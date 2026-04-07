@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace Template.UI.Views;
+namespace EstragoniaTemplate.UI.Views;
 
 public partial class MainView : UserControl
 {

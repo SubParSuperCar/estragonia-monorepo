@@ -3,9 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using static Template.UI.Utilities;
+using static EstragoniaTemplate.UI.Utilities;
 
-namespace Template.UI.Controls;
+namespace EstragoniaTemplate.UI.Controls;
 
 public partial class SliderFocusser : UserControl
 {

@@ -1,11 +1,11 @@
 using System;
+using EstragoniaTemplate.UI;
+using EstragoniaTemplate.UI.ViewModels;
+using EstragoniaTemplate.UI.Views;
 using Godot;
 using JLeb.Estragonia;
-using Template.UI;
-using Template.UI.ViewModels;
-using Template.UI.Views;
 
-namespace Template.Main;
+namespace EstragoniaTemplate.Main;
 
 public partial class UserInterface : AvaloniaControl, IFocussable
 {

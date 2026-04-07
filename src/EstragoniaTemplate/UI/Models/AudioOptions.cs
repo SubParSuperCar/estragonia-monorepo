@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Godot;
-using static Template.Main.AudioManager;
+using static EstragoniaTemplate.Main.AudioManager;
 
-namespace Template.UI.Models;
+namespace EstragoniaTemplate.UI.Models;
 
 public class AudioOptions : ObservableObject
 {

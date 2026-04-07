@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Godot;
-using static Template.UI.Utilities;
+using static EstragoniaTemplate.UI.Utilities;
 
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public partial class MainMenuViewModel : ViewModel
 {

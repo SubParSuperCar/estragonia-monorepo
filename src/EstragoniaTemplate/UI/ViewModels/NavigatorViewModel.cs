@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Avalonia.Animation;
 using CommunityToolkit.Mvvm.ComponentModel;
+using EstragoniaTemplate.Main;
 using Godot;
-using Template.Main;
 
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public abstract partial class NavigatorViewModel : ViewModel
 {

@@ -4,11 +4,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
-using Template.Main;
-using Template.UI.ViewModels;
-using static Template.UI.Utilities;
+using EstragoniaTemplate.Main;
+using EstragoniaTemplate.UI.ViewModels;
+using static EstragoniaTemplate.UI.Utilities;
 
-namespace Template.UI.Views;
+namespace EstragoniaTemplate.UI.Views;
 
 public class FocussedControl
 {

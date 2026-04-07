@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 
-namespace Template.UI.Converters;
+namespace EstragoniaTemplate.UI.Converters;
 
 public class PathToImageConverter : IValueConverter
 {
@@ -15,7 +15,7 @@ public class PathToImageConverter : IValueConverter
         if (value is not string path)
             return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
 
-        return Utilities.LoadImageFromResource(new Uri($"avares://Template/{ImageFolderPath}/{path}.png"));
+        return Utilities.LoadImageFromResource(new Uri($"avares://EstragoniaTemplate/{ImageFolderPath}/{path}.png"));
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

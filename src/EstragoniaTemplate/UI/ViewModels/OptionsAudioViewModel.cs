@@ -3,11 +3,11 @@ using System.ComponentModel;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Template.Main;
-using Template.UI.Models;
-using static Template.Main.AudioManager;
+using EstragoniaTemplate.Main;
+using EstragoniaTemplate.UI.Models;
+using static EstragoniaTemplate.Main.AudioManager;
 
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
 {

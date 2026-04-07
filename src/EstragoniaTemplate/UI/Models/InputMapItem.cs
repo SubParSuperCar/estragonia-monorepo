@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Godot;
 
-namespace Template.UI.Models;
+namespace EstragoniaTemplate.UI.Models;
 
 public partial class InputMapItem : ObservableObject
 {

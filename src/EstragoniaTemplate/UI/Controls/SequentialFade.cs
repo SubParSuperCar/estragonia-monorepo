@@ -7,7 +7,7 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Styling;
 
-namespace Template.UI.Controls;
+namespace EstragoniaTemplate.UI.Controls;
 
 public class SequentialFade : IPageTransition
 {

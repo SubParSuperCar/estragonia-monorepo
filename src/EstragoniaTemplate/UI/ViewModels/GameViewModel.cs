@@ -1,4 +1,4 @@
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public class GameViewModel : ViewModel
 {

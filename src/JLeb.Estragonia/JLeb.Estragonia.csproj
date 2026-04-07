@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <AssemblyTitle>Estragonia</AssemblyTitle>
-        <RootNamespace>JLeb.Estragonia</RootNamespace>
 
         <!-- Framework/Language -->
         <TargetFramework>net8.0</TargetFramework>

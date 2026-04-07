@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
+using EstragoniaTemplate.Main;
 using Godot;
-using Template.Main;
 
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public partial class InputListenerDialogViewModel : ViewModel
 {

@@ -3,7 +3,7 @@
 using System;
 using Avalonia;
 
-namespace Template.UI;
+namespace EstragoniaTemplate.UI;
 
 internal static class Designer
 {

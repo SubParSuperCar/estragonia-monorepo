@@ -6,11 +6,11 @@ using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Input;
 using Avalonia.Platform;
+using EstragoniaTemplate.UI.Controls;
 using Godot;
-using Template.UI.Controls;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 
-namespace Template.UI;
+namespace EstragoniaTemplate.UI;
 
 public static class Utilities
 {

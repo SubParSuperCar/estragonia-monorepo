@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Estragonia.GameMenu/.godot/mono/temp/bin/Debug/Estragonia.GameMenu.dll",
+            "program": "${workspaceFolder}/src/GameMenu/.godot/mono/temp/bin/Debug/GameMenu.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/Estragonia.GameMenu",
+            "cwd": "${workspaceFolder}/src/GameMenu",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

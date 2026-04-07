@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Template.Main;
+namespace EstragoniaTemplate.Main;
 
 public interface IFocussable
 {

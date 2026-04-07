@@ -1,6 +1,6 @@
-using Template.Main;
+using EstragoniaTemplate.Main;
 
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public class MainViewModel : NavigatorViewModel
 {

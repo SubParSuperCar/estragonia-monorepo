@@ -9,7 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Utilities;
 
-namespace Template.UI.Controls;
+namespace EstragoniaTemplate.UI.Controls;
 
 [TemplatePart("PART_ValueDecrementer", typeof(Button))]
 [TemplatePart("PART_ValueIncrementer", typeof(Button))]

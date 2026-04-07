@@ -3,7 +3,7 @@
     Focusable="True"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="Template.UI.Controls.SliderFocusser">
+    x:Class="EstragoniaTemplate.UI.Controls.SliderFocusser">
 
     <ContentControl Name="sliderContentControl"
                     XYFocus.NavigationModes="{Binding #root.XYFocusMode}"

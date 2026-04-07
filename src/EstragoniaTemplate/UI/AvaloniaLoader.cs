@@ -3,7 +3,7 @@ using Avalonia;
 using Godot;
 using JLeb.Estragonia;
 
-namespace Template.UI;
+namespace EstragoniaTemplate.UI;
 
 public partial class AvaloniaLoader : Node
 {

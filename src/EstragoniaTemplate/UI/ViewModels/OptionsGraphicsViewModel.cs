@@ -2,10 +2,10 @@ using System;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Template.Main;
-using Template.UI.Models;
+using EstragoniaTemplate.Main;
+using EstragoniaTemplate.UI.Models;
 
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 {

@@ -6,3 +6,4 @@ obj/
 .vscode/
 
 **/export_presets.cfg
+!**/rider-plugin/bin/

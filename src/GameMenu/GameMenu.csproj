@@ -1,8 +1,7 @@
 <Project Sdk="Godot.NET.Sdk/4.6.2">
 
     <PropertyGroup>
-        <AssemblyTitle>Estragonia.GameMenu</AssemblyTitle>
-        <RootNamespace>GameMenu</RootNamespace>
+        <AssemblyTitle>GameMenu</AssemblyTitle>
         <TargetFramework>net8.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <Nullable>enable</Nullable>
@@ -35,7 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Estragonia\Estragonia.csproj"/>
+        <ProjectReference Include="..\JLeb.Estragonia\JLeb.Estragonia.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

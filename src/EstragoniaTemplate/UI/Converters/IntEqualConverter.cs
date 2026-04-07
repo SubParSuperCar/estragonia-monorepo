@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 
-namespace Template.UI.Converters;
+namespace EstragoniaTemplate.UI.Converters;
 
 public class IntEqualConverter : IValueConverter
 {

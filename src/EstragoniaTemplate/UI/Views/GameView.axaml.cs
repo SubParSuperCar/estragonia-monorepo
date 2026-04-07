@@ -1,4 +1,4 @@
-namespace Template.UI.Views;
+namespace EstragoniaTemplate.UI.Views;
 
 public partial class GameView : View
 {

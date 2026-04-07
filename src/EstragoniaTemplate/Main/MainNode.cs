@@ -1,10 +1,10 @@
 using System;
+using EstragoniaTemplate.UI.Models;
+using EstragoniaTemplate.UI.ViewModels;
 using Godot;
-using Template.UI.Models;
-using Template.UI.ViewModels;
-using static Template.Main.AudioManager;
+using static EstragoniaTemplate.Main.AudioManager;
 
-namespace Template.Main;
+namespace EstragoniaTemplate.Main;
 
 public partial class MainNode : Node2D
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Controls;
-using Template.Main;
+using EstragoniaTemplate.Main;
 
-namespace Template.UI.Controls;
+namespace EstragoniaTemplate.UI.Controls;
 
 public class AudioButton : Button
 {

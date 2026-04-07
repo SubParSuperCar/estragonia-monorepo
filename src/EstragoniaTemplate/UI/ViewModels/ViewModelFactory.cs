@@ -1,8 +1,8 @@
-﻿using Godot;
-using Template.Main;
-using Template.UI.Models;
+﻿using EstragoniaTemplate.Main;
+using EstragoniaTemplate.UI.Models;
+using Godot;
 
-namespace Template.UI.ViewModels;
+namespace EstragoniaTemplate.UI.ViewModels;
 
 public class ViewModelFactory
 {

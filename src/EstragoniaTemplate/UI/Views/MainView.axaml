@@ -1,9 +1,9 @@
 <UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="using:Template.UI"
-    xmlns:vm="using:Template.UI.ViewModels"
-    x:Class="Template.UI.Views.MainView"
+    xmlns:ui="using:EstragoniaTemplate.UI"
+    xmlns:vm="using:EstragoniaTemplate.UI.ViewModels"
+    x:Class="EstragoniaTemplate.UI.Views.MainView"
     x:DataType="vm:MainViewModel"
     RenderOptions.TextRenderingMode="Antialias"
     XYFocus.NavigationModes="Enabled"

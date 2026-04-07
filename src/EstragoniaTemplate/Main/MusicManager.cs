@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Godot;
-using static Template.Main.AudioManager;
+using static EstragoniaTemplate.Main.AudioManager;
 
-namespace Template.Main;
+namespace EstragoniaTemplate.Main;
 
 public partial class MusicManager : Node
 {

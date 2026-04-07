@@ -4,7 +4,7 @@ using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Godot;
 
-namespace Template.UI.Converters;
+namespace EstragoniaTemplate.UI.Converters;
 
 public class GodotWindowModeConverter : IValueConverter
 {
