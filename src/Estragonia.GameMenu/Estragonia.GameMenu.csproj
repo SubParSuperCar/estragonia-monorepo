@@ -1,0 +1,51 @@
+<Project Sdk="Godot.NET.Sdk/4.6.2">
+
+    <PropertyGroup>
+        <AssemblyTitle>Estragonia.GameMenu</AssemblyTitle>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>14</LangVersion>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <Nullable>enable</Nullable>
+        <AnalysisMode>Recommended</AnalysisMode>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <RootNamespace>GameMenu</RootNamespace>
+    </PropertyGroup>
+
+    <!-- Create an executable for Avalonia designer support -->
+    <PropertyGroup Condition="$(Configuration) == 'Debug'">
+        <OutputType>Exe</OutputType>
+        <UseAppHost>false</UseAppHost>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+        <GdLauncherScriptExt>cmd</GdLauncherScriptExt>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+        <GdLauncherScriptExt>sh</GdLauncherScriptExt>
+    </PropertyGroup>
+
+    <ItemDefinitionGroup>
+        <PackageReference PrivateAssets="all"/>
+    </ItemDefinitionGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia.Themes.Simple" Version="[11.3.13]"/>
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="[11.3.0.6]"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Estragonia\Estragonia.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="UI/Fonts/*.ttf"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="Properties/launchSettings.json"/>
+        <None Include="shaders/*.gdshader"/>
+    </ItemGroup>
+
+</Project>

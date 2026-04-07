@@ -1,0 +1,6 @@
+<Solution>
+    <Project Path="Estragonia\Estragonia.csproj"/>
+    <Project Path="Estragonia.GameMenu\Estragonia.GameMenu.csproj"/>
+    <Project Path="Estragonia.HelloWorld\Estragonia.HelloWorld.csproj"/>
+    <Project Path="Estragonia.Template\Estragonia.Template.csproj"/>
+</Solution>

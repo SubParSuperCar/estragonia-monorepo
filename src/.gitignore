@@ -1,0 +1,8 @@
+bin/
+obj/
+
+.godot/
+.idea/
+.vscode/
+
+**/export_presets.cfg

@@ -1,0 +1,62 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Template.UI.ViewModels"
+    xmlns:controls="using:Template.UI.Controls"
+    mc:Ignorable="d"
+    d:DesignWidth="960"
+    d:DesignHeight="540"
+    x:Class="Template.UI.Views.InputListenerDialogView"
+    x:DataType="vm:InputListenerDialogViewModel">
+
+    <Design.DataContext>
+        <vm:InputListenerDialogViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="Run.hidden">
+            <Setter Property="FontSize"
+                    Value="0.01" />
+            <Setter Property="Foreground"
+                    Value="Transparent" />
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="rgba(0, 0, 0, 0.2)"
+            XYFocus.NavigationModes="Disabled">
+        <Border Padding="20"
+                MinWidth="300"
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="1"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+            <DockPanel>
+                <controls:AudioButton Name="initialFocus0"
+                                      DockPanel.Dock="Right"
+                                      VerticalAlignment="Top"
+                                      Margin="20 0 0 0"
+                                      Command="{Binding CancelCommand}"
+                                      IsCancel="True">
+                    X
+                </controls:AudioButton>
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <TextBlock HorizontalAlignment="Center">
+                        <Run>Awaiting valid</Run>
+                        <Run FontWeight="Bold" Classes.hidden="{Binding !ListenToKeyboard}">keyboard</Run>
+                        <!--
+						-->
+                        <Run FontWeight="Bold" Classes.hidden="{Binding ListenToKeyboard}">controller</Run>
+                        <Run>input for control:</Run>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center"
+                               Text="{Binding InputName}" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Border>
+
+</UserControl>

@@ -1,0 +1,44 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Template.UI.ViewModels"
+    xmlns:controls="using:Template.UI.Controls"
+    mc:Ignorable="d"
+    d:DesignWidth="960"
+    d:DesignHeight="540"
+    x:Class="Template.UI.Views.MainMenuView"
+    x:DataType="vm:MainMenuViewModel">
+
+    <Design.DataContext>
+        <vm:MainMenuViewModel />
+    </Design.DataContext>
+
+    <StackPanel HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="10">
+        <TextBlock FontSize="80"
+                   FontWeight="600">
+            Title Of Titles
+        </TextBlock>
+
+        <controls:AudioButton Name="initialFocus0"
+                              Theme="{StaticResource TextButton}"
+                              HorizontalAlignment="Center"
+                              Command="{Binding ToGameCommand}">
+            Start
+        </controls:AudioButton>
+        <controls:AudioButton Theme="{StaticResource TextButton}"
+                              HorizontalAlignment="Center"
+                              Command="{Binding ToOptionsCommand}">
+            Options
+        </controls:AudioButton>
+        <controls:AudioButton Theme="{StaticResource TextButton}"
+                              HorizontalAlignment="Center"
+                              Command="{Binding QuitCommand}">
+            Quit
+        </controls:AudioButton>
+    </StackPanel>
+
+</UserControl>

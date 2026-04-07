@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "Player": {
+      "commandName": "Executable",
+      "executablePath": "../.launch/launch.$(GdLauncherScriptExt)",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "--path \"$(ProjectDir)",
+      "nativeDebugging": true
+    },
+    "Editor": {
+      "commandName": "Executable",
+      "executablePath": "../.launch/launch.$(GdLauncherScriptExt)",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "--editor --path \"$(ProjectDir)",
+      "nativeDebugging": true
+    }
+  }
+}

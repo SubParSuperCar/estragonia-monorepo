@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cc5selknse45t"]
+
+[ext_resource type="Script" uid="uid://ghkhe3714kps" path="res://Main/MainNode.cs" id="1_qe6o4"]
+[ext_resource type="Script" uid="uid://101wk3ycbhr4" path="res://Main/UserInterface.cs" id="2_wwvnd"]
+
+[node name="MainNode" type="Node2D" unique_id=1938596739 node_paths=PackedStringArray("UserInterfaceMain", "UserInterfaceDialog")]
+script = ExtResource("1_qe6o4")
+UserInterfaceMain = NodePath("UI/UserInterfaceMain")
+UserInterfaceDialog = NodePath("UI/UserInterfaceDialog")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1725924770]
+process_mode = 3
+
+[node name="UserInterfaceMain" type="Control" parent="UI" unique_id=1682544093]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+script = ExtResource("2_wwvnd")
+
+[node name="UserInterfaceDialog" type="Control" parent="UI" unique_id=986157024]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_wwvnd")

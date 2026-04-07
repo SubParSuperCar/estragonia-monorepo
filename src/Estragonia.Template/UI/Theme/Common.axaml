@@ -1,0 +1,41 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="using:System">
+
+    <BoxShadows x:Key="InsetBackgroundFade">inset 0 0 10 5 White</BoxShadows>
+
+    <LinearGradientBrush x:Key="EngagedGradientBrush" StartPoint="50%,0%"
+                         EndPoint="50%,100%">
+        <GradientStop Color="Transparent"
+                      Offset="0.0" />
+        <GradientStop Color="#AEE4FF"
+                      Offset="0.4" />
+        <GradientStop Color="#AEE4FF"
+                      Offset="0.6" />
+        <GradientStop Color="Transparent"
+                      Offset="1.0" />
+    </LinearGradientBrush>
+
+    <FontFamily x:Key="StandardFontFamily">sans-serif</FontFamily>
+    <system:Double x:Key="NormalFontSize">16</system:Double>
+
+    <SolidColorBrush x:Key="ForegroundBrush" Color="#000000" />
+    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#FF808080" />
+
+    <SolidColorBrush x:Key="AccentBrush" Color="#FFAD22" />
+    <SolidColorBrush x:Key="AccentFocusBrush" Color="#FFDA9F" />
+
+    <SolidColorBrush x:Key="ContainerNormalBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ContainerNormalBorderBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="ContainerFocusBackgroundBrush" Color="#C5324780" />
+    <SolidColorBrush x:Key="ContainerFocusBorderBrush" Color="#FFFFFFFF" />
+
+    <SolidColorBrush x:Key="ButtonNormalBackgroundBrush" Color="#9AC9F6" />
+    <SolidColorBrush x:Key="ButtonNormalBorderBrush" Color="#2F4356" />
+    <SolidColorBrush x:Key="ButtonFocusBackgroundBrush" Color="#D8F1FF" />
+    <SolidColorBrush x:Key="ButtonFocusBorderBrush" Color="#9AC9F6" />
+
+    <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#80808080" />
+    <SolidColorBrush x:Key="DisabledBorderBrush" Color="#FF808080" />
+</ResourceDictionary>
