@@ -2,13 +2,12 @@
 
     <PropertyGroup>
         <AssemblyTitle>Estragonia.GameMenu</AssemblyTitle>
+        <RootNamespace>GameMenu</RootNamespace>
         <TargetFramework>net8.0</TargetFramework>
-        <LangVersion>14</LangVersion>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <Nullable>enable</Nullable>
         <AnalysisMode>Recommended</AnalysisMode>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <RootNamespace>GameMenu</RootNamespace>
     </PropertyGroup>
 
     <!-- Create an executable for Avalonia designer support -->
