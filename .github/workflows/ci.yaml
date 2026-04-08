@@ -24,9 +24,9 @@ jobs:
       matrix:
         configuration: [ Debug, Release ]
         project:
-          - JLeb.Estragonia
-          - EstragoniaTemplate
+          - Estragonia
           - GameMenu
+          - GameTemplate
           - HelloWorld
 
     defaults:
