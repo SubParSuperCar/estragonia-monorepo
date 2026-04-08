@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="EstragoniaTemplate"
+config/name="GameTemplate"
 run/main_scene="res://Scenes/main.tscn"
 config/project_settings_override="user://settings_override.cfg"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
@@ -32,7 +32,7 @@ window/size/mode=3
 
 [dotnet]
 
-project/assembly_name="EstragoniaTemplate"
+project/assembly_name="GameTemplate"
 
 [editor_plugins]
 
