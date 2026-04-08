@@ -3,7 +3,11 @@ obj/
 
 .godot/
 .idea/
-.vscode/
 
-**/export_presets.cfg
-!**/rider-plugin/bin/
+*.import
+*.uid
+
+export.cfg
+export_presets.cfg
+
+!rider-plugin/bin/
