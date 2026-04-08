@@ -1,11 +1,11 @@
-﻿using Avalonia.Data.Converters;
+using Avalonia.Data.Converters;
 
 namespace GameMenu.UI.Converters;
 
 public sealed class BooleanToOnOffConverter : FuncValueConverter<bool, string>
 {
-    public BooleanToOnOffConverter()
-        : base(value => value ? "On" : "Off")
-    {
-    }
+	public BooleanToOnOffConverter()
+		: base(value => value ? "On" : "Off")
+	{
+	}
 }

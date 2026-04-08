@@ -1,9 +1,11 @@
 # Estragonia Game UI Template
+
 A project that utilises [Avalonia](https://github.com/AvaloniaUI/Avalonia) within [Godot](https://github.com/godotengine/godot) (made possible by [Estragonia](https://github.com/MrJul/Estragonia)) to create a UI template that contains essential elements for any game.
 
 https://github.com/user-attachments/assets/fdcefaa2-10b9-480d-b8cc-6c7d55364a5b
 
 ## Features
+
 - Mouse, keyboard and controller navigation
   - Customized controls for this purpose
 - Options menu and saving
@@ -12,7 +14,8 @@ https://github.com/user-attachments/assets/fdcefaa2-10b9-480d-b8cc-6c7d55364a5b
 - Basic audio and music
 
 ## Licenses & attribution
-This project is licensed under [MIT-0](https://github.com/aws/mit-0), which is a permissive license that requires no attribution. However, there are files included that do not fall under this license.  
+
+This project is licensed under [MIT-0](https://github.com/aws/mit-0), which is a permissive license that requires no attribution. However, there are files included that do not fall under this license.
 
 MoveFocusWhenDisabledBehavior is from the Estragonia [GameMenu sample project](https://github.com/MrJul/Estragonia/blob/main/samples/GameMenu/UI/Behaviors/MoveFocusWhenDisabledBehavior.cs), where the following MIT license applies:
 
@@ -38,13 +41,13 @@ SOFTWARE.
 
 Other licenses:
 
-[Lobby Time](https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600054&Search=Search) Kevin MacLeod (incompetech.com)  
-Licensed under Creative Commons: By Attribution 3.0 License  
+[Lobby Time](https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1600054&Search=Search) Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 3.0 License
 http://creativecommons.org/licenses/by/3.0/
 
-UI keyboard navigation and click sound effect (modified)  
-Original sound created by StavSounds (CC0)  
+UI keyboard navigation and click sound effect (modified)
+Original sound created by StavSounds (CC0)
 https://freesound.org/people/StavSounds/sounds/546079/
 
-Input prompt images created by Kenney (CC0)  
+Input prompt images created by Kenney (CC0)
 https://kenney.nl/assets/input-prompts

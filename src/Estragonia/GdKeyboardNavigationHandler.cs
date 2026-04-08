@@ -1,4 +1,4 @@
-﻿using Avalonia.Input;
+using Avalonia.Input;
 
 namespace Estragonia;
 
@@ -8,15 +8,15 @@ namespace Estragonia;
 /// </summary>
 internal sealed class GodotKeyboardNavigationHandler : IKeyboardNavigationHandler
 {
-    private readonly KeyboardNavigationHandler _keyboardNavigationHandler = new();
+	private readonly KeyboardNavigationHandler _keyboardNavigationHandler = new();
 
-    void IKeyboardNavigationHandler.SetOwner(IInputRoot owner)
-    {
-    }
+	void IKeyboardNavigationHandler.SetOwner(IInputRoot owner)
+	{
+	}
 
-    public void Move(IInputElement element, NavigationDirection direction,
-        KeyModifiers keyModifiers = KeyModifiers.None)
-    {
-        _keyboardNavigationHandler.Move(element, direction, keyModifiers);
-    }
+	public void Move(IInputElement element, NavigationDirection direction,
+		KeyModifiers keyModifiers = KeyModifiers.None)
+	{
+		_keyboardNavigationHandler.Move(element, direction, keyModifiers);
+	}
 }

@@ -1,9 +1,9 @@
-﻿namespace GameMenu.UI;
+namespace GameMenu.UI;
 
 public partial class GameView : View
 {
-    public GameView()
-    {
-        InitializeComponent();
-    }
+	public GameView()
+	{
+		InitializeComponent();
+	}
 }

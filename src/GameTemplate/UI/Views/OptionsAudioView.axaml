@@ -1,186 +1,186 @@
 <UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:GameTemplate.UI.ViewModels"
-    xmlns:controls="using:GameTemplate.UI.Controls"
-    xmlns:converters="clr-namespace:GameTemplate.UI.Converters"
-    mc:Ignorable="d"
-    d:DesignWidth="500"
-    d:DesignHeight="540"
-    x:Class="GameTemplate.UI.Views.OptionsAudioView"
-    x:DataType="vm:OptionsAudioViewModel"
-    VerticalAlignment="Stretch"
-    HorizontalAlignment="Stretch">
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="using:GameTemplate.UI.ViewModels"
+	xmlns:controls="using:GameTemplate.UI.Controls"
+	xmlns:converters="clr-namespace:GameTemplate.UI.Converters"
+	mc:Ignorable="d"
+	d:DesignWidth="500"
+	d:DesignHeight="540"
+	x:Class="GameTemplate.UI.Views.OptionsAudioView"
+	x:DataType="vm:OptionsAudioViewModel"
+	VerticalAlignment="Stretch"
+	HorizontalAlignment="Stretch">
 
-    <Design.DataContext>
-        <vm:OptionsAudioViewModel />
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:OptionsAudioViewModel />
+	</Design.DataContext>
 
-    <UserControl.Resources>
-        <converters:IgnoringNullConverter x:Key="ignoringNullConverter" />
-    </UserControl.Resources>
+	<UserControl.Resources>
+		<converters:IgnoringNullConverter x:Key="ignoringNullConverter" />
+	</UserControl.Resources>
 
-    <UserControl.Styles>
-        <Style Selector=".centerChildrenVertical > :is(Control)">
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-        </Style>
-    </UserControl.Styles>
+	<UserControl.Styles>
+		<Style Selector=".centerChildrenVertical > :is(Control)">
+			<Setter Property="VerticalAlignment"
+			        Value="Center" />
+		</Style>
+	</UserControl.Styles>
 
-    <Border Padding="25 15"
-            Background="{StaticResource ContainerNormalBackgroundBrush}">
-        <DockPanel>
+	<Border Padding="25 15"
+	        Background="{StaticResource ContainerNormalBackgroundBrush}">
+		<DockPanel>
 
-            <!-- Settings List -->
-            <StackPanel DockPanel.Dock="Top"
-                        Spacing="6">
+			<!-- Settings List -->
+			<StackPanel DockPanel.Dock="Top"
+			            Spacing="6">
 
-                <!-- Master -->
-                <Grid ColumnDefinitions="Auto, *, Auto, 60"
-                      Height="40"
-                      Classes="centerChildrenVertical">
-                    <TextBlock Grid.Row="3">Master</TextBlock>
-                    <controls:SliderFocusser Grid.Column="2">
-                        <controls:SliderFocusser.Slider>
-                            <controls:FocusableSlider
-                                Name="masterSlider"
-                                Width="150"
-                                Minimum="0"
-                                Maximum="100"
-                                SmallChange="5"
-                                LargeChange="15"
-                                Value="{Binding MasterLevel}" />
-                        </controls:SliderFocusser.Slider>
-                    </controls:SliderFocusser>
+				<!-- Master -->
+				<Grid ColumnDefinitions="Auto, *, Auto, 60"
+				      Height="40"
+				      Classes="centerChildrenVertical">
+					<TextBlock Grid.Row="3">Master</TextBlock>
+					<controls:SliderFocusser Grid.Column="2">
+						<controls:SliderFocusser.Slider>
+							<controls:FocusableSlider
+								Name="masterSlider"
+								Width="150"
+								Minimum="0"
+								Maximum="100"
+								SmallChange="5"
+								LargeChange="15"
+								Value="{Binding MasterLevel}" />
+						</controls:SliderFocusser.Slider>
+					</controls:SliderFocusser>
 
-                    <controls:ConfirmableNumericUpDown
-                        Grid.Column="3"
-                        InnerRightContent="%"
-                        Target="{Binding #masterSlider}"
-                        BorderBrush="Transparent"
-                        HorizontalContentAlignment="Right"
-                        XYFocus.NavigationModes="Disabled"
-                        FormatString="0"
-                        Minimum="0"
-                        Maximum="100"
-                        ClipValueToMinMax="True"
-                        ShowButtonSpinner="False"
-                        Value="{Binding MasterLevel,
+					<controls:ConfirmableNumericUpDown
+						Grid.Column="3"
+						InnerRightContent="%"
+						Target="{Binding #masterSlider}"
+						BorderBrush="Transparent"
+						HorizontalContentAlignment="Right"
+						XYFocus.NavigationModes="Disabled"
+						FormatString="0"
+						Minimum="0"
+						Maximum="100"
+						ClipValueToMinMax="True"
+						ShowButtonSpinner="False"
+						Value="{Binding MasterLevel,
 							Converter={StaticResource ignoringNullConverter}}" />
-                </Grid>
+				</Grid>
 
-                <!-- Music -->
-                <Grid ColumnDefinitions="Auto, *, Auto, 60"
-                      Height="40"
-                      Classes="centerChildrenVertical">
-                    <TextBlock Grid.Row="3">Music</TextBlock>
-                    <controls:SliderFocusser Grid.Column="2">
-                        <controls:SliderFocusser.Slider>
-                            <controls:FocusableSlider
-                                Name="musicSlider"
-                                Width="150"
-                                Minimum="0"
-                                Maximum="100"
-                                SmallChange="5"
-                                LargeChange="15"
-                                Value="{Binding MusicLevel}" />
-                        </controls:SliderFocusser.Slider>
-                    </controls:SliderFocusser>
+				<!-- Music -->
+				<Grid ColumnDefinitions="Auto, *, Auto, 60"
+				      Height="40"
+				      Classes="centerChildrenVertical">
+					<TextBlock Grid.Row="3">Music</TextBlock>
+					<controls:SliderFocusser Grid.Column="2">
+						<controls:SliderFocusser.Slider>
+							<controls:FocusableSlider
+								Name="musicSlider"
+								Width="150"
+								Minimum="0"
+								Maximum="100"
+								SmallChange="5"
+								LargeChange="15"
+								Value="{Binding MusicLevel}" />
+						</controls:SliderFocusser.Slider>
+					</controls:SliderFocusser>
 
-                    <controls:ConfirmableNumericUpDown
-                        Grid.Column="3"
-                        InnerRightContent="%"
-                        Target="{Binding #musicSlider}"
-                        BorderBrush="Transparent"
-                        HorizontalContentAlignment="Right"
-                        XYFocus.NavigationModes="Disabled"
-                        FormatString="0"
-                        Minimum="0"
-                        Maximum="100"
-                        ClipValueToMinMax="True"
-                        ShowButtonSpinner="False"
-                        Value="{Binding MusicLevel,
+					<controls:ConfirmableNumericUpDown
+						Grid.Column="3"
+						InnerRightContent="%"
+						Target="{Binding #musicSlider}"
+						BorderBrush="Transparent"
+						HorizontalContentAlignment="Right"
+						XYFocus.NavigationModes="Disabled"
+						FormatString="0"
+						Minimum="0"
+						Maximum="100"
+						ClipValueToMinMax="True"
+						ShowButtonSpinner="False"
+						Value="{Binding MusicLevel,
 							Converter={StaticResource ignoringNullConverter}}" />
-                </Grid>
+				</Grid>
 
-                <!-- Sound effects -->
-                <Grid ColumnDefinitions="Auto, *, Auto, 60"
-                      Height="40"
-                      Classes="centerChildrenVertical">
-                    <TextBlock Grid.Row="3">Sound effects</TextBlock>
-                    <controls:SliderFocusser Grid.Column="2">
-                        <controls:SliderFocusser.Slider>
-                            <controls:FocusableSlider
-                                Name="soundEffectsSlider"
-                                Width="150"
-                                Minimum="0"
-                                Maximum="100"
-                                SmallChange="5"
-                                LargeChange="15"
-                                Value="{Binding SoundEffectsLevel}" />
-                        </controls:SliderFocusser.Slider>
-                    </controls:SliderFocusser>
+				<!-- Sound effects -->
+				<Grid ColumnDefinitions="Auto, *, Auto, 60"
+				      Height="40"
+				      Classes="centerChildrenVertical">
+					<TextBlock Grid.Row="3">Sound effects</TextBlock>
+					<controls:SliderFocusser Grid.Column="2">
+						<controls:SliderFocusser.Slider>
+							<controls:FocusableSlider
+								Name="soundEffectsSlider"
+								Width="150"
+								Minimum="0"
+								Maximum="100"
+								SmallChange="5"
+								LargeChange="15"
+								Value="{Binding SoundEffectsLevel}" />
+						</controls:SliderFocusser.Slider>
+					</controls:SliderFocusser>
 
-                    <controls:ConfirmableNumericUpDown
-                        Grid.Column="3"
-                        InnerRightContent="%"
-                        Target="{Binding #soundEffectsSlider}"
-                        BorderBrush="Transparent"
-                        HorizontalContentAlignment="Right"
-                        XYFocus.NavigationModes="Disabled"
-                        FormatString="0"
-                        Minimum="0"
-                        Maximum="100"
-                        ClipValueToMinMax="True"
-                        ShowButtonSpinner="False"
-                        Value="{Binding SoundEffectsLevel,
+					<controls:ConfirmableNumericUpDown
+						Grid.Column="3"
+						InnerRightContent="%"
+						Target="{Binding #soundEffectsSlider}"
+						BorderBrush="Transparent"
+						HorizontalContentAlignment="Right"
+						XYFocus.NavigationModes="Disabled"
+						FormatString="0"
+						Minimum="0"
+						Maximum="100"
+						ClipValueToMinMax="True"
+						ShowButtonSpinner="False"
+						Value="{Binding SoundEffectsLevel,
 							Converter={StaticResource ignoringNullConverter}}" />
-                </Grid>
+				</Grid>
 
-                <!-- Interface -->
-                <Grid ColumnDefinitions="Auto, *, Auto, 60"
-                      Height="40"
-                      Classes="centerChildrenVertical">
-                    <TextBlock Grid.Row="3">Interface</TextBlock>
-                    <controls:SliderFocusser Grid.Column="2">
-                        <controls:SliderFocusser.Slider>
-                            <controls:FocusableSlider
-                                Name="interfaceSlider"
-                                Width="150"
-                                Minimum="0"
-                                Maximum="100"
-                                SmallChange="5"
-                                LargeChange="15"
-                                Value="{Binding InterfaceLevel}" />
-                        </controls:SliderFocusser.Slider>
-                    </controls:SliderFocusser>
+				<!-- Interface -->
+				<Grid ColumnDefinitions="Auto, *, Auto, 60"
+				      Height="40"
+				      Classes="centerChildrenVertical">
+					<TextBlock Grid.Row="3">Interface</TextBlock>
+					<controls:SliderFocusser Grid.Column="2">
+						<controls:SliderFocusser.Slider>
+							<controls:FocusableSlider
+								Name="interfaceSlider"
+								Width="150"
+								Minimum="0"
+								Maximum="100"
+								SmallChange="5"
+								LargeChange="15"
+								Value="{Binding InterfaceLevel}" />
+						</controls:SliderFocusser.Slider>
+					</controls:SliderFocusser>
 
-                    <controls:ConfirmableNumericUpDown
-                        Grid.Column="3"
-                        InnerRightContent="%"
-                        Target="{Binding #interfaceSlider}"
-                        BorderBrush="Transparent"
-                        HorizontalContentAlignment="Right"
-                        XYFocus.NavigationModes="Disabled"
-                        FormatString="0"
-                        Minimum="0"
-                        Maximum="100"
-                        ClipValueToMinMax="True"
-                        ShowButtonSpinner="False"
-                        Value="{Binding InterfaceLevel,
+					<controls:ConfirmableNumericUpDown
+						Grid.Column="3"
+						InnerRightContent="%"
+						Target="{Binding #interfaceSlider}"
+						BorderBrush="Transparent"
+						HorizontalContentAlignment="Right"
+						XYFocus.NavigationModes="Disabled"
+						FormatString="0"
+						Minimum="0"
+						Maximum="100"
+						ClipValueToMinMax="True"
+						ShowButtonSpinner="False"
+						Value="{Binding InterfaceLevel,
 							Converter={StaticResource ignoringNullConverter}}" />
-                </Grid>
-            </StackPanel>
+				</Grid>
+			</StackPanel>
 
-            <controls:AudioButton DockPanel.Dock="Bottom"
-                                  HorizontalAlignment="Right"
-                                  Content="Reset to default"
-                                  Command="{Binding ResetToDefaultCommand}" />
+			<controls:AudioButton DockPanel.Dock="Bottom"
+			                      HorizontalAlignment="Right"
+			                      Content="Reset to default"
+			                      Command="{Binding ResetToDefaultCommand}" />
 
-            <Control />
-        </DockPanel>
-    </Border>
+			<Control />
+		</DockPanel>
+	</Border>
 
 </UserControl>

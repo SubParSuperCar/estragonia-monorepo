@@ -7,11 +7,11 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 120
 
-[*.{slnx,csproj,cs,axaml,gd,gdshader,props}]
+[*.{cs,axaml,gd,gdshader}]
 indent_style = tab
 indent_size = 4
 
-[*.{json,xml,yaml,sh,cmd}]
+[*.{slnx,csproj,props,json,xml,yaml,sh,cmd}]
 indent_style = space
 indent_size = 2
 

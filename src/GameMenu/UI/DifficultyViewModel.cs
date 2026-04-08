@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -8,26 +8,23 @@ namespace GameMenu.UI;
 
 public sealed partial class DifficultyViewModel : ViewModel
 {
-    private readonly INavigator _navigator;
+	private readonly INavigator _navigator;
 
-    [ObservableProperty] private GameDifficulty _selectedDifficulty = GameDifficulty.Normal;
+	[ObservableProperty] private GameDifficulty _selectedDifficulty = GameDifficulty.Normal;
 
-    public DifficultyViewModel(INavigator navigator)
-    {
-        _navigator = navigator;
-    }
+	public DifficultyViewModel(INavigator navigator)
+	{
+		_navigator = navigator;
+	}
 
-    public ObservableCollection<GameDifficulty> Difficulties { get; } = new(Enum.GetValues<GameDifficulty>());
+	public ObservableCollection<GameDifficulty> Difficulties { get; } = new(Enum.GetValues<GameDifficulty>());
 
-    protected override Task LoadAsync()
-    {
-        return Task.CompletedTask;
-    }
+	protected override Task LoadAsync() => Task.CompletedTask;
 
-    [RelayCommand]
-    public async Task StartGameAsync()
-    {
-        _navigator.NavigateTo(new GameLoadingViewModel(_navigator));
-        await TryCloseAsync();
-    }
+	[RelayCommand]
+	public async Task StartGameAsync()
+	{
+		_navigator.NavigateTo(new GameLoadingViewModel(_navigator));
+		await TryCloseAsync();
+	}
 }

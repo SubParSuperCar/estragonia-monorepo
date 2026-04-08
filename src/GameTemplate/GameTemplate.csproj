@@ -1,81 +1,81 @@
 ﻿<Project Sdk="Godot.NET.Sdk/4.6.2">
-    <PropertyGroup>
-        <AssemblyTitle>Template</AssemblyTitle>
-        <TargetFramework>net8.0</TargetFramework>
-        <LangVersion>14</LangVersion>
-        <EnableDynamicLoading>true</EnableDynamicLoading>
-        <Nullable>enable</Nullable>
-        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyTitle>Template</AssemblyTitle>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>14</LangVersion>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Nullable>enable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="$(Configuration) == 'Debug'">
-        <OutputType>Exe</OutputType>
-        <UseAppHost>false</UseAppHost>
-    </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration) == 'Debug'">
+    <OutputType>Exe</OutputType>
+    <UseAppHost>false</UseAppHost>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
-        <GdLauncherScriptExt>cmd</GdLauncherScriptExt>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <GdLauncherScriptExt>cmd</GdLauncherScriptExt>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
-        <GdLauncherScriptExt>sh</GdLauncherScriptExt>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <GdLauncherScriptExt>sh</GdLauncherScriptExt>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.13"/>
-        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0.6"/>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.13"/>
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0.6"/>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Estragonia\Estragonia.csproj"/>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Estragonia\Estragonia.csproj"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <AvaloniaResource Include="UI\Images\**"/>
-    </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="UI\Images\**"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <None Include="Properties/launchSettings.json"/>
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties/launchSettings.json"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <AvaloniaXaml Update="UI\Theme\TextButton.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Update="UI\Views\OptionsView.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-    </ItemGroup>
+  <ItemGroup>
+    <AvaloniaXaml Update="UI\Theme\TextButton.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="UI\Views\OptionsView.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+  </ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="UI\Views\EscapeMenuView.axaml.cs">
-            <DependentUpon>EscapeMenuView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Views\InputListenerDialogView.axaml.cs">
-            <DependentUpon>InputListenerDialogView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Views\DialogView.axaml.cs">
-            <DependentUpon>DialogView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Controls\SliderFocusser.axaml.cs">
-            <DependentUpon>SliderFocusser.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Views\GameView.axaml.cs">
-            <DependentUpon>GameView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Views\OptionsControlsView.axaml.cs">
-            <DependentUpon>OptionsControlsView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Views\OptionsAudioView.axaml.cs">
-            <DependentUpon>OptionsAudioView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Views\OptionsView.axaml.cs">
-            <SubType>Code</SubType>
-            <DependentUpon>OptionsView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="UI\Views\OptionsGraphicsView.axaml.cs">
-            <DependentUpon>OptionsGraphicsView.axaml</DependentUpon>
-        </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="UI\Views\EscapeMenuView.axaml.cs">
+      <DependentUpon>EscapeMenuView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Views\InputListenerDialogView.axaml.cs">
+      <DependentUpon>InputListenerDialogView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Views\DialogView.axaml.cs">
+      <DependentUpon>DialogView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Controls\SliderFocusser.axaml.cs">
+      <DependentUpon>SliderFocusser.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Views\GameView.axaml.cs">
+      <DependentUpon>GameView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Views\OptionsControlsView.axaml.cs">
+      <DependentUpon>OptionsControlsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Views\OptionsAudioView.axaml.cs">
+      <DependentUpon>OptionsAudioView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Views\OptionsView.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>OptionsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Views\OptionsGraphicsView.axaml.cs">
+      <DependentUpon>OptionsGraphicsView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

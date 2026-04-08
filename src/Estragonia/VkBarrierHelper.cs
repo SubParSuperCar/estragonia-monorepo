@@ -12,232 +12,229 @@ namespace Estragonia;
 /// </summary>
 internal sealed class VkBarrierHelper : ISurfaceSynchronizer
 {
-    private readonly VkDevice _device;
-    private readonly VkDeviceApi _deviceApi;
-    private readonly VkQueue _queue;
-    private readonly uint _queueFamilyIndex;
-    private readonly List<ReusableBuffer> _reusableBuffers = new();
+	private readonly VkDevice _device;
+	private readonly VkDeviceApi _deviceApi;
+	private readonly VkQueue _queue;
+	private readonly uint _queueFamilyIndex;
+	private readonly List<ReusableBuffer> _reusableBuffers = new();
 
-    private bool _isDisposed;
+	private bool _isDisposed;
 
-    public VkBarrierHelper(VkDevice device, VkQueue queue, VkDeviceApi deviceApi, uint queueFamilyIndex)
-    {
-        _device = device;
-        _queue = queue;
-        _deviceApi = deviceApi;
-        _queueFamilyIndex = queueFamilyIndex;
-    }
+	public VkBarrierHelper(VkDevice device, VkQueue queue, VkDeviceApi deviceApi, uint queueFamilyIndex)
+	{
+		_device = device;
+		_queue = queue;
+		_deviceApi = deviceApi;
+		_queueFamilyIndex = queueFamilyIndex;
+	}
 
-    /// <summary>Prepares the surface for Skia rendering by transitioning to COLOR_ATTACHMENT_OPTIMAL.</summary>
-    public void PrepareForRendering(IGodotSkiaSurface surface)
-    {
-        if (surface is not GodotSkiaSurface vkSurface)
-            throw new ArgumentException("Surface must be a Vulkan surface", nameof(surface));
+	/// <summary>Prepares the surface for Skia rendering by transitioning to COLOR_ATTACHMENT_OPTIMAL.</summary>
+	public void PrepareForRendering(IGodotSkiaSurface surface)
+	{
+		if (surface is not GodotSkiaSurface vkSurface)
+			throw new ArgumentException("Surface must be a Vulkan surface", nameof(surface));
 
-        // Clear the texture on first draw. This is already done by Avalonia, but Godot doesn't know that.
-        // We need it to avoid texture corruption on first draw on AMD GPUs.
-        if (vkSurface.DrawCount == 0)
-            vkSurface.RenderingDevice.TextureClear(vkSurface.GdTexture.TextureRdRid, new Color(0u), 0, 1, 0, 1);
+		// Clear the texture on first draw. This is already done by Avalonia, but Godot doesn't know that.
+		// We need it to avoid texture corruption on first draw on AMD GPUs.
+		if (vkSurface.DrawCount == 0)
+			vkSurface.RenderingDevice.TextureClear(vkSurface.GdTexture.TextureRdRid, new Color(0u), 0, 1, 0, 1);
 
-        // Godot leaves the image in SHADER_READ_ONLY_OPTIMAL but Skia expects it in COLOR_ATTACHMENT_OPTIMAL
-        vkSurface.TransitionLayoutTo(VkImageLayout.COLOR_ATTACHMENT_OPTIMAL);
-    }
+		// Godot leaves the image in SHADER_READ_ONLY_OPTIMAL but Skia expects it in COLOR_ATTACHMENT_OPTIMAL
+		vkSurface.TransitionLayoutTo(VkImageLayout.COLOR_ATTACHMENT_OPTIMAL);
+	}
 
-    /// <summary>Finalizes rendering by transitioning back to SHADER_READ_ONLY_OPTIMAL for Godot.</summary>
-    public void FinishRendering(IGodotSkiaSurface surface)
-    {
-        if (surface is not GodotSkiaSurface vkSurface)
-            throw new ArgumentException("Surface must be a Vulkan surface", nameof(surface));
+	/// <summary>Finalizes rendering by transitioning back to SHADER_READ_ONLY_OPTIMAL for Godot.</summary>
+	public void FinishRendering(IGodotSkiaSurface surface)
+	{
+		if (surface is not GodotSkiaSurface vkSurface)
+			throw new ArgumentException("Surface must be a Vulkan surface", nameof(surface));
 
-        vkSurface.SkSurface.Flush(true);
+		vkSurface.SkSurface.Flush(true);
 
-        // Switch back to SHADER_READ_ONLY_OPTIMAL for Godot
-        vkSurface.TransitionLayoutTo(VkImageLayout.SHADER_READ_ONLY_OPTIMAL);
+		// Switch back to SHADER_READ_ONLY_OPTIMAL for Godot
+		vkSurface.TransitionLayoutTo(VkImageLayout.SHADER_READ_ONLY_OPTIMAL);
 
-        vkSurface.DrawCount++;
-    }
+		vkSurface.DrawCount++;
+	}
 
-    public void Dispose()
-    {
-        if (_isDisposed)
-            return;
+	public void Dispose()
+	{
+		if (_isDisposed)
+			return;
 
-        _isDisposed = true;
+		_isDisposed = true;
 
-        for (var i = _reusableBuffers.Count - 1; i >= 0; --i)
-            _reusableBuffers[i].Dispose();
+		for (var i = _reusableBuffers.Count - 1; i >= 0; --i)
+			_reusableBuffers[i].Dispose();
 
-        _reusableBuffers.Clear();
-    }
+		_reusableBuffers.Clear();
+	}
 
-    public unsafe void TransitionImageLayout(
-        VkImage image,
-        VkImageLayout sourceLayout,
-        VkAccessFlags sourceAccessMask,
-        VkImageLayout destinationLayout,
-        VkAccessFlags destinationAccessMask
-    )
-    {
-        if (_isDisposed)
-            ThrowDisposed();
+	public unsafe void TransitionImageLayout(
+		VkImage image,
+		VkImageLayout sourceLayout,
+		VkAccessFlags sourceAccessMask,
+		VkImageLayout destinationLayout,
+		VkAccessFlags destinationAccessMask
+	)
+	{
+		if (_isDisposed)
+			ThrowDisposed();
 
-        var reusableBuffer = GetOrCreateReusableBuffer();
+		var reusableBuffer = GetOrCreateReusableBuffer();
 
-        var fence = reusableBuffer.Fence;
-        _deviceApi.ResetFences(_device, 1, &fence);
+		var fence = reusableBuffer.Fence;
+		_deviceApi.ResetFences(_device, 1, &fence);
 
-        var commandBuffer = reusableBuffer.CommandBuffer;
+		var commandBuffer = reusableBuffer.CommandBuffer;
 
-        var beginInfo = new VkCommandBufferBeginInfo
-        {
-            sType = VkStructureType.COMMAND_BUFFER_BEGIN_INFO,
-            flags = VkCommandBufferUsageFlags.ONE_TIME_SUBMIT_BIT
-        };
+		var beginInfo = new VkCommandBufferBeginInfo
+		{
+			sType = VkStructureType.COMMAND_BUFFER_BEGIN_INFO,
+			flags = VkCommandBufferUsageFlags.ONE_TIME_SUBMIT_BIT
+		};
 
-        _deviceApi.BeginCommandBuffer(commandBuffer, ref beginInfo);
+		_deviceApi.BeginCommandBuffer(commandBuffer, ref beginInfo);
 
-        var barrier = new VkImageMemoryBarrier
-        {
-            sType = VkStructureType.IMAGE_MEMORY_BARRIER,
-            srcAccessMask = sourceAccessMask,
-            dstAccessMask = destinationAccessMask,
-            oldLayout = sourceLayout,
-            newLayout = destinationLayout,
-            srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-            dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-            image = image,
-            subresourceRange = new VkImageSubresourceRange
-            {
-                aspectMask = VkImageAspectFlags.COLOR_BIT,
-                baseMipLevel = 0,
-                levelCount = 1,
-                baseArrayLayer = 0,
-                layerCount = 1
-            }
-        };
+		var barrier = new VkImageMemoryBarrier
+		{
+			sType = VkStructureType.IMAGE_MEMORY_BARRIER,
+			srcAccessMask = sourceAccessMask,
+			dstAccessMask = destinationAccessMask,
+			oldLayout = sourceLayout,
+			newLayout = destinationLayout,
+			srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+			dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+			image = image,
+			subresourceRange = new VkImageSubresourceRange
+			{
+				aspectMask = VkImageAspectFlags.COLOR_BIT,
+				baseMipLevel = 0,
+				levelCount = 1,
+				baseArrayLayer = 0,
+				layerCount = 1
+			}
+		};
 
-        _deviceApi.CmdPipelineBarrier(
-            reusableBuffer.CommandBuffer,
-            VkPipelineStageFlags.ALL_COMMANDS_BIT,
-            VkPipelineStageFlags.ALL_COMMANDS_BIT,
-            0,
-            0,
-            IntPtr.Zero,
-            0,
-            IntPtr.Zero,
-            1,
-            &barrier
-        );
+		_deviceApi.CmdPipelineBarrier(
+			reusableBuffer.CommandBuffer,
+			VkPipelineStageFlags.ALL_COMMANDS_BIT,
+			VkPipelineStageFlags.ALL_COMMANDS_BIT,
+			0,
+			0,
+			IntPtr.Zero,
+			0,
+			IntPtr.Zero,
+			1,
+			&barrier
+		);
 
-        _deviceApi.EndCommandBuffer(commandBuffer);
+		_deviceApi.EndCommandBuffer(commandBuffer);
 
-        var submitInfo = new VkSubmitInfo
-        {
-            sType = VkStructureType.SUBMIT_INFO,
-            waitSemaphoreCount = 0,
-            pWaitSemaphores = null,
-            pWaitDstStageMask = null,
-            commandBufferCount = 1,
-            pCommandBuffers = &commandBuffer,
-            signalSemaphoreCount = 0,
-            pSignalSemaphores = null
-        };
+		var submitInfo = new VkSubmitInfo
+		{
+			sType = VkStructureType.SUBMIT_INFO,
+			waitSemaphoreCount = 0,
+			pWaitSemaphores = null,
+			pWaitDstStageMask = null,
+			commandBufferCount = 1,
+			pCommandBuffers = &commandBuffer,
+			signalSemaphoreCount = 0,
+			pSignalSemaphores = null
+		};
 
-        _deviceApi.QueueSubmit(_queue, 1, &submitInfo, fence);
-    }
+		_deviceApi.QueueSubmit(_queue, 1, &submitInfo, fence);
+	}
 
-    private ReusableBuffer GetOrCreateReusableBuffer()
-    {
-        for (var i = 0; i < _reusableBuffers.Count; ++i)
-        {
-            var existingBuffer = _reusableBuffers[i];
-            if (existingBuffer.IsAvailable())
-                return existingBuffer;
-        }
+	private ReusableBuffer GetOrCreateReusableBuffer()
+	{
+		for (var i = 0; i < _reusableBuffers.Count; ++i)
+		{
+			var existingBuffer = _reusableBuffers[i];
+			if (existingBuffer.IsAvailable())
+				return existingBuffer;
+		}
 
-        var newBuffer = new ReusableBuffer(_device, _deviceApi, _queueFamilyIndex);
-        _reusableBuffers.Add(newBuffer);
-        return newBuffer;
-    }
+		var newBuffer = new ReusableBuffer(_device, _deviceApi, _queueFamilyIndex);
+		_reusableBuffers.Add(newBuffer);
+		return newBuffer;
+	}
 
-    [DoesNotReturn]
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private static void ThrowDisposed()
-    {
-        throw new ObjectDisposedException(nameof(VkBarrierHelper));
-    }
+	[DoesNotReturn]
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private static void ThrowDisposed()
+	{
+		throw new ObjectDisposedException(nameof(VkBarrierHelper));
+	}
 
-    /// <summary>
-    ///     Contains a reusable command pool, command buffer and an associated fence.
-    /// </summary>
-    private sealed class ReusableBuffer
-    {
-        private readonly VkCommandPool _commandPool;
+	/// <summary>
+	///     Contains a reusable command pool, command buffer and an associated fence.
+	/// </summary>
+	private sealed class ReusableBuffer
+	{
+		private readonly VkCommandPool _commandPool;
 
-        private readonly VkDevice _device;
-        private readonly VkDeviceApi _deviceApi;
-        private bool _isDisposed;
+		private readonly VkDevice _device;
+		private readonly VkDeviceApi _deviceApi;
+		private bool _isDisposed;
 
-        public unsafe ReusableBuffer(VkDevice device, VkDeviceApi deviceApi, uint queueFamilyIndex)
-        {
-            _device = device;
-            _deviceApi = deviceApi;
+		public unsafe ReusableBuffer(VkDevice device, VkDeviceApi deviceApi, uint queueFamilyIndex)
+		{
+			_device = device;
+			_deviceApi = deviceApi;
 
-            var poolCreateInfo = new VkCommandPoolCreateInfo
-            {
-                sType = VkStructureType.COMMAND_POOL_CREATE_INFO,
-                flags = VkCommandPoolCreateFlags.RESET_COMMAND_BUFFER_BIT,
-                queueFamilyIndex = queueFamilyIndex
-            };
+			var poolCreateInfo = new VkCommandPoolCreateInfo
+			{
+				sType = VkStructureType.COMMAND_POOL_CREATE_INFO,
+				flags = VkCommandPoolCreateFlags.RESET_COMMAND_BUFFER_BIT,
+				queueFamilyIndex = queueFamilyIndex
+			};
 
-            deviceApi.CreateCommandPool(device, ref poolCreateInfo, IntPtr.Zero, out _commandPool);
+			deviceApi.CreateCommandPool(device, ref poolCreateInfo, IntPtr.Zero, out _commandPool);
 
-            var bufferAllocateInfo = new VkCommandBufferAllocateInfo
-            {
-                sType = VkStructureType.COMMAND_BUFFER_ALLOCATE_INFO,
-                commandPool = _commandPool,
-                level = VkCommandBufferLevel.PRIMARY,
-                commandBufferCount = 1
-            };
+			var bufferAllocateInfo = new VkCommandBufferAllocateInfo
+			{
+				sType = VkStructureType.COMMAND_BUFFER_ALLOCATE_INFO,
+				commandPool = _commandPool,
+				level = VkCommandBufferLevel.PRIMARY,
+				commandBufferCount = 1
+			};
 
-            VkCommandBuffer commandBuffer;
-            deviceApi.AllocateCommandBuffers(_device, ref bufferAllocateInfo, &commandBuffer);
-            CommandBuffer = commandBuffer;
+			VkCommandBuffer commandBuffer;
+			deviceApi.AllocateCommandBuffers(_device, ref bufferAllocateInfo, &commandBuffer);
+			CommandBuffer = commandBuffer;
 
-            var fenceCreateInfo = new VkFenceCreateInfo
-            {
-                sType = VkStructureType.FENCE_CREATE_INFO,
-                flags = VkFenceCreateFlags.SIGNALED_BIT
-            };
+			var fenceCreateInfo = new VkFenceCreateInfo
+			{
+				sType = VkStructureType.FENCE_CREATE_INFO,
+				flags = VkFenceCreateFlags.SIGNALED_BIT
+			};
 
-            deviceApi.CreateFence(device, ref fenceCreateInfo, IntPtr.Zero, out var fence);
-            Fence = fence;
-        }
+			deviceApi.CreateFence(device, ref fenceCreateInfo, IntPtr.Zero, out var fence);
+			Fence = fence;
+		}
 
-        public VkCommandBuffer CommandBuffer { get; }
+		public VkCommandBuffer CommandBuffer { get; }
 
-        public VkFence Fence { get; }
+		public VkFence Fence { get; }
 
-        public bool IsAvailable()
-        {
-            return _deviceApi.GetFenceStatus(_device, Fence) == VkResult.VK_SUCCESS;
-        }
+		public bool IsAvailable() => _deviceApi.GetFenceStatus(_device, Fence) == VkResult.VK_SUCCESS;
 
-        public unsafe void Dispose()
-        {
-            if (_isDisposed)
-                return;
+		public unsafe void Dispose()
+		{
+			if (_isDisposed)
+				return;
 
-            _isDisposed = true;
+			_isDisposed = true;
 
-            var fence = Fence;
-            _deviceApi.WaitForFences(_device, 1, &fence, 1, ulong.MaxValue);
-            _deviceApi.DestroyFence(_device, fence, IntPtr.Zero);
+			var fence = Fence;
+			_deviceApi.WaitForFences(_device, 1, &fence, 1, ulong.MaxValue);
+			_deviceApi.DestroyFence(_device, fence, IntPtr.Zero);
 
-            var commandBuffer = CommandBuffer;
-            _deviceApi.FreeCommandBuffers(_device, _commandPool, 1, &commandBuffer);
+			var commandBuffer = CommandBuffer;
+			_deviceApi.FreeCommandBuffers(_device, _commandPool, 1, &commandBuffer);
 
-            _deviceApi.DestroyCommandPool(_device, _commandPool, IntPtr.Zero);
-        }
-    }
+			_deviceApi.DestroyCommandPool(_device, _commandPool, IntPtr.Zero);
+		}
+	}
 }

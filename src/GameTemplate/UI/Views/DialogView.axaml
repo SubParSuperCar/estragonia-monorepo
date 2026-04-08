@@ -1,74 +1,74 @@
 <UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:GameTemplate.UI.ViewModels"
-    xmlns:controls="using:GameTemplate.UI.Controls"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="540"
-    x:Class="GameTemplate.UI.Views.DialogView"
-    x:DataType="vm:DialogViewModel">
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="using:GameTemplate.UI.ViewModels"
+	xmlns:controls="using:GameTemplate.UI.Controls"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="540"
+	x:Class="GameTemplate.UI.Views.DialogView"
+	x:DataType="vm:DialogViewModel">
 
-    <Design.DataContext>
-        <vm:DialogViewModel>
-            <x:Arguments>
-                <x:String>Message</x:String>
-                <x:String>Cancel</x:String>
-                <x:String>Deny</x:String>
-                <x:String>Confirm</x:String>
-            </x:Arguments>
-        </vm:DialogViewModel>
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:DialogViewModel>
+			<x:Arguments>
+				<x:String>Message</x:String>
+				<x:String>Cancel</x:String>
+				<x:String>Deny</x:String>
+				<x:String>Confirm</x:String>
+			</x:Arguments>
+		</vm:DialogViewModel>
+	</Design.DataContext>
 
-    <Border Background="rgba(0, 0, 0, 0.2)">
-        <Border Padding="20"
-                MinWidth="300"
-                Background="White"
-                BorderBrush="Black"
-                BorderThickness="1"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center">
+	<Border Background="rgba(0, 0, 0, 0.2)">
+		<Border Padding="20"
+		        MinWidth="300"
+		        Background="White"
+		        BorderBrush="Black"
+		        BorderThickness="1"
+		        VerticalAlignment="Center"
+		        HorizontalAlignment="Center">
 
-            <StackPanel>
-                <TextBlock HorizontalAlignment="Center"
-                           Text="{Binding Message}"
-                           Margin="0,0,0,16" />
-                <DockPanel>
-                    <controls:AudioButton DockPanel.Dock="Left"
-                                          IsVisible="{Binding ConfirmText,
+			<StackPanel>
+				<TextBlock HorizontalAlignment="Center"
+				           Text="{Binding Message}"
+				           Margin="0,0,0,16" />
+				<DockPanel>
+					<controls:AudioButton DockPanel.Dock="Left"
+					                      IsVisible="{Binding ConfirmText,
 								Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                          Content="{Binding ConfirmText}"
-                                          Command="{Binding ButtonResponseCommand}">
-                        <controls:AudioButton.CommandParameter>
-                            <sys:Int32>2</sys:Int32>
-                        </controls:AudioButton.CommandParameter>
-                    </controls:AudioButton>
-                    <controls:AudioButton DockPanel.Dock="Left"
-                                          Margin="4,0,0,0"
-                                          IsVisible="{Binding DenyText,
+					                      Content="{Binding ConfirmText}"
+					                      Command="{Binding ButtonResponseCommand}">
+						<controls:AudioButton.CommandParameter>
+							<sys:Int32>2</sys:Int32>
+						</controls:AudioButton.CommandParameter>
+					</controls:AudioButton>
+					<controls:AudioButton DockPanel.Dock="Left"
+					                      Margin="4,0,0,0"
+					                      IsVisible="{Binding DenyText,
 								Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                          Content="{Binding DenyText}"
-                                          Command="{Binding ButtonResponseCommand}">
-                        <controls:AudioButton.CommandParameter>
-                            <sys:Int32>1</sys:Int32>
-                        </controls:AudioButton.CommandParameter>
-                    </controls:AudioButton>
-                    <controls:AudioButton DockPanel.Dock="Right"
-                                          Name="initialFocus0"
-                                          IsVisible="{Binding CancelText,
+					                      Content="{Binding DenyText}"
+					                      Command="{Binding ButtonResponseCommand}">
+						<controls:AudioButton.CommandParameter>
+							<sys:Int32>1</sys:Int32>
+						</controls:AudioButton.CommandParameter>
+					</controls:AudioButton>
+					<controls:AudioButton DockPanel.Dock="Right"
+					                      Name="initialFocus0"
+					                      IsVisible="{Binding CancelText,
 								Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                          Content="{Binding CancelText}"
-                                          Command="{Binding ButtonResponseCommand}"
-                                          IsCancel="True">
-                        <controls:AudioButton.CommandParameter>
-                            <sys:Int32>0</sys:Int32>
-                        </controls:AudioButton.CommandParameter>
-                    </controls:AudioButton>
-                    <Control Width="32" />
-                </DockPanel>
-            </StackPanel>
-        </Border>
-    </Border>
+					                      Content="{Binding CancelText}"
+					                      Command="{Binding ButtonResponseCommand}"
+					                      IsCancel="True">
+						<controls:AudioButton.CommandParameter>
+							<sys:Int32>0</sys:Int32>
+						</controls:AudioButton.CommandParameter>
+					</controls:AudioButton>
+					<Control Width="32" />
+				</DockPanel>
+			</StackPanel>
+		</Border>
+	</Border>
 
 </UserControl>

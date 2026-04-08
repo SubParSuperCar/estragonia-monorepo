@@ -1,4 +1,4 @@
-﻿using Avalonia.Platform;
+using Avalonia.Platform;
 using GdCursorShape = Godot.Control.CursorShape;
 
 namespace Estragonia;
@@ -6,19 +6,16 @@ namespace Estragonia;
 /// <summary>A standard cursor, represented by a <see cref="GdCursorShape" /> enum value.</summary>
 internal sealed class GodotStandardCursorImpl : ICursorImpl
 {
-    public GodotStandardCursorImpl(GdCursorShape cursorShape)
-    {
-        CursorShape = cursorShape;
-    }
+	public GodotStandardCursorImpl(GdCursorShape cursorShape)
+	{
+		CursorShape = cursorShape;
+	}
 
-    public GdCursorShape CursorShape { get; }
+	public GdCursorShape CursorShape { get; }
 
-    public void Dispose()
-    {
-    }
+	public void Dispose()
+	{
+	}
 
-    public override string ToString()
-    {
-        return CursorShape.ToString();
-    }
+	public override string ToString() => CursorShape.ToString();
 }

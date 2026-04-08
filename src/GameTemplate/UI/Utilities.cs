@@ -14,69 +14,61 @@ namespace GameTemplate.UI;
 
 public static class Utilities
 {
-    public enum TransitionType
-    {
-        Fade
-    }
+	public enum TransitionType
+	{
+		Fade
+	}
 
-    public static NavigationMethod NavigationMethodBasedOnMouseOrKey
-        => AvaloniaLoader.LastPressedInputWasMouseClick ? NavigationMethod.Unspecified : NavigationMethod.Directional;
+	public static NavigationMethod NavigationMethodBasedOnMouseOrKey
+		=> AvaloniaLoader.LastPressedInputWasMouseClick ? NavigationMethod.Unspecified : NavigationMethod.Directional;
 
-    public static Bitmap LoadImageFromResource(Uri resourceUri)
-    {
-        return new Bitmap(AssetLoader.Open(resourceUri));
-    }
+	public static Bitmap LoadImageFromResource(Uri resourceUri) => new(AssetLoader.Open(resourceUri));
 
-    /// <summary>
-    ///     Note: rounds to milliseconds.
-    /// </summary>
-    public static TimeSpan TimeSpanFromSeconds(float seconds)
-    {
-        return new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(seconds * 1000));
-    }
+	/// <summary>
+	///     Note: rounds to milliseconds.
+	/// </summary>
+	public static TimeSpan TimeSpanFromSeconds(float seconds) => new(0, 0, 0, 0, Mathf.RoundToInt(seconds * 1000));
 
-    public static PageTransitionWithDuration CreatePageTransition(TransitionType transitionType, float durationSeconds)
-    {
-        var duration = TimeSpanFromSeconds(durationSeconds);
+	public static PageTransitionWithDuration CreatePageTransition(TransitionType transitionType, float durationSeconds)
+	{
+		var duration = TimeSpanFromSeconds(durationSeconds);
 
-        IPageTransition transition;
-        switch (transitionType)
-        {
-            default:
-            case TransitionType.Fade:
-                transition = new CompositePageTransition
-                {
-                    PageTransitions = new List<IPageTransition>
-                    {
-                        new SequentialFade(duration),
-                        new TransitionDisableFromControl(duration)
-                    }
-                };
-                break;
-        }
+		IPageTransition transition;
+		switch (transitionType)
+		{
+			default:
+			case TransitionType.Fade:
+				transition = new CompositePageTransition
+				{
+					PageTransitions = new List<IPageTransition>
+					{
+						new SequentialFade(duration),
+						new TransitionDisableFromControl(duration)
+					}
+				};
+				break;
+		}
 
-        return new PageTransitionWithDuration(transition, durationSeconds);
-    }
+		return new PageTransitionWithDuration(transition, durationSeconds);
+	}
 
-    public class PageTransitionWithDuration : IPageTransition
-    {
-        public PageTransitionWithDuration(IPageTransition pageTransition, float durationSeconds)
-        {
-            PageTransition = pageTransition;
-            Duration = durationSeconds;
-        }
+	public class PageTransitionWithDuration : IPageTransition
+	{
+		public PageTransitionWithDuration(IPageTransition pageTransition, float durationSeconds)
+		{
+			PageTransition = pageTransition;
+			Duration = durationSeconds;
+		}
 
-        public IPageTransition PageTransition { get; set; }
-        public float Duration { get; set; }
+		public IPageTransition PageTransition { get; set; }
+		public float Duration { get; set; }
 
-        public Task Start(Visual? from, Visual? to, bool forward, CancellationToken cancellationToken)
-        {
-            return PageTransition.Start(from, to, forward, cancellationToken);
-        }
+		public Task Start(Visual? from, Visual? to, bool forward, CancellationToken cancellationToken) =>
+			PageTransition.Start(from, to, forward, cancellationToken);
 
-        public async Task StartToEnd()
-        {
-            await Task.Delay(TimeSpanFromSeconds(Duration));
-        }
-    }
+		public async Task StartToEnd()
+		{
+			await Task.Delay(TimeSpanFromSeconds(Duration));
+		}
+	}
 }

@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, test ]
+    branches: [main, test]
   pull_request:
-    branches: [ main, test ]
+    branches: [main, test]
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [ Debug, Release ]
+        configuration: [Debug, Release]
         project:
           - Estragonia
           - GameMenu
@@ -40,7 +40,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '10.x'
+          dotnet-version: "10.x"
           cache: true
           cache-dependency-path: src/**/*.csproj
 

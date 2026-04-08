@@ -4,7 +4,7 @@ namespace GameTemplate.UI.ViewModels;
 
 public class MainViewModel : NavigatorViewModel
 {
-    public MainViewModel(UserInterface userInterface) : base(userInterface)
-    {
-    }
+	public MainViewModel(UserInterface userInterface) : base(userInterface)
+	{
+	}
 }

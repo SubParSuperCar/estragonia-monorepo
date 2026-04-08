@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -10,36 +10,36 @@ namespace GameMenu.UI.Behaviors;
 /// <summary>A behavior that focuses a given target when the associated object gets disabled while being focused.</summary>
 public sealed class MoveFocusWhenDisabledBehavior : Behavior<Control>
 {
-    public static readonly StyledProperty<IInputElement?> TargetProperty =
-        AvaloniaProperty.Register<MoveFocusWhenDisabledBehavior, IInputElement?>(nameof(Target));
+	public static readonly StyledProperty<IInputElement?> TargetProperty =
+		AvaloniaProperty.Register<MoveFocusWhenDisabledBehavior, IInputElement?>(nameof(Target));
 
-    private IDisposable? _subscription;
+	private IDisposable? _subscription;
 
-    public IInputElement? Target
-    {
-        get => GetValue(TargetProperty);
-        set => SetValue(TargetProperty, value);
-    }
+	public IInputElement? Target
+	{
+		get => GetValue(TargetProperty);
+		set => SetValue(TargetProperty, value);
+	}
 
-    protected override void OnAttached()
-    {
-        base.OnAttached();
+	protected override void OnAttached()
+	{
+		base.OnAttached();
 
-        _subscription = AssociatedObject?.GetObservable(InputElement.IsEffectivelyEnabledProperty)
-            .Subscribe(new AnonymousObserver<bool>(OnIsEnabledChanged));
-    }
+		_subscription = AssociatedObject?.GetObservable(InputElement.IsEffectivelyEnabledProperty)
+			.Subscribe(new AnonymousObserver<bool>(OnIsEnabledChanged));
+	}
 
-    protected override void OnDetaching()
-    {
-        _subscription?.Dispose();
-        _subscription = null;
+	protected override void OnDetaching()
+	{
+		_subscription?.Dispose();
+		_subscription = null;
 
-        base.OnDetaching();
-    }
+		base.OnDetaching();
+	}
 
-    private void OnIsEnabledChanged(bool isEnabled)
-    {
-        if (!isEnabled && AssociatedObject?.IsFocused == true)
-            Target?.Focus();
-    }
+	private void OnIsEnabledChanged(bool isEnabled)
+	{
+		if (!isEnabled && AssociatedObject?.IsFocused == true)
+			Target?.Focus();
+	}
 }

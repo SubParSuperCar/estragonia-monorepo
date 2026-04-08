@@ -10,11 +10,11 @@ It's GPU accelerated using the native graphics API for your platform.
 
 ## Platform Support
 
-| Platform | Graphics Backend | Rendering |
-|----------|-----------------|-----------|
-| Windows  | Vulkan          | GPU accelerated |
-| Linux    | Vulkan          | GPU accelerated |
-| macOS    | Metal           | GPU accelerated (zero-copy) |
+| Platform | Graphics Backend | Rendering                   |
+| -------- | ---------------- | --------------------------- |
+| Windows  | Vulkan           | GPU accelerated             |
+| Linux    | Vulkan           | GPU accelerated             |
+| macOS    | Metal            | GPU accelerated (zero-copy) |
 
 The appropriate backend is automatically selected at runtime. No configuration required.
 
@@ -32,6 +32,7 @@ For a more detailed guide, see the [step by step instructions](https://github.co
 For various things to know regarding compatibility, rendering and input handling, see [this document](https://github.com/MrJul/Estragonia/blob/main/docs/toknow.md).
 
 Samples:
+
 - [HelloWorld](https://github.com/MrJul/Estragonia/tree/main/samples/HelloWorld): a basic Avalonia-into-Godot setup.
 - [GameMenu](https://github.com/MrJul/Estragonia/tree/main/samples/GameMenu): a functional game menu UI using the MVVM pattern, with controller support, UI animations and scaling.
 

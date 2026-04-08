@@ -1,39 +1,36 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 
 namespace GameMenu.UI;
 
 public sealed partial class MainMenuViewModel : ViewModel
 {
-    private readonly INavigator _navigator;
-    private readonly UIOptions _uiOptions;
+	private readonly INavigator _navigator;
+	private readonly UIOptions _uiOptions;
 
-    public MainMenuViewModel(INavigator navigator, UIOptions uiOptions)
-    {
-        _navigator = navigator;
-        _uiOptions = uiOptions;
-    }
+	public MainMenuViewModel(INavigator navigator, UIOptions uiOptions)
+	{
+		_navigator = navigator;
+		_uiOptions = uiOptions;
+	}
 
-    protected override Task LoadAsync()
-    {
-        return Task.CompletedTask;
-    }
+	protected override Task LoadAsync() => Task.CompletedTask;
 
-    [RelayCommand]
-    public void StartNewGame()
-    {
-        _navigator.NavigateTo(new DifficultyViewModel(_navigator));
-    }
+	[RelayCommand]
+	public void StartNewGame()
+	{
+		_navigator.NavigateTo(new DifficultyViewModel(_navigator));
+	}
 
-    [RelayCommand]
-    public void OpenOptions()
-    {
-        _navigator.NavigateTo(new OptionsViewModel(_uiOptions));
-    }
+	[RelayCommand]
+	public void OpenOptions()
+	{
+		_navigator.NavigateTo(new OptionsViewModel(_uiOptions));
+	}
 
-    [RelayCommand]
-    public void Exit()
-    {
-        _navigator.Quit();
-    }
+	[RelayCommand]
+	public void Exit()
+	{
+		_navigator.Quit();
+	}
 }

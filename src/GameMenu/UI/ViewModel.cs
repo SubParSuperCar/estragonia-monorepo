@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,40 +8,37 @@ namespace GameMenu.UI;
 
 public abstract partial class ViewModel : ObservableObject
 {
-    private Task? _loadTask;
+	private Task? _loadTask;
 
-    [ObservableProperty] private SceneTree? _sceneTree;
+	[ObservableProperty] private SceneTree? _sceneTree;
 
-    public event EventHandler? Closed;
+	public event EventHandler? Closed;
 
-    public Task EnsureLoadedAsync()
-    {
-        return _loadTask ??= LoadAsync();
-    }
+	public Task EnsureLoadedAsync()
+	{
+		return _loadTask ??= LoadAsync();
+	}
 
-    protected abstract Task LoadAsync();
+	protected abstract Task LoadAsync();
 
-    [RelayCommand]
-    public async Task<bool> TryCloseAsync()
-    {
-        if (!await TryCloseCoreAsync())
-            return false;
+	[RelayCommand]
+	public async Task<bool> TryCloseAsync()
+	{
+		if (!await TryCloseCoreAsync())
+			return false;
 
-        OnClosed();
-        return true;
-    }
+		OnClosed();
+		return true;
+	}
 
-    protected virtual Task<bool> TryCloseCoreAsync()
-    {
-        return Task.FromResult(true);
-    }
+	protected virtual Task<bool> TryCloseCoreAsync() => Task.FromResult(true);
 
-    private void OnClosed()
-    {
-        Closed?.Invoke(this, EventArgs.Empty);
-    }
+	private void OnClosed()
+	{
+		Closed?.Invoke(this, EventArgs.Empty);
+	}
 
-    public virtual void ProcessFrame()
-    {
-    }
+	public virtual void ProcessFrame()
+	{
+	}
 }

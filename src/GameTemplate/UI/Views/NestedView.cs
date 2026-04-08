@@ -8,13 +8,13 @@ namespace GameTemplate.UI.Views;
 /// </summary>
 public abstract class NestedView : View
 {
-    protected override void OnGotFocus(GotFocusEventArgs e)
-    {
-        TrackFocussedControls = false;
-        base.OnGotFocus(e);
-    }
+	protected override void OnGotFocus(GotFocusEventArgs e)
+	{
+		TrackFocussedControls = false;
+		base.OnGotFocus(e);
+	}
 
-    protected override void FocusLast()
-    {
-    }
+	protected override void FocusLast()
+	{
+	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -9,62 +9,56 @@ namespace Estragonia;
 /// <summary>Godot Vulkan-based <see cref="IPlatformGraphics" /> implementation.</summary>
 internal sealed class GodotVkPlatformGraphics : IGodotPlatformGraphics
 {
-    private GodotVkSkiaGpu? _context;
-    private int _refCount;
+	private GodotVkSkiaGpu? _context;
+	private int _refCount;
 
-    bool IPlatformGraphics.UsesSharedContext
-        => true;
+	bool IPlatformGraphics.UsesSharedContext
+		=> true;
 
-    public IGodotSkiaGpu GetSharedContext()
-    {
-        if (Volatile.Read(ref _refCount) == 0)
-            ThrowDisposed();
+	public IGodotSkiaGpu GetSharedContext()
+	{
+		if (Volatile.Read(ref _refCount) == 0)
+			ThrowDisposed();
 
-        if (_context is null || _context.IsLost)
-        {
-            _context?.Dispose();
-            _context = null;
-            _context = new GodotVkSkiaGpu();
-        }
+		if (_context is null || _context.IsLost)
+		{
+			_context?.Dispose();
+			_context = null;
+			_context = new GodotVkSkiaGpu();
+		}
 
-        return _context;
-    }
+		return _context;
+	}
 
-    IPlatformGraphicsContext IPlatformGraphics.CreateContext()
-    {
-        throw new NotSupportedException();
-    }
+	IPlatformGraphicsContext IPlatformGraphics.CreateContext() => throw new NotSupportedException();
 
-    IPlatformGraphicsContext IPlatformGraphics.GetSharedContext()
-    {
-        return GetSharedContext();
-    }
+	IPlatformGraphicsContext IPlatformGraphics.GetSharedContext() => GetSharedContext();
 
-    public void AddRef()
-    {
-        Interlocked.Increment(ref _refCount);
-    }
+	public void AddRef()
+	{
+		Interlocked.Increment(ref _refCount);
+	}
 
-    public void Release()
-    {
-        if (Interlocked.Decrement(ref _refCount) == 0)
-            Dispose();
-    }
+	public void Release()
+	{
+		if (Interlocked.Decrement(ref _refCount) == 0)
+			Dispose();
+	}
 
 
-    public void Dispose()
-    {
-        if (_context is not null)
-        {
-            _context.Dispose();
-            _context = null;
-        }
-    }
+	public void Dispose()
+	{
+		if (_context is not null)
+		{
+			_context.Dispose();
+			_context = null;
+		}
+	}
 
-    [DoesNotReturn]
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private static void ThrowDisposed()
-    {
-        throw new ObjectDisposedException(nameof(GodotVkPlatformGraphics));
-    }
+	[DoesNotReturn]
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private static void ThrowDisposed()
+	{
+		throw new ObjectDisposedException(nameof(GodotVkPlatformGraphics));
+	}
 }

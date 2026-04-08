@@ -1,9 +1,9 @@
-﻿namespace GameMenu.UI;
+namespace GameMenu.UI;
 
 public partial class DifficultyView : View
 {
-    public DifficultyView()
-    {
-        InitializeComponent();
-    }
+	public DifficultyView()
+	{
+		InitializeComponent();
+	}
 }

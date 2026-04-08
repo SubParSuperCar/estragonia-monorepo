@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -9,40 +9,40 @@ namespace GameTemplate.UI.Controls;
 
 public class ConfirmableNumericUpDown : NumericUpDown
 {
-    public static readonly StyledProperty<IInputElement?> TargetProperty =
-        AvaloniaProperty.Register<ConfirmableNumericUpDown, IInputElement?>(nameof(Target));
+	public static readonly StyledProperty<IInputElement?> TargetProperty =
+		AvaloniaProperty.Register<ConfirmableNumericUpDown, IInputElement?>(nameof(Target));
 
-    private decimal? _lastNonNullValue;
-    protected override Type StyleKeyOverride => typeof(NumericUpDown);
+	private decimal? _lastNonNullValue;
+	protected override Type StyleKeyOverride => typeof(NumericUpDown);
 
-    public IInputElement? Target
-    {
-        get => GetValue(TargetProperty);
-        set => SetValue(TargetProperty, value);
-    }
+	public IInputElement? Target
+	{
+		get => GetValue(TargetProperty);
+		set => SetValue(TargetProperty, value);
+	}
 
-    protected override void OnValueChanged(decimal? oldValue, decimal? newValue)
-    {
-        if (newValue != null) _lastNonNullValue = newValue;
+	protected override void OnValueChanged(decimal? oldValue, decimal? newValue)
+	{
+		if (newValue != null) _lastNonNullValue = newValue;
 
-        base.OnValueChanged(oldValue, newValue);
-    }
+		base.OnValueChanged(oldValue, newValue);
+	}
 
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            Value ??= _lastNonNullValue;
-            Target?.Focus(NavigationMethodBasedOnMouseOrKey);
-            e.Handled = true;
-        }
+	protected override void OnKeyDown(KeyEventArgs e)
+	{
+		if (e.Key == Key.Enter)
+		{
+			Value ??= _lastNonNullValue;
+			Target?.Focus(NavigationMethodBasedOnMouseOrKey);
+			e.Handled = true;
+		}
 
-        base.OnKeyDown(e);
-    }
+		base.OnKeyDown(e);
+	}
 
-    protected override void OnLostFocus(RoutedEventArgs e)
-    {
-        Value ??= _lastNonNullValue;
-        base.OnLostFocus(e);
-    }
+	protected override void OnLostFocus(RoutedEventArgs e)
+	{
+		Value ??= _lastNonNullValue;
+		base.OnLostFocus(e);
+	}
 }

@@ -1,11 +1,11 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 
 namespace HelloWorld;
 
 public partial class HelloWorldView : UserControl
 {
-    public HelloWorldView()
-    {
-        InitializeComponent();
-    }
+	public HelloWorldView()
+	{
+		InitializeComponent();
+	}
 }

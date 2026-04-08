@@ -1,21 +1,21 @@
 <UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ui="using:GameTemplate.UI"
-    xmlns:vm="using:GameTemplate.UI.ViewModels"
-    x:Class="GameTemplate.UI.Views.MainView"
-    x:DataType="vm:MainViewModel"
-    RenderOptions.TextRenderingMode="Antialias"
-    XYFocus.NavigationModes="Enabled"
-    XYFocus.UpNavigationStrategy="Projection"
-    XYFocus.DownNavigationStrategy="Projection"
-    XYFocus.LeftNavigationStrategy="Projection"
-    XYFocus.RightNavigationStrategy="Projection">
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ui="using:GameTemplate.UI"
+	xmlns:vm="using:GameTemplate.UI.ViewModels"
+	x:Class="GameTemplate.UI.Views.MainView"
+	x:DataType="vm:MainViewModel"
+	RenderOptions.TextRenderingMode="Antialias"
+	XYFocus.NavigationModes="Enabled"
+	XYFocus.UpNavigationStrategy="Projection"
+	XYFocus.DownNavigationStrategy="Projection"
+	XYFocus.LeftNavigationStrategy="Projection"
+	XYFocus.RightNavigationStrategy="Projection">
 
-    <UserControl.DataTemplates>
-        <ui:ViewLocator />
-    </UserControl.DataTemplates>
+	<UserControl.DataTemplates>
+		<ui:ViewLocator />
+	</UserControl.DataTemplates>
 
-    <TransitioningContentControl Content="{Binding CurrentViewModel}"
-                                 PageTransition="{Binding Transition}" />
+	<TransitioningContentControl Content="{Binding CurrentViewModel}"
+	                             PageTransition="{Binding Transition}" />
 </UserControl>

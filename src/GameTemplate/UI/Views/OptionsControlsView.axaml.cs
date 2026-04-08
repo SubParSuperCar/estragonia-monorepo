@@ -2,8 +2,8 @@ namespace GameTemplate.UI.Views;
 
 public partial class OptionsControlsView : NestedView
 {
-    public OptionsControlsView()
-    {
-        InitializeComponent();
-    }
+	public OptionsControlsView()
+	{
+		InitializeComponent();
+	}
 }

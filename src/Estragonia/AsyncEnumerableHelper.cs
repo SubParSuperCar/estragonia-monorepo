@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -6,52 +6,46 @@ namespace Estragonia;
 
 internal static class AsyncEnumerableHelper
 {
-    public static IAsyncEnumerable<T> AsAsyncEnumerable<T>(this IEnumerable<T> enumerable)
-    {
-        return new EnumerableAsyncWrapper<T>(enumerable);
-    }
+	public static IAsyncEnumerable<T> AsAsyncEnumerable<T>(this IEnumerable<T> enumerable) =>
+		new EnumerableAsyncWrapper<T>(enumerable);
 
-    private sealed class EnumerableAsyncWrapper<T> : IAsyncEnumerable<T>
-    {
-        private readonly IEnumerable<T> _enumerable;
+	private sealed class EnumerableAsyncWrapper<T> : IAsyncEnumerable<T>
+	{
+		private readonly IEnumerable<T> _enumerable;
 
-        public EnumerableAsyncWrapper(IEnumerable<T> enumerable)
-        {
-            _enumerable = enumerable;
-        }
+		public EnumerableAsyncWrapper(IEnumerable<T> enumerable)
+		{
+			_enumerable = enumerable;
+		}
 
-        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
-        {
-            return new EnumeratorAsyncWrapper<T>(_enumerable.GetEnumerator(), cancellationToken);
-        }
-    }
+		public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default) =>
+			new EnumeratorAsyncWrapper<T>(_enumerable.GetEnumerator(), cancellationToken);
+	}
 
-    private sealed class EnumeratorAsyncWrapper<T> : IAsyncEnumerator<T>
-    {
-        private readonly CancellationToken _cancellationToken;
+	private sealed class EnumeratorAsyncWrapper<T> : IAsyncEnumerator<T>
+	{
+		private readonly CancellationToken _cancellationToken;
 
-        private readonly IEnumerator<T> _enumerator;
+		private readonly IEnumerator<T> _enumerator;
 
-        public EnumeratorAsyncWrapper(IEnumerator<T> enumerator, CancellationToken cancellationToken)
-        {
-            _enumerator = enumerator;
-            _cancellationToken = cancellationToken;
-        }
+		public EnumeratorAsyncWrapper(IEnumerator<T> enumerator, CancellationToken cancellationToken)
+		{
+			_enumerator = enumerator;
+			_cancellationToken = cancellationToken;
+		}
 
-        public T Current
-            => _enumerator.Current;
+		public T Current
+			=> _enumerator.Current;
 
-        public ValueTask<bool> MoveNextAsync()
-        {
-            return _cancellationToken.IsCancellationRequested
-                ? new ValueTask<bool>(Task.FromCanceled<bool>(_cancellationToken))
-                : new ValueTask<bool>(_enumerator.MoveNext());
-        }
+		public ValueTask<bool> MoveNextAsync() =>
+			_cancellationToken.IsCancellationRequested
+				? new ValueTask<bool>(Task.FromCanceled<bool>(_cancellationToken))
+				: new ValueTask<bool>(_enumerator.MoveNext());
 
-        public ValueTask DisposeAsync()
-        {
-            _enumerator.Dispose();
-            return default;
-        }
-    }
+		public ValueTask DisposeAsync()
+		{
+			_enumerator.Dispose();
+			return default;
+		}
+	}
 }
