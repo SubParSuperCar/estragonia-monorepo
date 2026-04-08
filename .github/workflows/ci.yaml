@@ -17,14 +17,17 @@ env:
 
 jobs:
   discover:
+    name: Discover projects
     runs-on: ubuntu-latest
     outputs:
       projects: ${{ steps.set.outputs.projects }}
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
 
-      - id: set
+      - name: Find projects
+        id: set
         run: |
           projects=$(find src -name "*.csproj" | xargs -n1 dirname | sort -u | jq -R -s -c 'split("\n")[:-1]')
           echo "projects=$projects" >> $GITHUB_OUTPUT
