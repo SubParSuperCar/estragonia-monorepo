@@ -22,10 +22,6 @@
     <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.2"/>
   </ItemGroup>
 
-  <PropertyGroup>
-    <NoWarn>$(NoWarn);AVALONIAUNSTABLEAPIS</NoWarn>
-  </PropertyGroup>
-
   <!--
     Reference the Avalonia runtime assemblies (lib/) instead of the reference assemblies (ref/) from nuget packages.
     The reference assemblies have patches to prevent using some platform interfaces we need :(
