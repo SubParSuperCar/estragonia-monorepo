@@ -1,0 +1,37 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Template.UI.ViewModels"
+    xmlns:controls="using:Template.UI.Controls"
+    mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="540"
+    x:Class="Template.UI.Views.EscapeMenuView"
+    x:DataType="vm:EscapeMenuViewModel">
+
+    <Design.DataContext>
+        <vm:EscapeMenuViewModel />
+    </Design.DataContext>
+
+    <Border HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            BorderThickness="1"
+            BorderBrush="Black"
+            Background="White"
+            Padding="10">
+        <StackPanel Spacing="6">
+            <controls:AudioButton Name="initialFocus0"
+                                  Command="{Binding CloseCommand}"
+                                  IsCancel="True"
+                                  Margin="0 0 0 6">
+                Resume
+            </controls:AudioButton>
+            <controls:AudioButton Command="{Binding ToOptionsCommand}">
+                Options
+            </controls:AudioButton>
+            <controls:AudioButton Command="{Binding ToMainMenuCommand}">
+                Exit to main menu
+            </controls:AudioButton>
+        </StackPanel>
+    </Border>
+</UserControl>

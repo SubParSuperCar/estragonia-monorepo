@@ -1,0 +1,198 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Template.UI.ViewModels"
+    xmlns:controls="using:Template.UI.Controls"
+    xmlns:model="using:Template.UI.Models"
+    xmlns:converters="clr-namespace:Template.UI.Converters"
+    mc:Ignorable="d"
+    d:DesignWidth="500"
+    d:DesignHeight="540"
+    x:Class="Template.UI.Views.OptionsControlsView"
+    x:DataType="vm:OptionsControlsViewModel">
+
+    <UserControl.Resources>
+        <converters:ButtonToImageConverter x:Key="ButtonImageConverter" />
+        <converters:PathToImageConverter x:Key="PathImageConverter" />
+
+        <!-- InputMapItem DataTemplate -->
+        <DataTemplate x:Key="inputMapItemTemplate"
+                      DataType="model:InputMapItem">
+            <Grid ColumnDefinitions="*, *, 80, 80"
+                  Margin="0 2"
+                  Height="40">
+                <TextBlock VerticalAlignment="Center"
+                           Margin="10 0 0 0"
+                           Text="{Binding InputName}" />
+
+                <!-- Reserved inputs -->
+                <Border Grid.Column="1"
+                        Background="Gray"
+                        HorizontalAlignment="Right"
+                        Margin="10 2"
+                        Padding="2"
+                        IsVisible="{Binding ReservedKeyPaths,
+							Converter={x:Static ObjectConverters.IsNotNull}}"
+                        ToolTip.Tip="These inputs are reserved for this control and cannot be bound within this group.">
+                    <ItemsControl ItemsSource="{Binding ReservedKeyPaths}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding .,
+										Converter={StaticResource PathImageConverter}}"
+                                       Width="32" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Border>
+
+                <!-- Keyboard input -->
+                <controls:AudioButton Grid.Column="2"
+                                      Classes="inputMapButton"
+                                      Command="{Binding $parent[ItemsControl].((vm:OptionsControlsViewModel)DataContext).InputPromptKeyboardCommand}"
+                                      CommandParameter="{Binding .}">
+                    <Image
+                        Source="{Binding KeyEnumValue,
+										Converter={StaticResource ButtonImageConverter},
+										ConverterParameter=keyboard}"
+                        Width="32" />
+                </controls:AudioButton>
+
+                <!-- Controller input -->
+                <controls:AudioButton Grid.Column="3"
+                                      Classes="inputMapButton"
+                                      Command="{Binding $parent[ItemsControl].((vm:OptionsControlsViewModel)DataContext).InputPromptJoypadCommand}"
+                                      CommandParameter="{Binding .}">
+                    <Image
+                        Source="{Binding ControllerEnumValue,
+										Converter={StaticResource ButtonImageConverter},
+										ConverterParameter=xbox}"
+                        Width="32" />
+                </controls:AudioButton>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Design.DataContext>
+        <vm:OptionsControlsViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="controls|AudioButton.inputMapButton">
+            <Setter Property="Padding"
+                    Value="6 0" />
+            <Setter Property="Margin"
+                    Value="2 0" />
+            <Setter Property="Background"
+                    Value="#454545" />
+            <Setter Property="BorderThickness"
+                    Value="3" />
+
+            <Style Selector="^:pointerover, ^:focus-within">
+                <Setter Property="Background"
+                        Value="#777777" />
+            </Style>
+        </Style>
+
+        <Style Selector="HeaderedContentControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Header -->
+                        <Border
+                            ZIndex="1"
+                            Padding="5,0,5,0"
+                            Margin="30,0,0,0"
+                            Background="{TemplateBinding Background}">
+                            <TextBlock
+                                Text="{TemplateBinding Header}"
+                                FontWeight="Bold" />
+                        </Border>
+
+                        <!-- Content Area -->
+                        <Border
+                            Grid.RowSpan="2"
+                            Padding="0,5,0,0"
+                            Grid.ColumnSpan="2"
+                            Margin="0,10,0,0"
+                            CornerRadius="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter
+                                Name="PART_ContentPresenter"
+                                Padding="8"
+                                Content="{TemplateBinding Content}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <Border Padding="15"
+            Background="{StaticResource ContainerNormalBackgroundBrush}">
+
+        <StackPanel Spacing="10">
+
+            <!-- Keyboard/controller labels -->
+            <StackPanel>
+                <Grid ColumnDefinitions="*, 92, 82, 80"
+                      Margin="0 0 10 0">
+                    <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Center">
+                        Reserved
+                    </TextBlock>
+                    <TextBlock Grid.Column="2"
+                               HorizontalAlignment="Center">
+                        Keyboard
+                    </TextBlock>
+                    <TextBlock Grid.Column="3"
+                               HorizontalAlignment="Center">
+                        Controller
+                    </TextBlock>
+                </Grid>
+
+                <!-- Control sections -->
+                <HeaderedContentControl Header="Navigation"
+                                        Background="White"
+                                        BorderBrush="#bc6b66"
+                                        BorderThickness="3"
+                                        Margin="0 0 0 20">
+                    <ItemsControl ItemsSource="{Binding NavigationInputMapItems}"
+                                  ItemTemplate="{StaticResource inputMapItemTemplate}" />
+                </HeaderedContentControl>
+                <HeaderedContentControl Header="Gameplay"
+                                        Background="White"
+                                        BorderBrush="#6c94bc"
+                                        BorderThickness="3"
+                                        Margin="0 0 0 10">
+                    <ItemsControl ItemsSource="{Binding GameplayInputMapItems}"
+                                  ItemTemplate="{StaticResource inputMapItemTemplate}" />
+                </HeaderedContentControl>
+            </StackPanel>
+
+            <controls:AudioButton HorizontalAlignment="Right"
+                                  Margin="10 0 0 0"
+                                  Command="{Binding ResetToDefaultCommand}">
+                Reset all controls to default
+            </controls:AudioButton>
+        </StackPanel>
+    </Border>
+
+
+</UserControl>

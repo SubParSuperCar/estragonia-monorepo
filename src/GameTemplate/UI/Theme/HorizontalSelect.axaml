@@ -1,0 +1,128 @@
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Template.UI.Controls"
+    xmlns:scg="clr-namespace:System.Collections.Generic;assembly=netstandard"
+    xmlns:converters="clr-namespace:Template.UI.Converters">
+
+    <Design.PreviewWith>
+        <Border Background="White">
+            <StackPanel Spacing="20"
+                        Margin="20"
+                        Width="250">
+                <controls:HorizontalSelect Value="0">
+                    <controls:HorizontalSelect.ValueNames>
+                        <scg:List x:TypeArguments="x:String">
+                            <x:String>Option 1</x:String>
+                            <x:String>Option B</x:String>
+                            <x:String>Option III</x:String>
+                            <x:String>Option Four</x:String>
+                            <x:String>Option Penta</x:String>
+                        </scg:List>
+                    </controls:HorizontalSelect.ValueNames>
+                </controls:HorizontalSelect>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <ControlTheme x:Key="{x:Type controls:HorizontalSelect}"
+                  TargetType="controls:HorizontalSelect">
+        <ControlTheme.Resources>
+            <converters:IntEqualMultiConverter x:Key="intEqualMultiConverter" />
+            <converters:IntAdderConverter x:Key="intAdderConverter" />
+        </ControlTheme.Resources>
+
+        <Style Selector="^ /template/ Grid.engaged">
+            <Setter Property="Background"
+                    Value="{StaticResource EngagedGradientBrush}" />
+        </Style>
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Name="PART_Container"
+                      RowDefinitions="Auto, Auto"
+                      ColumnDefinitions="Auto, *, Auto">
+
+                    <Border Grid.RowSpan="2"
+                            Grid.ColumnSpan="3" />
+
+                    <controls:AudioButton Name="PART_ValueDecrementer"
+                                          Grid.RowSpan="2"
+                                          VerticalAlignment="Center"
+                                          Focusable="False">
+                        &lt;
+                    </controls:AudioButton>
+
+                    <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="{TemplateBinding DisplayedText}" />
+
+                    <ItemsControl Name="PART_ValuesPresenter"
+                                  Grid.Column="1"
+                                  Grid.Row="1"
+                                  Padding="6 0"
+                                  Height="8"
+                                  ItemsSource="{TemplateBinding Values}">
+
+                        <ItemsControl.Styles>
+                            <Style Selector="Border.current">
+                                <Setter Property="Background"
+                                        Value="{StaticResource AccentBrush}" />
+                            </Style>
+                            <Style Selector="Border.last">
+                                <Setter Property="BorderThickness"
+                                        Value="1" />
+                            </Style>
+                        </ItemsControl.Styles>
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid
+                                    Columns="{Binding ValueNames.Count,
+											 RelativeSource={RelativeSource AncestorType=controls:HorizontalSelect}}" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Black"
+                                        BorderThickness="1 1 0 1"
+                                        Background="White">
+                                    <Classes.current>
+                                        <MultiBinding Converter="{StaticResource intEqualMultiConverter}">
+                                            <Binding />
+                                            <Binding
+                                                RelativeSource="{RelativeSource AncestorType=controls:HorizontalSelect}"
+                                                Path="Value" />
+                                        </MultiBinding>
+                                    </Classes.current>
+                                    <Classes.last>
+                                        <MultiBinding Converter="{StaticResource intEqualMultiConverter}">
+                                            <Binding />
+                                            <Binding
+                                                RelativeSource="{RelativeSource AncestorType=controls:HorizontalSelect}"
+                                                Path="ValueNames.Count"
+                                                Converter="{StaticResource intAdderConverter}"
+                                                ConverterParameter="-1" />
+                                        </MultiBinding>
+                                    </Classes.last>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <controls:AudioButton Name="PART_ValueIncrementer"
+                                          Grid.Column="2"
+                                          Grid.RowSpan="2"
+                                          VerticalAlignment="Center"
+                                          Focusable="False">
+                        >
+                    </controls:AudioButton>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+</ResourceDictionary>
