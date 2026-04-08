@@ -49,9 +49,23 @@ internal sealed class BclStorageFolder : IStorageBookmarkFolder
 			.AsAsyncEnumerable();
 	}
 
-	public Task<IStorageFolder?> GetFolderAsync(string name) => throw new NotImplementedException();
+	public Task<IStorageFolder?> GetFolderAsync(string name)
+	{
+		var directory = DirectoryInfo.EnumerateDirectories().FirstOrDefault(d => d.Name == name);
+		if (directory is null)
+			return Task.FromResult<IStorageFolder?>(null);
 
-	public Task<IStorageFile?> GetFileAsync(string name) => throw new NotImplementedException();
+		return Task.FromResult<IStorageFolder?>(new BclStorageFolder(directory));
+	}
+
+	public Task<IStorageFile?> GetFileAsync(string name)
+	{
+		var file = DirectoryInfo.EnumerateFiles().FirstOrDefault(f => f.Name == name);
+		if (file is null)
+			return Task.FromResult<IStorageFile?>(null);
+
+		return Task.FromResult<IStorageFile?>(new BclStorageFile(file));
+	}
 
 	public Task<string?> SaveBookmarkAsync() => Task.FromResult<string?>(DirectoryInfo.FullName);
 
