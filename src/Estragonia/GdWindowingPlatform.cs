@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia.Platform;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 internal sealed class GodotWindowingPlatform : IWindowingPlatform
 {

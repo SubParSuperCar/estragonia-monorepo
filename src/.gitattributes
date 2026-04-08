@@ -3,5 +3,3 @@
 *.godot text eol=lf
 *.import text eol=lf
 *.tscn text eol=lf
-
-*.cmd binary

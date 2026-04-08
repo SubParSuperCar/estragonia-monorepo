@@ -8,11 +8,11 @@ using Avalonia.Input.Platform;
 using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
+using Estragonia.Input;
 using Godot;
-using JLeb.Estragonia.Input;
 using AvCompositor = Avalonia.Rendering.Composition.Compositor;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Contains Godot to Avalonia platform initialization.</summary>
 internal static class GodotPlatform

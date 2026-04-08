@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Template.Main;
+namespace GameTemplate.Main;
 
 public interface IFocussable
 {

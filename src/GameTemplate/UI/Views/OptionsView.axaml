@@ -3,15 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="using:Template.UI"
-    xmlns:vm="using:Template.UI.ViewModels"
-    xmlns:controls="using:Template.UI.Controls"
+    xmlns:ui="using:GameTemplate.UI"
+    xmlns:vm="using:GameTemplate.UI.ViewModels"
+    xmlns:controls="using:GameTemplate.UI.Controls"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:converters="clr-namespace:Template.UI.Converters"
+    xmlns:converters="clr-namespace:GameTemplate.UI.Converters"
     mc:Ignorable="d"
     d:DesignWidth="960"
     d:DesignHeight="540"
-    x:Class="Template.UI.Views.OptionsView"
+    x:Class="GameTemplate.UI.Views.OptionsView"
     x:DataType="vm:OptionsViewModel">
 
     <UserControl.DataTemplates>

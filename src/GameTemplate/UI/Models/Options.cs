@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Godot;
 
-namespace Template.UI.Models;
+namespace GameTemplate.UI.Models;
 
 public class Options
 {

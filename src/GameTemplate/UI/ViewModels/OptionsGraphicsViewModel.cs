@@ -2,10 +2,10 @@ using System;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Template.Main;
-using Template.UI.Models;
+using GameTemplate.Main;
+using GameTemplate.UI.Models;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 {

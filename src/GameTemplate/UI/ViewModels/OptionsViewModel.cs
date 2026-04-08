@@ -1,9 +1,9 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Template.Main;
+using GameTemplate.Main;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public interface IOptionsTabViewModel
 {

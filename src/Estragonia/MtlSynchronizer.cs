@@ -2,7 +2,7 @@ using System;
 using Godot;
 using SkiaSharp;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>
 ///     Metal surface synchronizer. Uses GPU-to-GPU blitting when possible.

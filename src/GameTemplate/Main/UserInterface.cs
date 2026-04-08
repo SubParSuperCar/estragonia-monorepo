@@ -1,11 +1,11 @@
 using System;
-using Godot;
 using Estragonia;
-using Template.UI;
-using Template.UI.ViewModels;
-using Template.UI.Views;
+using GameTemplate.UI;
+using GameTemplate.UI.ViewModels;
+using GameTemplate.UI.Views;
+using Godot;
 
-namespace Template.Main;
+namespace GameTemplate.Main;
 
 public partial class UserInterface : AvaloniaControl, IFocussable
 {

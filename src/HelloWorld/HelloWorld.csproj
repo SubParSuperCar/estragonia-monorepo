@@ -3,6 +3,7 @@
     <PropertyGroup>
         <AssemblyTitle>HelloWorld</AssemblyTitle>
         <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>14</LangVersion>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <Nullable>enable</Nullable>
         <AnalysisMode>Recommended</AnalysisMode>
@@ -32,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\JLeb.Estragonia\JLeb.Estragonia.csproj"/>
+        <ProjectReference Include="..\Estragonia\Estragonia.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

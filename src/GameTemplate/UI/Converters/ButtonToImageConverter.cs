@@ -5,7 +5,7 @@ using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Godot;
 
-namespace Template.UI.Converters;
+namespace GameTemplate.UI.Converters;
 
 public class ButtonToImageConverter : IValueConverter
 {
@@ -36,7 +36,7 @@ public class ButtonToImageConverter : IValueConverter
 
         if (buttonName != null)
             return Utilities.LoadImageFromResource(
-                new Uri($"avares://Template/{ImageFolderPath}/{subFolder}/{buttonName}.png"));
+                new Uri($"avares://GameTemplate/{ImageFolderPath}/{subFolder}/{buttonName}.png"));
 
         return null;
     }

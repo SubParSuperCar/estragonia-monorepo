@@ -1,6 +1,6 @@
 ﻿using Avalonia.Input;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>
 ///     An implementation of <see cref="IKeyboardNavigationHandler" /> that does NOT listen for tab.

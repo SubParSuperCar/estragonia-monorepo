@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Godot;
 
-namespace Template.UI;
+namespace GameTemplate.UI;
 
 internal static class ButtonToIconName
 {

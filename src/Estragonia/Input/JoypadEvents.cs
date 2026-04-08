@@ -1,7 +1,7 @@
 ﻿using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace JLeb.Estragonia.Input;
+namespace Estragonia.Input;
 
 /// <summary>Contains Avalonia events related to joypad (game controller).</summary>
 public static class JoypadEvents

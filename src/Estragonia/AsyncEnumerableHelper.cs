@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 internal static class AsyncEnumerableHelper
 {

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Input.Raw;
 
-namespace JLeb.Estragonia.Input;
+namespace Estragonia.Input;
 
 /// <summary>Implementation of <see cref="IJoypadDevice" />.</summary>
 internal sealed class JoypadDevice : IJoypadDevice

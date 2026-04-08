@@ -3,9 +3,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using static Template.UI.Utilities;
+using static GameTemplate.UI.Utilities;
 
-namespace Template.UI.Controls;
+namespace GameTemplate.UI.Controls;
 
 public class ConfirmableNumericUpDown : NumericUpDown
 {

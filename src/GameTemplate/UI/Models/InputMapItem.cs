@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Godot;
 
-namespace Template.UI.Models;
+namespace GameTemplate.UI.Models;
 
 public partial class InputMapItem : ObservableObject
 {

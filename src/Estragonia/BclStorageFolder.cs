@@ -6,7 +6,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 internal sealed class BclStorageFolder : IStorageBookmarkFolder
 {

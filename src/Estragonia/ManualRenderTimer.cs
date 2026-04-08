@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Rendering;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>A <see cref="IRenderTimer" /> implementation that is only triggered manually.</summary>
 internal sealed class ManualRenderTimer : IRenderTimer

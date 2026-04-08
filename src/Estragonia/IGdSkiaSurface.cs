@@ -2,7 +2,7 @@ using Avalonia.Skia;
 using Godot;
 using SkiaSharp;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Interface for Godot Skia surfaces that can be used for rendering.</summary>
 internal interface IGodotSkiaSurface : ISkiaSurface

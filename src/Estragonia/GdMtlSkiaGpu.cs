@@ -7,7 +7,7 @@ using Avalonia.Skia;
 using Godot;
 using SkiaSharp;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Bridges the Godot Metal renderer with a Skia context used by Avalonia.</summary>
 internal sealed class GodotMtlSkiaGpu : IGodotSkiaGpu

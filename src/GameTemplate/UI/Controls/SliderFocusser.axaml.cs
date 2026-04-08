@@ -3,9 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using static Template.UI.Utilities;
+using static GameTemplate.UI.Utilities;
 
-namespace Template.UI.Controls;
+namespace GameTemplate.UI.Controls;
 
 public partial class SliderFocusser : UserControl
 {

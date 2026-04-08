@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Template.UI.ViewModels;
+using GameTemplate.UI.ViewModels;
 
-namespace Template.UI;
+namespace GameTemplate.UI;
 
 /// <summary>
 ///     Caches views for unique ViewModel instances. <br />

@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Input;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Contains extensions methods for <see cref="AppBuilder" /> related to Godot.</summary>
 public static class AppBuilderExtensions

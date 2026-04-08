@@ -1,7 +1,7 @@
 ﻿using Avalonia.Interactivity;
 using Godot;
 
-namespace JLeb.Estragonia.Input;
+namespace Estragonia.Input;
 
 /// <summary>Provides information about a joypad button event.</summary>
 public class JoypadButtonEventArgs : RoutedEventArgs

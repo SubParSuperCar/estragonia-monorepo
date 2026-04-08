@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
+using GameTemplate.Main;
 using Godot;
-using Template.Main;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public partial class InputListenerDialogViewModel : ViewModel
 {

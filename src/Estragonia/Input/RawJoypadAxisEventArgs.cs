@@ -2,7 +2,7 @@
 using Avalonia.Input.Raw;
 using Godot;
 
-namespace JLeb.Estragonia.Input;
+namespace Estragonia.Input;
 
 /// <summary>Represents raw input event arguments related to a joypad axis.</summary>
 public class RawJoypadAxisEventArgs : RawInputEventArgs

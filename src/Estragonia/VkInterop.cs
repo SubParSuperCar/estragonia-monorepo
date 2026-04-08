@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 

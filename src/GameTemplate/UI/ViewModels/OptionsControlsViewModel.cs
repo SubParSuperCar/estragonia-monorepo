@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GameTemplate.Main;
+using GameTemplate.UI.Models;
 using Godot;
-using Template.Main;
-using Template.UI.Models;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public partial class OptionsControlsViewModel : ViewModel, IOptionsTabViewModel
 {

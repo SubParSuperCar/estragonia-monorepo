@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Avalonia.Platform;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>An implementation of <see cref="IPlatformIconLoader" /> that provides fake icons (never displayed).</summary>
 internal sealed class StubPlatformIconLoader : IPlatformIconLoader

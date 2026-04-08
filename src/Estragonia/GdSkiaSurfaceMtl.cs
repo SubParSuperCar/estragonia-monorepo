@@ -3,7 +3,7 @@ using Avalonia.Skia;
 using Godot;
 using SkiaSharp;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Encapsulates a Skia surface along with the Godot texture it comes from (Metal backend).</summary>
 internal sealed class GodotSkiaSurfaceMetal : IGodotSkiaSurface

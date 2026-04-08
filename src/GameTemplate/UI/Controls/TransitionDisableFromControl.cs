@@ -5,7 +5,7 @@ using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Input;
 
-namespace Template.UI.Controls;
+namespace GameTemplate.UI.Controls;
 
 public class TransitionDisableFromControl : IPageTransition
 {

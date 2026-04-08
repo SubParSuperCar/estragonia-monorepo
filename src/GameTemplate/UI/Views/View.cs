@@ -4,11 +4,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
-using Template.Main;
-using Template.UI.ViewModels;
-using static Template.UI.Utilities;
+using GameTemplate.Main;
+using GameTemplate.UI.ViewModels;
+using static GameTemplate.UI.Utilities;
 
-namespace Template.UI.Views;
+namespace GameTemplate.UI.Views;
 
 public class FocussedControl
 {

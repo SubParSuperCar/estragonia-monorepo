@@ -9,10 +9,10 @@ using Avalonia.Platform;
 using Avalonia.Skia;
 using Godot;
 using SkiaSharp;
-using static JLeb.Estragonia.VkInterop;
+using static Estragonia.VkInterop;
 using Environment = System.Environment;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Bridges the Godot Vulkan renderer with a Skia context used by Avalonia.</summary>
 internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu

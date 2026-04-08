@@ -3,11 +3,11 @@ using System.ComponentModel;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Template.Main;
-using Template.UI.Models;
-using static Template.Main.AudioManager;
+using GameTemplate.Main;
+using GameTemplate.UI.Models;
+using static GameTemplate.Main.AudioManager;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
 {
@@ -38,10 +38,10 @@ public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
         _focusStack = focusStack;
         _dialogUserInterface = dialogUserInterface;
 
-        MasterLevel = GetBusLinearEnergyPercentage(AudioManager.Bus.Master);
-        MusicLevel = GetBusLinearEnergyPercentage(AudioManager.Bus.Music);
-        SoundEffectsLevel = GetBusLinearEnergyPercentage(AudioManager.Bus.SFX);
-        InterfaceLevel = GetBusLinearEnergyPercentage(AudioManager.Bus.UI);
+        MasterLevel = GetBusLinearEnergyPercentage(Bus.Master);
+        MusicLevel = GetBusLinearEnergyPercentage(Bus.Music);
+        SoundEffectsLevel = GetBusLinearEnergyPercentage(Bus.SFX);
+        InterfaceLevel = GetBusLinearEnergyPercentage(Bus.UI);
     }
 
     public void TryClose(Action callOnClose)
@@ -68,16 +68,16 @@ public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
         switch (e.PropertyName)
         {
             case nameof(MasterLevel):
-                UpdateBusDbLevelFromLinear(AudioManager.Bus.Master, MasterLevel);
+                UpdateBusDbLevelFromLinear(Bus.Master, MasterLevel);
                 break;
             case nameof(MusicLevel):
-                UpdateBusDbLevelFromLinear(AudioManager.Bus.Music, MusicLevel);
+                UpdateBusDbLevelFromLinear(Bus.Music, MusicLevel);
                 break;
             case nameof(SoundEffectsLevel):
-                UpdateBusDbLevelFromLinear(AudioManager.Bus.SFX, SoundEffectsLevel);
+                UpdateBusDbLevelFromLinear(Bus.SFX, SoundEffectsLevel);
                 break;
             case nameof(InterfaceLevel):
-                UpdateBusDbLevelFromLinear(AudioManager.Bus.UI, InterfaceLevel);
+                UpdateBusDbLevelFromLinear(Bus.UI, InterfaceLevel);
                 break;
         }
     }

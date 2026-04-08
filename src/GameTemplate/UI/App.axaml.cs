@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Markup.Xaml;
 
-namespace Template.UI;
+namespace GameTemplate.UI;
 
 public class App : Application
 {

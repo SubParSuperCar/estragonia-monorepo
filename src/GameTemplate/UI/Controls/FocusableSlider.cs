@@ -5,7 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace Template.UI.Controls;
+namespace GameTemplate.UI.Controls;
 
 [TemplatePart("PART_Grid", typeof(Grid))]
 public class FocusableSlider : Slider

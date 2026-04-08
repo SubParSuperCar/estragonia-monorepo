@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace Template.UI.Converters;
+namespace GameTemplate.UI.Converters;
 
 public class IntEqualMultiConverter : IMultiValueConverter
 {

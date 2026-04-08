@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Godot;
-using static Template.UI.Utilities;
+using static GameTemplate.UI.Utilities;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public partial class MainMenuViewModel : ViewModel
 {
@@ -35,7 +35,7 @@ public partial class MainMenuViewModel : ViewModel
     public void ToOptions()
     {
         _navigatorViewModel.NavigateTo(_viewModelFactory.CreateOptions(),
-            CreatePageTransition(Utilities.TransitionType.Fade, 0.5f));
+            CreatePageTransition(TransitionType.Fade, 0.5f));
     }
 
     [RelayCommand]

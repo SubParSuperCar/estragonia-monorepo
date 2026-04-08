@@ -1,4 +1,4 @@
-﻿namespace JLeb.Estragonia.Input;
+﻿namespace Estragonia.Input;
 
 /// <summary>Represents the type of joypad button event.</summary>
 public enum RawJoypadButtonEventType

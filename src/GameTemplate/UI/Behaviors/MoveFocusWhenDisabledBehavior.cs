@@ -4,9 +4,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Reactive;
 using Avalonia.Xaml.Interactivity;
-using static Template.UI.Utilities;
+using static GameTemplate.UI.Utilities;
 
-namespace Template.UI.Behaviors;
+namespace GameTemplate.UI.Behaviors;
 
 /// <summary>A behavior that focuses a given target when the associated object gets disabled while being focused.</summary>
 public sealed class MoveFocusWhenDisabledBehavior : Behavior<Control>

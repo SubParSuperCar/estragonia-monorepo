@@ -6,7 +6,7 @@ using Godot;
 using GdDispatcher = Godot.Dispatcher;
 using SysTimer = System.Threading.Timer;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>An implementation of <see cref="IDispatcherImpl" /> that uses the underlying Godot dispatcher.</summary>
 [SuppressMessage(

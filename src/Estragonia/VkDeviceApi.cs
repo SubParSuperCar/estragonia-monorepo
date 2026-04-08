@@ -1,9 +1,9 @@
 using System;
 using System.Buffers;
 using System.Text.Unicode;
-using static JLeb.Estragonia.VkInterop;
+using static Estragonia.VkInterop;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 internal sealed unsafe class VkDeviceApi
 {

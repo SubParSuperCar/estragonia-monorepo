@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace Template.Main;
+namespace GameTemplate.Main;
 
 public class KeyRepeater
 {

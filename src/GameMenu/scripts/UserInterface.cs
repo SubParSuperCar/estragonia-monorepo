@@ -1,7 +1,7 @@
 using System.ComponentModel;
+using Estragonia;
 using GameMenu.UI;
 using Godot;
-using JLeb.Estragonia;
 
 namespace GameMenu;
 

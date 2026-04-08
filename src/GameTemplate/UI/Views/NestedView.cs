@@ -1,6 +1,6 @@
 using Avalonia.Input;
 
-namespace Template.UI.Views;
+namespace GameTemplate.UI.Views;
 
 /// <summary>
 ///     View that does not track the last focused control. Use this when it is contained within <br />

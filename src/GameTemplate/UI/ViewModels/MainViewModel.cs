@@ -1,6 +1,6 @@
-using Template.Main;
+using GameTemplate.Main;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public class MainViewModel : NavigatorViewModel
 {

@@ -2,9 +2,9 @@
 using Avalonia.Skia;
 using Godot;
 using SkiaSharp;
-using static JLeb.Estragonia.VkInterop;
+using static Estragonia.VkInterop;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Encapsulates a Skia surface along with the Godot texture it comes from (Vulkan backend).</summary>
 internal sealed class GodotSkiaSurface : IGodotSkiaSurface

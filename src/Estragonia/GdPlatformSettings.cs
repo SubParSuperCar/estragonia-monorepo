@@ -1,7 +1,7 @@
 ﻿using Avalonia.Platform;
 using Godot;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Implementation of <see cref="IPlatformSettings" /> for Godot.</summary>
 internal sealed class GodotPlatformSettings : DefaultPlatformSettings

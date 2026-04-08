@@ -2,7 +2,7 @@
 using Avalonia.Skia;
 using SkiaSharp;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>A render target that uses an underlying Skia surface.</summary>
 internal sealed class GodotSkiaRenderTarget : ISkiaGpuRenderTarget

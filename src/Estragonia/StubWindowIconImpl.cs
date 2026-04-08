@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Avalonia.Platform;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>A fake window icon that can't be displayed but can still be saved.</summary>
 internal sealed class StubWindowIconImpl : IWindowIconImpl

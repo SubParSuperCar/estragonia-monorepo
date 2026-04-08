@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Platform;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Interface for Godot platform graphics implementations.</summary>
 internal interface IGodotPlatformGraphics : IPlatformGraphics, IDisposable

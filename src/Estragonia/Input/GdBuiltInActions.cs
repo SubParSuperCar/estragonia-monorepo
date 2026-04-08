@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace JLeb.Estragonia.Input;
+namespace Estragonia.Input;
 
 /// <summary>Contains the names of various Godot built-in actions that are recognized by Estragonia.</summary>
 public static class GodotBuiltInActions

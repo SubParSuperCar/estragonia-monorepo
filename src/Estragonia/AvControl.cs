@@ -5,15 +5,15 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform;
+using Estragonia.Input;
 using Godot;
 using Godot.NativeInterop;
-using JLeb.Estragonia.Input;
 using AvControl = Avalonia.Controls.Control;
 using GdControl = Godot.Control;
 using GdInput = Godot.Input;
 using GdKey = Godot.Key;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Renders an Avalonia control and forwards input to it.</summary>
 public class AvaloniaControl : GdControl

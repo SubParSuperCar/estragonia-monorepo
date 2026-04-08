@@ -1,5 +1,5 @@
+using Estragonia;
 using Godot;
-using JLeb.Estragonia;
 
 namespace HelloWorld;
 

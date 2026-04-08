@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Godot;
 
-namespace Template.UI.Models;
+namespace GameTemplate.UI.Models;
 
 public class InputMapGroup
 {

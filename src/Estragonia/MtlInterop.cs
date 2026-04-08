@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using Godot;
 using SkiaSharp;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>
 ///     Native interop for SkiaSharp Metal functions and GPU texture blitting.

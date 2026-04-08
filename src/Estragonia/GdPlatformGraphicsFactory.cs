@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Factory for creating the appropriate platform graphics implementation.</summary>
 internal static class GodotPlatformGraphicsFactory

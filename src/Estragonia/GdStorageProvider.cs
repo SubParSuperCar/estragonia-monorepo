@@ -7,7 +7,7 @@ using Avalonia.Platform.Storage;
 using Godot;
 using Environment = System.Environment;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Implementation of <see cref="IStorageProvider" /> for Godot.</summary>
 internal sealed class GodotStorageProvider : IStorageProvider

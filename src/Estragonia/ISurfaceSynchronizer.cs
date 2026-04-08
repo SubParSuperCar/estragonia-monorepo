@@ -1,6 +1,6 @@
 using System;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Interface for synchronizing GPU operations between Godot and Skia.</summary>
 internal interface ISurfaceSynchronizer : IDisposable

@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Skia;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Interface for GPU backends that bridge Godot and SkiaSharp.</summary>
 internal interface IGodotSkiaGpu : ISkiaGpu

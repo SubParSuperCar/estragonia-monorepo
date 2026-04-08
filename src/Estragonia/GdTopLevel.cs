@@ -2,7 +2,7 @@
 using Avalonia.Controls.Embedding;
 using Avalonia.Input;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>
 ///     A <see cref="TopLevel" /> used with Godot.

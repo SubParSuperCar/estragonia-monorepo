@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Godot;
-using static Template.Main.AudioManager;
+using static GameTemplate.Main.AudioManager;
 
-namespace Template.Main;
+namespace GameTemplate.Main;
 
 public partial class MusicManager : Node
 {
@@ -20,7 +20,7 @@ public partial class MusicManager : Node
 
     private AudioStreamPlayer _musicPlayer = new()
     {
-        Bus = AudioManager.Bus.Music.ToString()
+        Bus = Bus.Music.ToString()
     };
 
     private Tween? _musicTween;
@@ -41,10 +41,10 @@ public partial class MusicManager : Node
     /// </summary>
     public void FadeOutMusic(float durationSeconds)
     {
-        var originalMusicLevel = GetBusLinearEnergy(AudioManager.Bus.Music);
+        var originalMusicLevel = GetBusLinearEnergy(Bus.Music);
         var tween = GetTree().CreateTween().SetEase(Tween.EaseType.InOut).SetTrans(Tween.TransitionType.Quad);
         tween.TweenMethod(
-            Callable.From((float linearEnergy) => { UpdateBusDbLevelFromLinear(AudioManager.Bus.Music, linearEnergy); }),
+            Callable.From((float linearEnergy) => { UpdateBusDbLevelFromLinear(Bus.Music, linearEnergy); }),
             originalMusicLevel, 0, durationSeconds);
 
         _musicTween = tween;
@@ -56,7 +56,7 @@ public partial class MusicManager : Node
 
             await Task.Delay(50);
 
-            UpdateBusDbLevelFromLinear(AudioManager.Bus.Music, originalMusicLevel);
+            UpdateBusDbLevelFromLinear(Bus.Music, originalMusicLevel);
 
             if (_nextMusic != null)
             {

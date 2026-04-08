@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Godot;
 
-namespace Template.Main;
+namespace GameTemplate.Main;
 
 public class InputMapKeyEvent
 {

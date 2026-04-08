@@ -1,9 +1,9 @@
 using System;
 using Avalonia;
-using Godot;
 using Estragonia;
+using Godot;
 
-namespace Template.UI;
+namespace GameTemplate.UI;
 
 public partial class AvaloniaLoader : Node
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 
-namespace Template.Main;
+namespace GameTemplate.Main;
 
 public partial class AudioManager : Node
 {

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Avalonia.Platform;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Godot Metal-based <see cref="IPlatformGraphics" /> implementation.</summary>
 internal sealed class GodotMtlPlatformGraphics : IGodotPlatformGraphics

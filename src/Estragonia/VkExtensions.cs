@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using static JLeb.Estragonia.VkInterop;
+using static Estragonia.VkInterop;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 internal static class VkExtensions
 {

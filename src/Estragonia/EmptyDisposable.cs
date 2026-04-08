@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>A reusable <see cref="IDisposable" /> implementation that does nothing when disposed.</summary>
 internal sealed class EmptyDisposable : IDisposable

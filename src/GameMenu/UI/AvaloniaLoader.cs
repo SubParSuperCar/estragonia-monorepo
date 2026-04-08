@@ -1,6 +1,6 @@
 ﻿using Avalonia;
+using Estragonia;
 using Godot;
-using JLeb.Estragonia;
 
 namespace GameMenu.UI;
 

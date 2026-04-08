@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Avalonia.Input;
 
-namespace JLeb.Estragonia.Input;
+namespace Estragonia.Input;
 
 /// <summary>Contains the various Avalonia devices created from Godot.</summary>
 public static class GodotDevices

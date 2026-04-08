@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Avalonia.Animation;
 using CommunityToolkit.Mvvm.ComponentModel;
+using GameTemplate.Main;
 using Godot;
-using Template.Main;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public abstract partial class NavigatorViewModel : ViewModel
 {
@@ -40,7 +40,7 @@ public abstract partial class NavigatorViewModel : ViewModel
         bool replace = false, bool clearStack = false)
     {
         _pageTransition = transition;
-        Transition<> = transition;
+        Transition = transition;
 
         if (clearStack)
             while (CurrentViewModel != null)

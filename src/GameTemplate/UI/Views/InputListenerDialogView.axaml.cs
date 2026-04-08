@@ -1,4 +1,4 @@
-namespace Template.UI.Views;
+namespace GameTemplate.UI.Views;
 
 public partial class InputListenerDialogView : View
 {

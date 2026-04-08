@@ -8,7 +8,7 @@ using GdCursorShape = Godot.Control.CursorShape;
 using GdColor = Godot.Color;
 using GdKey = Godot.Key;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Contains extensions methods to convert between Godot and Avalonia types.</summary>
 public static class ConversionExtensions

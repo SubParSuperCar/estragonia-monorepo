@@ -1,9 +1,9 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Controls;
-using Template.Main;
+using GameTemplate.Main;
 
-namespace Template.UI.Controls;
+namespace GameTemplate.UI.Controls;
 
 public class AudioButton : Button
 {

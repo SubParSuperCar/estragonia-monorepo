@@ -1,9 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Godot;
-using Template.Main;
-using static Template.Main.AudioManager;
+using static GameTemplate.Main.AudioManager;
 
-namespace Template.UI.Models;
+namespace GameTemplate.UI.Models;
 
 public class AudioOptions : ObservableObject
 {
@@ -40,9 +39,9 @@ public class AudioOptions : ObservableObject
 
     public void Apply()
     {
-        UpdateBusDbLevelFromLinear(AudioManager.Bus.Master, MasterLevel);
-        UpdateBusDbLevelFromLinear(AudioManager.Bus.Music, MusicLevel);
-        UpdateBusDbLevelFromLinear(AudioManager.Bus.SFX, SoundEffectsLevel);
-        UpdateBusDbLevelFromLinear(AudioManager.Bus.UI, InterfaceLevel);
+        UpdateBusDbLevelFromLinear(Bus.Master, MasterLevel);
+        UpdateBusDbLevelFromLinear(Bus.Music, MusicLevel);
+        UpdateBusDbLevelFromLinear(Bus.SFX, SoundEffectsLevel);
+        UpdateBusDbLevelFromLinear(Bus.UI, InterfaceLevel);
     }
 }

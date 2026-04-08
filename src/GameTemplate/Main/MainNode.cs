@@ -1,10 +1,10 @@
 using System;
+using GameTemplate.UI.Models;
+using GameTemplate.UI.ViewModels;
 using Godot;
-using Template.UI.Models;
-using Template.UI.ViewModels;
-using static Template.Main.AudioManager;
+using static GameTemplate.Main.AudioManager;
 
-namespace Template.Main;
+namespace GameTemplate.Main;
 
 public partial class MainNode : Node2D
 {
@@ -73,7 +73,7 @@ public partial class MainNode : Node2D
                     or IOptionsTabViewModel))
                 {
                     _sceneTree.Paused = true;
-                    Instance?.PauseOrResumeAudioPlayersBus(true, [AudioManager.Bus.SFX]);
+                    Instance?.PauseOrResumeAudioPlayersBus(true, [Bus.SFX]);
 
                     var escapeMenu = _viewModelFactory.CreateEscapeMenu();
                     UserInterfaceMain.MainViewModel?.NavigateTo(escapeMenu);

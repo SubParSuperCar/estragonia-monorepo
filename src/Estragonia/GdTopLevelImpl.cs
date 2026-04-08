@@ -7,14 +7,14 @@ using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Input.Raw;
 using Avalonia.Platform;
+using Estragonia.Input;
 using Godot;
-using JLeb.Estragonia.Input;
 using AvCompositor = Avalonia.Rendering.Composition.Compositor;
 using AvKey = Avalonia.Input.Key;
 using GdCursorShape = Godot.Control.CursorShape;
 using GdMouseButton = Godot.MouseButton;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>Implementation of Avalonia <see cref="ITopLevelImpl" /> that renders to a Godot texture.</summary>
 internal sealed class GodotTopLevelImpl : ITopLevelImpl

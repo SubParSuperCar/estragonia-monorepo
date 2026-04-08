@@ -2,6 +2,7 @@
     <PropertyGroup>
         <AssemblyTitle>Template</AssemblyTitle>
         <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>14</LangVersion>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <Nullable>enable</Nullable>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -27,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Estragonia\Estragonia.csproj" />
+        <ProjectReference Include="..\Estragonia\Estragonia.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

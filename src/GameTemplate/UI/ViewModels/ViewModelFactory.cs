@@ -1,8 +1,8 @@
-﻿using Godot;
-using Template.Main;
-using Template.UI.Models;
+﻿using GameTemplate.Main;
+using GameTemplate.UI.Models;
+using Godot;
 
-namespace Template.UI.ViewModels;
+namespace GameTemplate.UI.ViewModels;
 
 public class ViewModelFactory
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Godot;
-using static JLeb.Estragonia.VkInterop;
+using static Estragonia.VkInterop;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>
 ///     An helper to create Vulkan image barriers.

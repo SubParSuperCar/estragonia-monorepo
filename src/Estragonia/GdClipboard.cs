@@ -4,7 +4,7 @@ using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Godot;
 
-namespace JLeb.Estragonia;
+namespace Estragonia;
 
 /// <summary>An implementation of <see cref="IClipboard" /> that uses Godot clipboard methods.</summary>
 internal sealed class GodotClipboard : IClipboard
