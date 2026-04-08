@@ -50,8 +50,8 @@ public partial class InputListenerDialogViewModel : ViewModel
 
 		(Key?, JoyButton?)? inputTuple = null;
 		if (ListenToKeyboard && inputEvent is InputEventKey keyEvent && keyEvent.Pressed
-		    && ButtonToIconName.TryGetKeyboard(keyEvent.Keycode, out var name)
-		    && !_reservedKeys.Contains(keyEvent.PhysicalKeycode))
+			&& ButtonToIconName.TryGetKeyboard(keyEvent.Keycode, out var name)
+			&& !_reservedKeys.Contains(keyEvent.PhysicalKeycode))
 		{
 			// UserInterface will process the inputEvent after this method:
 			// set pressed to false to prevent instant press after this dialog is closed.
@@ -59,7 +59,7 @@ public partial class InputListenerDialogViewModel : ViewModel
 			inputTuple = (keyEvent.PhysicalKeycode, null);
 		}
 		else if (!ListenToKeyboard && inputEvent is InputEventJoypadButton joypadEvent && joypadEvent.Pressed
-		         && ButtonToIconName.TryGetXbox(joypadEvent.ButtonIndex, out _))
+				 && ButtonToIconName.TryGetXbox(joypadEvent.ButtonIndex, out _))
 		{
 			joypadEvent.Pressed = false;
 			inputTuple = (null, joypadEvent.ButtonIndex);

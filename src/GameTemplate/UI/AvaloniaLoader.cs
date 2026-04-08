@@ -120,7 +120,7 @@ public partial class AvaloniaLoader : Node
 				DisplayServer.MouseSetMode(DisplayServer.MouseMode.Visible);
 			}
 			else if ((@event is InputEventKey key && key.Pressed) ||
-			         (@event is InputEventJoypadButton joypadButton && joypadButton.Pressed))
+					 (@event is InputEventJoypadButton joypadButton && joypadButton.Pressed))
 			{
 				if (LastPressedInputWasMouseClick || MouseMovedSinceLastButtonPress)
 					_elapsedMouseUntouchedSinceButtonPress = 0;

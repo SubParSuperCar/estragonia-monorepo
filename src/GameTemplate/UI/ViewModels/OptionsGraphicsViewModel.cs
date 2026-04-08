@@ -16,7 +16,8 @@ public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 	private readonly Options _options;
 	private readonly GraphicsOptions _savedGraphicsOptions;
 
-	[ObservableProperty] [NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
+	[ObservableProperty]
+	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
 	private bool _canApply;
 
 	private GraphicsOptions _currentlyAppliedGraphicsOptions;

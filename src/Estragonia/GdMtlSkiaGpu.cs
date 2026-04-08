@@ -73,10 +73,10 @@ internal sealed class GodotMtlSkiaGpu : IGodotSkiaGpu
 			Mipmaps = 1,
 			Samples = RenderingDevice.TextureSamples.Samples1,
 			UsageBits = RenderingDevice.TextureUsageBits.SamplingBit
-			            | RenderingDevice.TextureUsageBits.ColorAttachmentBit
-			            | RenderingDevice.TextureUsageBits.CanCopyFromBit
-			            | RenderingDevice.TextureUsageBits.CanCopyToBit
-			            | RenderingDevice.TextureUsageBits.CanUpdateBit
+						| RenderingDevice.TextureUsageBits.ColorAttachmentBit
+						| RenderingDevice.TextureUsageBits.CanCopyFromBit
+						| RenderingDevice.TextureUsageBits.CanCopyToBit
+						| RenderingDevice.TextureUsageBits.CanUpdateBit
 		};
 
 		var gdRdTexture = _renderingDevice.TextureCreate(gdRdTextureFormat, new RDTextureView());

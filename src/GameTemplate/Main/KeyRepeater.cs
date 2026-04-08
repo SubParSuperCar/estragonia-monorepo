@@ -46,14 +46,14 @@ public class KeyRepeater
 		foreach (var directionalEvent in _directionalInputEvents)
 		{
 			if (directionalEvent is InputEventKey keyEvent &&
-			    keyEvent.PhysicalKeycode == inputEventKey?.PhysicalKeycode)
+				keyEvent.PhysicalKeycode == inputEventKey?.PhysicalKeycode)
 			{
 				correspondingDirectionalEvent = directionalEvent;
 				break;
 			}
 
 			if (directionalEvent is InputEventJoypadButton joypadEvent &&
-			    joypadEvent.ButtonIndex == joypadButton?.ButtonIndex)
+				joypadEvent.ButtonIndex == joypadButton?.ButtonIndex)
 			{
 				correspondingDirectionalEvent = directionalEvent;
 				break;

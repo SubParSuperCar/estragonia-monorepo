@@ -9,14 +9,16 @@ public partial class InputMapItem : ObservableObject
 	private readonly StringName _inputMapAction;
 	private readonly InputMapGroup _inputMapGroup;
 
-	[ObservableProperty] [NotifyPropertyChangedFor(nameof(JoyButtonName))]
+	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(JoyButtonName))]
 	private int? _controllerEnumValue = (int)JoyButton.A;
 
 	private InputEventJoypadButton? _inputMapJoypadEvent;
 
 	private InputEventKey? _inputMapKeyEvent;
 
-	[ObservableProperty] [NotifyPropertyChangedFor(nameof(KeyName))]
+	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(KeyName))]
 	private int? _keyEnumValue = (int)Key.Right;
 
 	public InputMapItem(string inputMapAction, string inputName, InputMapGroup inputMapGroup,

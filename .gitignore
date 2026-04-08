@@ -10,4 +10,4 @@ obj/
 export.cfg
 export_presets.cfg
 
-!rider-plugin/bin/
+!**/rider-plugin/bin/
