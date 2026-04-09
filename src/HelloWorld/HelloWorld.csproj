@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.13" PrivateAssets="all"/>
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.13" PrivateAssets="contentfiles;analyzers"/>
   </ItemGroup>
 
   <ItemGroup>

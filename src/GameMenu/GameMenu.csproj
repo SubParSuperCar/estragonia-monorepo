@@ -25,9 +25,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.13" PrivateAssets="all"/>
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="[11.3.0.6]" PrivateAssets="all"/>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" PrivateAssets="all"/>
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.13" PrivateAssets="contentfiles;analyzers"/>
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="[11.3.0.6]" PrivateAssets="contentfiles;analyzers"/>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" PrivateAssets="contentfiles;analyzers"/>
   </ItemGroup>
 
   <ItemGroup>
