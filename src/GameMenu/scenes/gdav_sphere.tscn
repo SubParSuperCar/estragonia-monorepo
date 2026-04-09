@@ -5,5 +5,5 @@
 
 [node name="GdAvSphereRoot" unique_id=1880195299 instance=ExtResource("1_asbc4")]
 
-[node name="GdAvSphere" parent="." index="0" unique_id=953194000]
+[node name="GdAvSphere" parent="." index="0" unique_id=670758453]
 script = ExtResource("2_2lpsc")
