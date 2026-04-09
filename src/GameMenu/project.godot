@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-AvaloniaLoader="res://UI/AvaloniaLoader.cs"
+AvaloniaLoader="*res://UI/AvaloniaLoader.cs"
 
 [dotnet]
 
@@ -46,5 +46,6 @@ ui_cancel={
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 anti_aliasing/quality/screen_space_aa=1

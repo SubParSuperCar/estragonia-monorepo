@@ -24,12 +24,8 @@
     <GdLauncherScriptExt>sh</GdLauncherScriptExt>
   </PropertyGroup>
 
-  <ItemDefinitionGroup>
-    <PackageReference PrivateAssets="all"/>
-  </ItemDefinitionGroup>
-
   <ItemGroup>
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="[11.3.13]"/>
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.13" PrivateAssets="all"/>
   </ItemGroup>
 
   <ItemGroup>
