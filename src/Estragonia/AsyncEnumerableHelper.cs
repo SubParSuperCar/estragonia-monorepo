@@ -9,42 +9,26 @@ internal static class AsyncEnumerableHelper
 	public static IAsyncEnumerable<T> AsAsyncEnumerable<T>(this IEnumerable<T> enumerable) =>
 		new EnumerableAsyncWrapper<T>(enumerable);
 
-	private sealed class EnumerableAsyncWrapper<T> : IAsyncEnumerable<T>
+	private sealed class EnumerableAsyncWrapper<T>(IEnumerable<T> enumerable) : IAsyncEnumerable<T>
 	{
-		private readonly IEnumerable<T> _enumerable;
-
-		public EnumerableAsyncWrapper(IEnumerable<T> enumerable)
-		{
-			_enumerable = enumerable;
-		}
-
 		public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default) =>
-			new EnumeratorAsyncWrapper<T>(_enumerable.GetEnumerator(), cancellationToken);
+			new EnumeratorAsyncWrapper<T>(enumerable.GetEnumerator(), cancellationToken);
 	}
 
-	private sealed class EnumeratorAsyncWrapper<T> : IAsyncEnumerator<T>
+	private sealed class EnumeratorAsyncWrapper<T>(IEnumerator<T> enumerator, CancellationToken cancellationToken)
+		: IAsyncEnumerator<T>
 	{
-		private readonly CancellationToken _cancellationToken;
-
-		private readonly IEnumerator<T> _enumerator;
-
-		public EnumeratorAsyncWrapper(IEnumerator<T> enumerator, CancellationToken cancellationToken)
-		{
-			_enumerator = enumerator;
-			_cancellationToken = cancellationToken;
-		}
-
 		public T Current
-			=> _enumerator.Current;
+			=> enumerator.Current;
 
 		public ValueTask<bool> MoveNextAsync() =>
-			_cancellationToken.IsCancellationRequested
-				? new ValueTask<bool>(Task.FromCanceled<bool>(_cancellationToken))
-				: new ValueTask<bool>(_enumerator.MoveNext());
+			cancellationToken.IsCancellationRequested
+				? new ValueTask<bool>(Task.FromCanceled<bool>(cancellationToken))
+				: new ValueTask<bool>(enumerator.MoveNext());
 
 		public ValueTask DisposeAsync()
 		{
-			_enumerator.Dispose();
+			enumerator.Dispose();
 			return default;
 		}
 	}

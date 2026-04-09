@@ -9,8 +9,8 @@ public class KeyRepeater
 {
 	private const float SecondsUntilRepeat = 0.4f;
 	private const float RepeatIntervalSeconds = 0.1f;
-	private readonly HashSet<JoyButton> _blockedJoyButtons = new();
-	private readonly HashSet<Key> _blockedKeys = new();
+	private readonly HashSet<JoyButton> _blockedJoyButtons = [];
+	private readonly HashSet<Key> _blockedKeys = [];
 
 	private readonly StringName[] _directionalInputEventNames = ["ui_left", "ui_right", "ui_up", "ui_down"];
 
@@ -24,7 +24,7 @@ public class KeyRepeater
 		new() { PhysicalKeycode = Key.Right, Keycode = Key.Right }
 	];
 
-	private HashSet<InputEvent> _directionalInputEvents = new();
+	private HashSet<InputEvent> _directionalInputEvents = [];
 
 	public KeyRepeater()
 	{
@@ -45,19 +45,12 @@ public class KeyRepeater
 		InputEvent? correspondingDirectionalEvent = null;
 		foreach (var directionalEvent in _directionalInputEvents)
 		{
-			if (directionalEvent is InputEventKey keyEvent &&
-				keyEvent.PhysicalKeycode == inputEventKey?.PhysicalKeycode)
-			{
-				correspondingDirectionalEvent = directionalEvent;
-				break;
-			}
-
-			if (directionalEvent is InputEventJoypadButton joypadEvent &&
-				joypadEvent.ButtonIndex == joypadButton?.ButtonIndex)
-			{
-				correspondingDirectionalEvent = directionalEvent;
-				break;
-			}
+			if ((directionalEvent is not InputEventKey keyEvent ||
+				 keyEvent.PhysicalKeycode != inputEventKey?.PhysicalKeycode) &&
+				(directionalEvent is not InputEventJoypadButton joypadEvent ||
+				 joypadEvent.ButtonIndex != joypadButton?.ButtonIndex)) continue;
+			correspondingDirectionalEvent = directionalEvent;
+			break;
 		}
 
 		if (correspondingDirectionalEvent == null)
@@ -76,19 +69,14 @@ public class KeyRepeater
 
 		if (_inputDownDurations.ContainsKey(correspondingDirectionalEvent))
 		{
-			if (!pressed)
-			{
-				_inputDownDurations.Remove(correspondingDirectionalEvent);
-				return false;
-			}
-		}
-		else if (pressed)
-		{
-			_inputDownDurations.Add(correspondingDirectionalEvent, 0);
+			if (pressed) return true;
+			_inputDownDurations.Remove(correspondingDirectionalEvent);
 			return false;
 		}
 
-		return true;
+		if (!pressed) return true;
+		_inputDownDurations.Add(correspondingDirectionalEvent, 0);
+		return false;
 	}
 
 	public void ClearRepeatingAndBlockedInput()
@@ -100,7 +88,7 @@ public class KeyRepeater
 
 	public void UpdateDirectionalKeys()
 	{
-		List<InputEvent> directionalEvents = new();
+		List<InputEvent> directionalEvents = [];
 		foreach (var directionalName in _directionalInputEventNames)
 		{
 			var directionEvents = InputMap.ActionGetEvents(directionalName);
@@ -136,26 +124,25 @@ public class KeyRepeater
 		}
 	}
 
-	private InputEvent CreatePressedInputEvent(InputEvent inputEvent)
+	private static InputEvent CreatePressedInputEvent(InputEvent inputEvent)
 	{
-		if (inputEvent is InputEventKey keyEvent)
-			return new InputEventKey
+		return inputEvent switch
+		{
+			InputEventKey keyEvent => new InputEventKey
 			{
 				Echo = true,
 				Pressed = true,
 				PhysicalKeycode = keyEvent.PhysicalKeycode,
 				Keycode = keyEvent.Keycode
-			};
-
-		if (inputEvent is InputEventJoypadButton joypadEvent)
-			return new InputEventJoypadButton
+			},
+			InputEventJoypadButton joypadEvent => new InputEventJoypadButton
 			{
 				Pressed = true,
 				ButtonIndex = joypadEvent.ButtonIndex,
 				Device = joypadEvent.Device
-			};
-
-		throw new ArgumentException("Argument was neither InputEventKey nor InputEventJoypadButton",
-			nameof(inputEvent));
+			},
+			_ => throw new ArgumentException("Argument was neither InputEventKey nor InputEventJoypadButton",
+				nameof(inputEvent))
+		};
 	}
 }

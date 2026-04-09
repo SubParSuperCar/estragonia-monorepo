@@ -38,10 +38,8 @@ internal sealed class GodotMtlSkiaGpu : IGodotSkiaGpu
 
 		// Create Metal GRContext using native interop
 		var grContext = MtlInterop.CreateMetalContext(mtlDevice, _mtlQueue);
-		if (grContext is null)
-			throw new InvalidOperationException("Couldn't create Metal context");
 
-		_grContext = grContext;
+		_grContext = grContext ?? throw new InvalidOperationException("Couldn't create Metal context");
 		_synchronizer = new MtlSynchronizer();
 	}
 
@@ -161,24 +159,21 @@ internal sealed class GodotMtlSkiaGpu : IGodotSkiaGpu
 				GRSurfaceOrigin.TopLeft,
 				SKColorType.Rgba8888);
 
-			if (skSurface is null)
-			{
-				backendTexture.Dispose();
-				return null;
-			}
-
-			return new GodotSkiaSurfaceMetal(
-				skSurface,
-				gdTexture,
-				_renderingDevice,
-				renderScaling,
-				_mtlQueue,
-				gdMetalTexture,
-				size.Width,
-				size.Height,
-				true,
-				backendTexture
-			);
+			if (skSurface is not null)
+				return new GodotSkiaSurfaceMetal(
+					skSurface,
+					gdTexture,
+					_renderingDevice,
+					renderScaling,
+					_mtlQueue,
+					gdMetalTexture,
+					size.Width,
+					size.Height,
+					true,
+					backendTexture
+				);
+			backendTexture.Dispose();
+			return null;
 		}
 		catch
 		{

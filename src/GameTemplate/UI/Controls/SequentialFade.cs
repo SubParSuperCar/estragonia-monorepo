@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Styling;
 
 namespace GameTemplate.UI.Controls;
@@ -13,10 +12,6 @@ public class SequentialFade : IPageTransition
 {
 	private readonly Animation _fadeInAnimation;
 	private readonly Animation _fadeOutAnimation;
-
-	public SequentialFade() : this(TimeSpan.Zero)
-	{
-	}
 
 	public SequentialFade(TimeSpan duration)
 	{
@@ -108,33 +103,6 @@ public class SequentialFade : IPageTransition
 	}
 
 	/// <summary>
-	///     Gets the duration of the animation.
-	/// </summary>
-	public TimeSpan Duration
-	{
-		get => _fadeOutAnimation.Duration;
-		set => _fadeOutAnimation.Duration = _fadeInAnimation.Duration = value;
-	}
-
-	/// <summary>
-	///     Gets or sets element entrance easing.
-	/// </summary>
-	public Easing FadeInEasing
-	{
-		get => _fadeInAnimation.Easing;
-		set => _fadeInAnimation.Easing = value;
-	}
-
-	/// <summary>
-	///     Gets or sets element exit easing.
-	/// </summary>
-	public Easing FadeOutEasing
-	{
-		get => _fadeOutAnimation.Easing;
-		set => _fadeOutAnimation.Easing = value;
-	}
-
-	/// <summary>
 	///     Starts the animation.
 	/// </summary>
 	/// <param name="from">
@@ -154,7 +122,7 @@ public class SequentialFade : IPageTransition
 		Start(from, to, cancellationToken);
 
 	/// <inheritdoc cref="Start(Visual, Visual, CancellationToken)" />
-	public async Task Start(Visual? from, Visual? to, CancellationToken cancellationToken)
+	private async Task Start(Visual? from, Visual? to, CancellationToken cancellationToken)
 	{
 		if (cancellationToken.IsCancellationRequested) return;
 

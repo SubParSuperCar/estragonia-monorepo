@@ -6,16 +6,9 @@ using Avalonia.Platform.Storage;
 
 namespace Estragonia;
 
-internal sealed class BclStorageFile : IStorageBookmarkFile
+internal sealed class BclStorageFile(FileInfo fileInfo) : IStorageBookmarkFile
 {
-	private Uri? _path;
-
-	public BclStorageFile(FileInfo fileInfo)
-	{
-		FileInfo = fileInfo;
-	}
-
-	public FileInfo FileInfo { get; }
+	private FileInfo FileInfo { get; } = fileInfo;
 
 	public string Name
 		=> FileInfo.Name;
@@ -24,7 +17,7 @@ internal sealed class BclStorageFile : IStorageBookmarkFile
 		=> true;
 
 	public Uri Path
-		=> _path ??= BuildPath();
+		=> field ??= BuildPath();
 
 	public Task<StorageItemProperties> GetBasicPropertiesAsync()
 	{
@@ -64,15 +57,11 @@ internal sealed class BclStorageFile : IStorageBookmarkFile
 
 	public Task<IStorageItem?> MoveAsync(IStorageFolder destination)
 	{
-		if (destination is BclStorageFolder storageFolder)
-		{
-			var newPath = System.IO.Path.Combine(storageFolder.DirectoryInfo.FullName, FileInfo.Name);
-			FileInfo.MoveTo(newPath);
+		if (destination is not BclStorageFolder storageFolder) return Task.FromResult<IStorageItem?>(null);
+		var newPath = System.IO.Path.Combine(storageFolder.DirectoryInfo.FullName, FileInfo.Name);
+		FileInfo.MoveTo(newPath);
 
-			return Task.FromResult<IStorageItem?>(new BclStorageFile(new FileInfo(newPath)));
-		}
-
-		return Task.FromResult<IStorageItem?>(null);
+		return Task.FromResult<IStorageItem?>(new BclStorageFile(new FileInfo(newPath)));
 	}
 
 	public void Dispose()

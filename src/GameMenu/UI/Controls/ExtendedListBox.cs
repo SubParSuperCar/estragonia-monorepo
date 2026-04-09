@@ -22,6 +22,7 @@ public class ExtendedListBox : ListBox
 			return;
 
 		// Override the default ListBox behavior that changes the selection with Up/Down: we want to change the focus instead.
+		// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
 		switch (e.Key)
 		{
 			case Key.Up:

@@ -5,10 +5,10 @@ namespace GameTemplate.UI.ViewModels;
 
 public partial class EscapeMenuViewModel : ViewModel
 {
-	private readonly UserInterface _dialogUserInterface;
-	private readonly FocusStack _focusStack;
-	private readonly NavigatorViewModel _navigatorViewModel;
-	private readonly ViewModelFactory _viewModelFactory;
+	private readonly UserInterface _dialogUserInterface = null!;
+	private readonly FocusStack _focusStack = null!;
+	private readonly NavigatorViewModel _navigatorViewModel = null!;
+	private readonly ViewModelFactory _viewModelFactory = null!;
 
 	/// <summary>
 	///     Intended for designer usage only.
@@ -28,13 +28,13 @@ public partial class EscapeMenuViewModel : ViewModel
 	}
 
 	[RelayCommand]
-	public void ToOptions()
+	private void ToOptions()
 	{
 		_navigatorViewModel.NavigateTo(_viewModelFactory.CreateOptions());
 	}
 
 	[RelayCommand]
-	public void ToMainMenu()
+	private void ToMainMenu()
 	{
 		var dialog = new DialogViewModel(
 			"Are you sure you want to exit to the main menu?",

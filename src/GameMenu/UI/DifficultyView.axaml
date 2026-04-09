@@ -34,6 +34,7 @@
 
 	<Grid RowDefinitions="Auto,*,Auto">
 
+		<!-- ReSharper disable Xaml.StyleClassNotFound -->
 		<TextBlock
 			Classes="view-title"
 			Text="Difficulty"
@@ -49,6 +50,7 @@
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
 
 		</Border>
+		<!-- ReSharper restore Xaml.StyleClassNotFound -->
 
 		<!-- Buttons -->
 		<StackPanel

@@ -22,7 +22,7 @@ public class DirectionalFocusStructure : AvaloniaObject
 
 	[Content]
 	[SuppressMessage("ReSharper", "CollectionNeverUpdated.Global", Justification = "Updated in XAML")]
-	public AvaloniaList<DirectionalFocusControl> Controls { get; } = new();
+	public AvaloniaList<DirectionalFocusControl> Controls { get; } = [];
 
 	private BuiltStructure BuildStructure()
 	{
@@ -89,15 +89,8 @@ public class DirectionalFocusStructure : AvaloniaObject
 	/// </summary>
 	public Control? GetLeft(Control? anchor) => Structure.GetLeft(anchor);
 
-	private readonly struct BuiltStructure
+	private readonly struct BuiltStructure(Row[] rows)
 	{
-		private readonly Row[] _rows;
-
-		public BuiltStructure(Row[] rows)
-		{
-			_rows = rows;
-		}
-
 		public Control? GetDown(Control? anchor)
 		{
 			if (FindControl(anchor) is not var (rowIndex, _))
@@ -109,29 +102,29 @@ public class DirectionalFocusStructure : AvaloniaObject
 		public Control? GetUp(Control? anchor)
 		{
 			if (FindControl(anchor) is not var (rowIndex, _))
-				rowIndex = _rows.Length;
+				rowIndex = rows.Length;
 
 			return FindPreviousValidControl(rowIndex - 1);
 		}
 
 		public Control? GetRight(Control? anchor) =>
 			FindControl(anchor) is var (rowIndex, controlIndex)
-				? _rows[rowIndex].FindNextValidControl(controlIndex + 1)
+				? rows[rowIndex].FindNextValidControl(controlIndex + 1)
 				: FindNextValidControl(0);
 
 		public Control? GetLeft(Control? anchor) =>
 			FindControl(anchor) is var (rowIndex, controlIndex)
-				? _rows[rowIndex].FindPreviousValidControl(controlIndex - 1)
-				: FindPreviousValidControl(_rows.Length - 1);
+				? rows[rowIndex].FindPreviousValidControl(controlIndex - 1)
+				: FindPreviousValidControl(rows.Length - 1);
 
 		private (int rowIndex, int controlIndex)? FindControl(Control? control)
 		{
 			if (control is null)
 				return null;
 
-			for (var rowIndex = 0; rowIndex < _rows.Length; ++rowIndex)
+			for (var rowIndex = 0; rowIndex < rows.Length; ++rowIndex)
 			{
-				var row = _rows[rowIndex];
+				var row = rows[rowIndex];
 				var controlIndex = row.IndexOf(control);
 				if (controlIndex >= 0)
 					return (rowIndex, controlIndex);
@@ -142,9 +135,9 @@ public class DirectionalFocusStructure : AvaloniaObject
 
 		private Control? FindNextValidControl(int startRowIndex)
 		{
-			for (var rowIndex = startRowIndex; rowIndex < _rows.Length; ++rowIndex)
+			for (var rowIndex = startRowIndex; rowIndex < rows.Length; ++rowIndex)
 			{
-				var row = _rows[rowIndex];
+				var row = rows[rowIndex];
 				if ((row.TryGetValidDefaultControl() ?? row.FindNextValidControl(0)) is { } control)
 					return control;
 			}
@@ -156,7 +149,7 @@ public class DirectionalFocusStructure : AvaloniaObject
 		{
 			for (var rowIndex = startRowIndex; rowIndex >= 0; --rowIndex)
 			{
-				var row = _rows[rowIndex];
+				var row = rows[rowIndex];
 				if ((row.TryGetValidDefaultControl() ?? row.FindPreviousValidControl(row.Count - 1)) is { } control)
 					return control;
 			}
@@ -165,29 +158,20 @@ public class DirectionalFocusStructure : AvaloniaObject
 		}
 	}
 
-	private readonly struct Row
+	private readonly struct Row(Control[] controls, Control? defaultControl)
 	{
-		private readonly Control[] _controls;
-		private readonly Control? _defaultControl;
-
 		public int Count
-			=> _controls.Length;
+			=> controls.Length;
 
-		public Row(Control[] controls, Control? defaultControl)
-		{
-			_controls = controls;
-			_defaultControl = defaultControl;
-		}
+		public int IndexOf(Control control) => Array.IndexOf(controls, control);
 
-		public int IndexOf(Control control) => Array.IndexOf(_controls, control);
-
-		public Control? TryGetValidDefaultControl() => IsValidControl(_defaultControl) ? _defaultControl : null;
+		public Control? TryGetValidDefaultControl() => IsValidControl(defaultControl) ? defaultControl : null;
 
 		public Control? FindNextValidControl(int startIndex)
 		{
-			for (var index = startIndex; index < _controls.Length; ++index)
-				if (IsValidControl(_controls[index]))
-					return _controls[index];
+			for (var index = startIndex; index < controls.Length; ++index)
+				if (IsValidControl(controls[index]))
+					return controls[index];
 
 			return null;
 		}
@@ -195,8 +179,8 @@ public class DirectionalFocusStructure : AvaloniaObject
 		public Control? FindPreviousValidControl(int startIndex)
 		{
 			for (var index = startIndex; index >= 0; --index)
-				if (IsValidControl(_controls[index]))
-					return _controls[index];
+				if (IsValidControl(controls[index]))
+					return controls[index];
 
 			return null;
 		}

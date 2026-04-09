@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -16,6 +15,7 @@ public static class Utilities
 {
 	public enum TransitionType
 	{
+		// ReSharper disable once InconsistentNaming
 		Fade
 	}
 
@@ -40,11 +40,11 @@ public static class Utilities
 			case TransitionType.Fade:
 				transition = new CompositePageTransition
 				{
-					PageTransitions = new List<IPageTransition>
-					{
+					PageTransitions =
+					[
 						new SequentialFade(duration),
 						new TransitionDisableFromControl(duration)
-					}
+					]
 				};
 				break;
 		}
@@ -52,16 +52,10 @@ public static class Utilities
 		return new PageTransitionWithDuration(transition, durationSeconds);
 	}
 
-	public class PageTransitionWithDuration : IPageTransition
+	public class PageTransitionWithDuration(IPageTransition pageTransition, float durationSeconds) : IPageTransition
 	{
-		public PageTransitionWithDuration(IPageTransition pageTransition, float durationSeconds)
-		{
-			PageTransition = pageTransition;
-			Duration = durationSeconds;
-		}
-
-		public IPageTransition PageTransition { get; set; }
-		public float Duration { get; set; }
+		private IPageTransition PageTransition { get; } = pageTransition;
+		private float Duration { get; } = durationSeconds;
 
 		public Task Start(Visual? from, Visual? to, bool forward, CancellationToken cancellationToken) =>
 			PageTransition.Start(from, to, forward, cancellationToken);

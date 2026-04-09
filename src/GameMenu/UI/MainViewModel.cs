@@ -6,18 +6,13 @@ using Godot;
 
 namespace GameMenu.UI;
 
-public sealed partial class MainViewModel : ViewModel, INavigator
+public sealed partial class MainViewModel(UiOptions uiOptions) : ViewModel, INavigator
 {
-	private readonly List<ViewModel> _openViewModels = new();
+	private readonly List<ViewModel> _openViewModels = [];
 
-	[ObservableProperty] private int _framesPerSecond;
+	[ObservableProperty] public partial int FramesPerSecond { get; set; }
 
-	public MainViewModel(UIOptions uiOptions)
-	{
-		UIOptions = uiOptions;
-	}
-
-	public UIOptions UIOptions { get; }
+	public UiOptions UiOptions { get; } = uiOptions;
 
 	public ViewModel? CurrentViewModel
 		=> _openViewModels.Count > 0 ? _openViewModels[^1] : null;
@@ -59,12 +54,12 @@ public sealed partial class MainViewModel : ViewModel, INavigator
 		return true;
 	}
 
-	public async Task<bool> TryCloseCurrentAsync() =>
+	private async Task<bool> TryCloseCurrentAsync() =>
 		CurrentViewModel is { } viewModel && await viewModel.TryCloseAsync();
 
 	protected override Task LoadAsync()
 	{
-		NavigateTo(new MainMenuViewModel(this, UIOptions));
+		NavigateTo(new MainMenuViewModel(this, UiOptions));
 		return Task.CompletedTask;
 	}
 

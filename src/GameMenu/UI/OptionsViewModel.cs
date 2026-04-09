@@ -6,38 +6,25 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace GameMenu.UI;
 
-public sealed partial class OptionsViewModel : ViewModel
+public sealed partial class OptionsViewModel(UiOptions uiOptions) : ViewModel
 {
-	private readonly UIOptions _uiOptions;
+	[ObservableProperty] public partial bool Fullscreen { get; set; } = uiOptions.Fullscreen;
 
-	private bool _canApply;
-
-	[ObservableProperty] private bool _fullscreen;
-
-	[ObservableProperty] private bool _showFps;
+	[ObservableProperty] public partial bool ShowFps { get; set; } = uiOptions.ShowFps;
 
 	[ObservableProperty]
-	[SuppressMessage("ReSharper", "InconsistentNaming",
+	[field: SuppressMessage("ReSharper", "InconsistentNaming",
 		Justification = "Name required for correct property generation")]
-	private double _UIScale;
+	public partial double UIScale { get; set; } = uiOptions.UIScale;
 
-	[ObservableProperty] private bool _vSync;
-
-	public OptionsViewModel(UIOptions uiOptions)
-	{
-		_uiOptions = uiOptions;
-		_vSync = uiOptions.VSync;
-		_fullscreen = uiOptions.Fullscreen;
-		_showFps = uiOptions.ShowFps;
-		_UIScale = uiOptions.UIScale;
-	}
+	[ObservableProperty] public partial bool VSync { get; set; } = uiOptions.VSync;
 
 	public bool CanApply
 	{
-		get => _canApply;
+		get;
 		private set
 		{
-			if (SetProperty(ref _canApply, value))
+			if (SetProperty(ref field, value))
 				ApplyCommand.NotifyCanExecuteChanged();
 		}
 	}
@@ -53,12 +40,12 @@ public sealed partial class OptionsViewModel : ViewModel
 	protected override Task LoadAsync() => Task.CompletedTask;
 
 	[RelayCommand(CanExecute = nameof(CanApply))]
-	public void Apply()
+	private void Apply()
 	{
-		_uiOptions.VSync = VSync;
-		_uiOptions.Fullscreen = Fullscreen;
-		_uiOptions.ShowFps = ShowFps;
-		_uiOptions.UIScale = UIScale;
+		uiOptions.VSync = VSync;
+		uiOptions.Fullscreen = Fullscreen;
+		uiOptions.ShowFps = ShowFps;
+		uiOptions.UIScale = UIScale;
 		CanApply = false;
 	}
 }

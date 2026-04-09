@@ -26,6 +26,7 @@ internal static class ButtonToIconName
 	{
 		name = key switch
 		{
+#pragma warning disable
 			>= Key.Key0 and <= Key.Key9 => ((int)key - 48).ToString(),
 
 			>= Key.A and <= Key.Z
@@ -33,6 +34,7 @@ internal static class ButtonToIconName
 				or Key.Enter or Key.Space
 				or Key.Backspace
 				or Key.Period or Key.Comma => key.ToString().ToLower(),
+#pragma warning restore
 
 			_ => null
 		};

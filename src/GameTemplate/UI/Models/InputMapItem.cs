@@ -6,20 +6,12 @@ namespace GameTemplate.UI.Models;
 
 public partial class InputMapItem : ObservableObject
 {
-	private readonly StringName _inputMapAction;
-	private readonly InputMapGroup _inputMapGroup;
-
-	[ObservableProperty]
-	[NotifyPropertyChangedFor(nameof(JoyButtonName))]
-	private int? _controllerEnumValue = (int)JoyButton.A;
+	private readonly StringName _inputMapAction = null!;
+	private readonly InputMapGroup _inputMapGroup = null!;
 
 	private InputEventJoypadButton? _inputMapJoypadEvent;
 
 	private InputEventKey? _inputMapKeyEvent;
-
-	[ObservableProperty]
-	[NotifyPropertyChangedFor(nameof(KeyName))]
-	private int? _keyEnumValue = (int)Key.Right;
 
 	public InputMapItem(string inputMapAction, string inputName, InputMapGroup inputMapGroup,
 		string[]? reservedKeyNames = null)
@@ -35,17 +27,18 @@ public partial class InputMapItem : ObservableObject
 		var inputEvents = InputMap.ActionGetEvents(_inputMapAction);
 
 		foreach (var inputEvent in inputEvents)
-			if (inputEvent is InputEventKey inputKey)
+			switch (inputEvent)
 			{
-				_inputMapKeyEvent = inputKey;
-				KeyEnumValue = (int)inputKey.PhysicalKeycode;
-				inputMapGroup.KeyMappings.Add(inputKey.PhysicalKeycode, this);
-			}
-			else if (inputEvent is InputEventJoypadButton inputJoypad)
-			{
-				_inputMapJoypadEvent = inputJoypad;
-				ControllerEnumValue = (int)inputJoypad.ButtonIndex;
-				inputMapGroup.JoypadMappings.Add(inputJoypad.ButtonIndex, this);
+				case InputEventKey inputKey:
+					_inputMapKeyEvent = inputKey;
+					KeyEnumValue = (int)inputKey.PhysicalKeycode;
+					inputMapGroup.KeyMappings.Add(inputKey.PhysicalKeycode, this);
+					break;
+				case InputEventJoypadButton inputJoypad:
+					_inputMapJoypadEvent = inputJoypad;
+					ControllerEnumValue = (int)inputJoypad.ButtonIndex;
+					inputMapGroup.JoypadMappings.Add(inputJoypad.ButtonIndex, this);
+					break;
 			}
 	}
 
@@ -62,7 +55,15 @@ public partial class InputMapItem : ObservableObject
 		if (joyButton != null) ControllerEnumValue = (int)joyButton;
 	}
 
-	public string InputName { get; } = "";
+	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(JoyButtonName))]
+	public partial int? ControllerEnumValue { get; set; }
+
+	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(KeyName))]
+	public partial int? KeyEnumValue { get; set; }
+
+	public string InputName { get; }
 	public string KeyName => KeyEnumValue == null ? "" : ((Key)KeyEnumValue).ToString();
 	public string JoyButtonName => ControllerEnumValue == null ? "" : ((JoyButton)ControllerEnumValue).ToString();
 

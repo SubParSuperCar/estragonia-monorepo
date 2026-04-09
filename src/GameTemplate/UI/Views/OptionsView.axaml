@@ -28,7 +28,7 @@
 	</Design.DataContext>
 
 	<UserControl.Resources>
-		<converters:IntEqualConverter x:Key="intEqualConverter" />
+		<converters:IntEqualConverter x:Key="IntEqualConverter" />
 	</UserControl.Resources>
 
 	<UserControl.Styles>
@@ -73,10 +73,10 @@
 				            Grid.Column="0"
 				            Width="100"
 				            Background="White">
-					<controls:AudioButton Name="initialFocus0"
+					<controls:AudioButton Name="InitialFocus0"
 					                      Theme="{StaticResource TextButton}"
 					                      Classes.currentTab="{Binding CurrentTabIndex,
-								Converter={StaticResource intEqualConverter},
+								Converter={StaticResource IntEqualConverter},
 								ConverterParameter=0}"
 					                      Command="{Binding ToOptionsTabCommand}">
 						<controls:AudioButton.CommandParameter>
@@ -86,7 +86,7 @@
 					</controls:AudioButton>
 					<controls:AudioButton Theme="{StaticResource TextButton}"
 					                      Classes.currentTab="{Binding CurrentTabIndex,
-								Converter={StaticResource intEqualConverter},
+								Converter={StaticResource IntEqualConverter},
 								ConverterParameter=1}"
 					                      Command="{Binding ToOptionsTabCommand}">
 						<controls:AudioButton.CommandParameter>
@@ -96,7 +96,7 @@
 					</controls:AudioButton>
 					<controls:AudioButton Theme="{StaticResource TextButton}"
 					                      Classes.currentTab="{Binding CurrentTabIndex,
-								Converter={StaticResource intEqualConverter},
+								Converter={StaticResource IntEqualConverter},
 								ConverterParameter=2}"
 					                      Command="{Binding ToOptionsTabCommand}">
 						<controls:AudioButton.CommandParameter>
@@ -107,7 +107,7 @@
 				</StackPanel>
 
 				<!-- Main Content -->
-				<ScrollViewer Name="scrollViewer"
+				<ScrollViewer Name="ScrollViewer"
 				              Grid.Row="1"
 				              Grid.Column="1">
 					<ContentControl Content="{Binding CurrentViewModel}" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Godot;
 using static Estragonia.VkInterop;
@@ -10,23 +11,12 @@ namespace Estragonia;
 /// <summary>
 ///     An helper to create Vulkan image barriers.
 /// </summary>
-internal sealed class VkBarrierHelper : ISurfaceSynchronizer
+internal sealed class VkBarrierHelper(VkDevice device, VkQueue queue, VkDeviceApi deviceApi, uint queueFamilyIndex)
+	: ISurfaceSynchronizer
 {
-	private readonly VkDevice _device;
-	private readonly VkDeviceApi _deviceApi;
-	private readonly VkQueue _queue;
-	private readonly uint _queueFamilyIndex;
-	private readonly List<ReusableBuffer> _reusableBuffers = new();
+	private readonly List<ReusableBuffer> _reusableBuffers = [];
 
 	private bool _isDisposed;
-
-	public VkBarrierHelper(VkDevice device, VkQueue queue, VkDeviceApi deviceApi, uint queueFamilyIndex)
-	{
-		_device = device;
-		_queue = queue;
-		_deviceApi = deviceApi;
-		_queueFamilyIndex = queueFamilyIndex;
-	}
 
 	/// <summary>Prepares the surface for Skia rendering by transitioning to COLOR_ATTACHMENT_OPTIMAL.</summary>
 	public void PrepareForRendering(IGodotSkiaSurface surface)
@@ -84,7 +74,7 @@ internal sealed class VkBarrierHelper : ISurfaceSynchronizer
 		var reusableBuffer = GetOrCreateReusableBuffer();
 
 		var fence = reusableBuffer.Fence;
-		_deviceApi.ResetFences(_device, 1, &fence);
+		deviceApi.ResetFences(device, 1, &fence);
 
 		var commandBuffer = reusableBuffer.CommandBuffer;
 
@@ -94,7 +84,7 @@ internal sealed class VkBarrierHelper : ISurfaceSynchronizer
 			flags = VkCommandBufferUsageFlags.ONE_TIME_SUBMIT_BIT
 		};
 
-		_deviceApi.BeginCommandBuffer(commandBuffer, ref beginInfo);
+		deviceApi.BeginCommandBuffer(commandBuffer, ref beginInfo);
 
 		var barrier = new VkImageMemoryBarrier
 		{
@@ -116,7 +106,7 @@ internal sealed class VkBarrierHelper : ISurfaceSynchronizer
 			}
 		};
 
-		_deviceApi.CmdPipelineBarrier(
+		deviceApi.CmdPipelineBarrier(
 			reusableBuffer.CommandBuffer,
 			VkPipelineStageFlags.ALL_COMMANDS_BIT,
 			VkPipelineStageFlags.ALL_COMMANDS_BIT,
@@ -129,7 +119,7 @@ internal sealed class VkBarrierHelper : ISurfaceSynchronizer
 			&barrier
 		);
 
-		_deviceApi.EndCommandBuffer(commandBuffer);
+		deviceApi.EndCommandBuffer(commandBuffer);
 
 		var submitInfo = new VkSubmitInfo
 		{
@@ -143,19 +133,15 @@ internal sealed class VkBarrierHelper : ISurfaceSynchronizer
 			pSignalSemaphores = null
 		};
 
-		_deviceApi.QueueSubmit(_queue, 1, &submitInfo, fence);
+		deviceApi.QueueSubmit(queue, 1, &submitInfo, fence);
 	}
 
 	private ReusableBuffer GetOrCreateReusableBuffer()
 	{
-		for (var i = 0; i < _reusableBuffers.Count; ++i)
-		{
-			var existingBuffer = _reusableBuffers[i];
-			if (existingBuffer.IsAvailable())
-				return existingBuffer;
-		}
+		foreach (var existingBuffer in _reusableBuffers.Where(existingBuffer => existingBuffer.IsAvailable()))
+			return existingBuffer;
 
-		var newBuffer = new ReusableBuffer(_device, _deviceApi, _queueFamilyIndex);
+		var newBuffer = new ReusableBuffer(device, deviceApi, queueFamilyIndex);
 		_reusableBuffers.Add(newBuffer);
 		return newBuffer;
 	}

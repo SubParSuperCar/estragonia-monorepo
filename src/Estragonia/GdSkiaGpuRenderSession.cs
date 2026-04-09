@@ -18,7 +18,7 @@ internal sealed class GodotSkiaGpuRenderSession : ISkiaGpuRenderSession
 
 	public IGodotSkiaSurface Surface { get; }
 
-	public ISurfaceSynchronizer Synchronizer { get; }
+	private ISurfaceSynchronizer Synchronizer { get; }
 
 	public GRContext GrContext { get; }
 

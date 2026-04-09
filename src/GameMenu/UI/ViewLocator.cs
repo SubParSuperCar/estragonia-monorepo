@@ -31,8 +31,8 @@ public sealed class ViewLocator : IDataTemplate
 			: CreateViewNotFound(viewModelType);
 	}
 
-	private static Control CreateViewNotFound(Type viewModelType) =>
-		new TextBlock
+	private static TextBlock CreateViewNotFound(Type viewModelType) =>
+		new()
 		{
 			Text = $"No view registered for viewmodel type\n{viewModelType}",
 			HorizontalAlignment = HorizontalAlignment.Center,
@@ -41,22 +41,13 @@ public sealed class ViewLocator : IDataTemplate
 			Foreground = Brushes.Red
 		};
 
-	private sealed class ViewFactory
+	private sealed class ViewFactory(Func<View> createView, bool cached = false)
 	{
-		private readonly bool _cached;
-
-		private readonly Func<View> _createView;
 		private View? _cachedView;
 
-		public ViewFactory(Func<View> createView, bool cached = false)
-		{
-			_createView = createView;
-			_cached = cached;
-		}
-
 		public View GetOrCreateView() =>
-			_cached
-				? _cachedView ??= _createView()
-				: _createView();
+			cached
+				? _cachedView ??= createView()
+				: createView();
 	}
 }

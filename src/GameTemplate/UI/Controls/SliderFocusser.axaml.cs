@@ -12,14 +12,12 @@ public partial class SliderFocusser : UserControl
 	public static readonly StyledProperty<IInputElement?> SliderProperty =
 		AvaloniaProperty.Register<ConfirmableNumericUpDown, IInputElement?>(nameof(Slider));
 
-	public static readonly DirectProperty<SliderFocusser, string> XYFocusModeProperty =
+	private static readonly DirectProperty<SliderFocusser, string> XyFocusModeProperty =
 		AvaloniaProperty.RegisterDirect<SliderFocusser, string>(
-			nameof(XYFocusMode),
-			o => o.XYFocusMode,
-			(o, v) => o.XYFocusMode = v,
+			nameof(XyFocusMode),
+			o => o.XyFocusMode,
+			(o, v) => o.XyFocusMode = v,
 			defaultBindingMode: BindingMode.OneWay);
-
-	private string _xyFocusMode = "Disabled";
 
 	public SliderFocusser()
 	{
@@ -32,22 +30,22 @@ public partial class SliderFocusser : UserControl
 		set => SetValue(SliderProperty, value);
 	}
 
-	public string XYFocusMode
+	public string XyFocusMode
 	{
-		get => _xyFocusMode;
-		set => SetAndRaise(XYFocusModeProperty, ref _xyFocusMode, value);
-	}
+		get;
+		set => SetAndRaise(XyFocusModeProperty, ref field, value);
+	} = "Disabled";
 
 	protected override void OnLostFocus(RoutedEventArgs e)
 	{
 		base.OnLostFocus(e);
 
-		XYFocusMode = "Disabled";
+		XyFocusMode = "Disabled";
 	}
 
 	protected override void OnGotFocus(GotFocusEventArgs e)
 	{
-		if (sliderContentControl.Content is Slider slider) slider.Focus(NavigationMethodBasedOnMouseOrKey);
+		if (SliderContentControl.Content is Slider slider) slider.Focus(NavigationMethodBasedOnMouseOrKey);
 	}
 
 	protected override void OnKeyDown(KeyEventArgs e)
@@ -57,6 +55,6 @@ public partial class SliderFocusser : UserControl
 		if (e.Handled || e is not { Key: Key.Up or Key.Down or Key.Left or Key.Right })
 			return;
 
-		XYFocusMode = "Enabled";
+		XyFocusMode = "Enabled";
 	}
 }

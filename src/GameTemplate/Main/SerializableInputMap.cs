@@ -5,40 +5,20 @@ using Godot;
 
 namespace GameTemplate.Main;
 
-public class InputMapKeyEvent
+public class InputMapKeyEvent(string inputActionName, Key physicalKey)
 {
-	public InputMapKeyEvent()
-	{
-	}
-
-	public InputMapKeyEvent(string action, Key physicalKey)
-	{
-		InputActionName = action;
-		PhysicalKey = physicalKey;
-	}
-
-	public string InputActionName { get; set; }
+	public string InputActionName { get; } = inputActionName;
 
 	[JsonConverter(typeof(JsonStringEnumConverter))]
-	public Key PhysicalKey { get; set; }
+	public Key PhysicalKey { get; } = physicalKey;
 }
 
-public class InputMapJoypadEvent
+public class InputMapJoypadEvent(string inputActionName, JoyButton joypadButton)
 {
-	public InputMapJoypadEvent()
-	{
-	}
-
-	public InputMapJoypadEvent(string action, JoyButton joypadButton)
-	{
-		InputActionName = action;
-		JoypadButton = joypadButton;
-	}
-
-	public string InputActionName { get; set; }
+	public string InputActionName { get; } = inputActionName;
 
 	[JsonConverter(typeof(JsonStringEnumConverter))]
-	public JoyButton JoypadButton { get; set; }
+	public JoyButton JoypadButton { get; } = joypadButton;
 }
 
 public class SerializableInputMap
@@ -48,8 +28,8 @@ public class SerializableInputMap
 		WriteIndented = true
 	};
 
-	public List<InputMapKeyEvent> KeyEvents { get; set; } = new();
-	public List<InputMapJoypadEvent> JoypadEvents { get; set; } = new();
+	public List<InputMapKeyEvent> KeyEvents { get; init; } = [];
+	public List<InputMapJoypadEvent> JoypadEvents { get; init; } = [];
 
 	public static void SaveCurrentInputMap()
 	{
@@ -57,10 +37,15 @@ public class SerializableInputMap
 
 		foreach (var action in InputMap.GetActions())
 			foreach (var inputEvent in InputMap.ActionGetEvents(action))
-				if (inputEvent is InputEventKey key && key.PhysicalKeycode != Key.None)
-					inputMap.KeyEvents.Add(new InputMapKeyEvent(action, key.PhysicalKeycode));
-				else if (inputEvent is InputEventJoypadButton joypadButton)
-					inputMap.JoypadEvents.Add(new InputMapJoypadEvent(action, joypadButton.ButtonIndex));
+				switch (inputEvent)
+				{
+					case InputEventKey key when key.PhysicalKeycode != Key.None:
+						inputMap.KeyEvents.Add(new InputMapKeyEvent(action, key.PhysicalKeycode));
+						break;
+					case InputEventJoypadButton joypadButton:
+						inputMap.JoypadEvents.Add(new InputMapJoypadEvent(action, joypadButton.ButtonIndex));
+						break;
+				}
 
 		using var file = FileAccess.Open("user://input_map.json", FileAccess.ModeFlags.Write);
 		file.StoreString(JsonSerializer.Serialize(inputMap, _jsonOptions));

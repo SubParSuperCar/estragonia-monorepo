@@ -20,7 +20,7 @@
 	        Background="White"
 	        Padding="10">
 		<StackPanel Spacing="6">
-			<controls:AudioButton Name="initialFocus0"
+			<controls:AudioButton Name="InitialFocus0"
 			                      Command="{Binding CloseCommand}"
 			                      IsCancel="True"
 			                      Margin="0 0 0 6">

@@ -31,7 +31,4 @@ public sealed class DirectionalFocusControl : AvaloniaObject
 		get => GetValue(IsRowDefaultProperty);
 		set => SetValue(IsRowDefaultProperty, value);
 	}
-
-	public Control? TryGetValidControl() =>
-		Control is { IsEffectivelyVisible: true, IsEffectivelyEnabled: true } control ? control : null;
 }

@@ -21,7 +21,7 @@
 	<Design.DataContext>
 		<ui:OptionsViewModel>
 			<x:Arguments>
-				<ui:UIOptions />
+				<ui:UiOptions />
 			</x:Arguments>
 		</ui:OptionsViewModel>
 	</Design.DataContext>
@@ -61,7 +61,7 @@
 			<ui:DirectionalFocusControl Control="{Binding #VSyncCheckBox}" IsNewRow="True" />
 			<ui:DirectionalFocusControl Control="{Binding #FullscreenCheckBox}" IsNewRow="True" />
 			<ui:DirectionalFocusControl Control="{Binding #ShowFpsCheckBox}" IsNewRow="True" />
-			<ui:DirectionalFocusControl Control="{Binding #UIScaleSlider}" IsNewRow="True" />
+			<ui:DirectionalFocusControl Control="{Binding #UiScaleSlider}" IsNewRow="True" />
 			<ui:DirectionalFocusControl Control="{Binding #CloseButton}" IsNewRow="True" />
 			<ui:DirectionalFocusControl Control="{Binding #ApplyButton}" IsRowDefault="True" />
 		</ui:DirectionalFocusStructure>
@@ -71,6 +71,7 @@
 
 	<Grid RowDefinitions="Auto,*,Auto">
 
+		<!-- ReSharper disable Xaml.StyleClassNotFound -->
 		<TextBlock
 			Classes="view-title"
 			Text="Options"
@@ -170,7 +171,7 @@
 					<Border Classes="selectable option">
 
 						<Interaction.Behaviors>
-							<behaviors:FocusWithPointerBehavior Target="{Binding #UIScaleSlider}" />
+							<behaviors:FocusWithPointerBehavior Target="{Binding #UiScaleSlider}" />
 						</Interaction.Behaviors>
 
 						<Grid ColumnDefinitions="3*,*,*">
@@ -184,7 +185,7 @@
 								Text="{Binding UIScale, StringFormat=P0}" />
 
 							<controls:ExtendedSlider
-								x:Name="UIScaleSlider"
+								x:Name="UiScaleSlider"
 								Classes="value"
 								Value="{Binding UIScale, Mode=TwoWay}"
 								Minimum="0.6"
@@ -198,6 +199,7 @@
 						</Grid>
 
 					</Border>
+					<!-- ReSharper restore Xaml.StyleClassNotFound -->
 
 				</StackPanel>
 			</ScrollViewer>

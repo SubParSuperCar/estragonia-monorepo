@@ -17,12 +17,12 @@ namespace Estragonia;
 /// <summary>Contains Godot to Avalonia platform initialization.</summary>
 internal static class GodotPlatform
 {
-	private static AvCompositor? s_compositor;
-	private static ManualRenderTimer? s_renderTimer;
-	private static ulong s_lastProcessFrame = ulong.MaxValue;
+	private static AvCompositor? _sCompositor;
+	private static ManualRenderTimer? _sRenderTimer;
+	private static ulong _sLastProcessFrame = ulong.MaxValue;
 
 	public static AvCompositor Compositor
-		=> s_compositor ?? throw new InvalidOperationException($"{nameof(GodotPlatform)} hasn't been initialized");
+		=> _sCompositor ?? throw new InvalidOperationException($"{nameof(GodotPlatform)} hasn't been initialized");
 
 	public static void Initialize()
 	{
@@ -46,8 +46,8 @@ internal static class GodotPlatform
 			.Bind<ManagedFileDialogOptions>()
 			.ToConstant(new ManagedFileDialogOptions { AllowDirectorySelection = true });
 
-		s_renderTimer = renderTimer;
-		s_compositor = new AvCompositor(platformGraphics);
+		_sRenderTimer = renderTimer;
+		_sCompositor = new AvCompositor(platformGraphics);
 	}
 
 	private static PlatformHotkeyConfiguration CreatePlatformHotKeyConfiguration() =>
@@ -57,15 +57,15 @@ internal static class GodotPlatform
 
 	public static void TriggerRenderTick()
 	{
-		if (s_renderTimer is null)
+		if (_sRenderTimer is null)
 			return;
 
 		// if we have several AvaloniaControls, ensure we tick the timer only once each frame
 		var processFrame = Engine.GetProcessFrames();
-		if (processFrame == s_lastProcessFrame)
+		if (processFrame == _sLastProcessFrame)
 			return;
 
-		s_lastProcessFrame = processFrame;
-		s_renderTimer.TriggerTick(new TimeSpan((long)(Time.GetTicksUsec() * 10UL)));
+		_sLastProcessFrame = processFrame;
+		_sRenderTimer.TriggerTick(new TimeSpan((long)(Time.GetTicksUsec() * 10UL)));
 	}
 }

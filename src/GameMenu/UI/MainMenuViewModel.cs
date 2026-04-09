@@ -3,34 +3,25 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace GameMenu.UI;
 
-public sealed partial class MainMenuViewModel : ViewModel
+public sealed partial class MainMenuViewModel(INavigator navigator, UiOptions uiOptions) : ViewModel
 {
-	private readonly INavigator _navigator;
-	private readonly UIOptions _uiOptions;
-
-	public MainMenuViewModel(INavigator navigator, UIOptions uiOptions)
-	{
-		_navigator = navigator;
-		_uiOptions = uiOptions;
-	}
-
 	protected override Task LoadAsync() => Task.CompletedTask;
 
 	[RelayCommand]
-	public void StartNewGame()
+	private void StartNewGame()
 	{
-		_navigator.NavigateTo(new DifficultyViewModel(_navigator));
+		navigator.NavigateTo(new DifficultyViewModel(navigator));
 	}
 
 	[RelayCommand]
-	public void OpenOptions()
+	private void OpenOptions()
 	{
-		_navigator.NavigateTo(new OptionsViewModel(_uiOptions));
+		navigator.NavigateTo(new OptionsViewModel(uiOptions));
 	}
 
 	[RelayCommand]
-	public void Exit()
+	private void Exit()
 	{
-		_navigator.Quit();
+		navigator.Quit();
 	}
 }

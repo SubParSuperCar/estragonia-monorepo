@@ -28,8 +28,8 @@
 	<ControlTheme x:Key="{x:Type controls:HorizontalSelect}"
 	              TargetType="controls:HorizontalSelect">
 		<ControlTheme.Resources>
-			<converters:IntEqualMultiConverter x:Key="intEqualMultiConverter" />
-			<converters:IntAdderConverter x:Key="intAdderConverter" />
+			<converters:IntEqualMultiConverter x:Key="IntEqualMultiConverter" />
+			<converters:IntAdderConverter x:Key="IntAdderConverter" />
 		</ControlTheme.Resources>
 
 		<Style Selector="^ /template/ Grid.engaged">
@@ -47,13 +47,13 @@
 					        Grid.ColumnSpan="3" />
 
 					<controls:AudioButton Name="PART_ValueDecrementer"
-					                      Grid.RowSpan="2"
+					                      Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
 					                      VerticalAlignment="Center"
 					                      Focusable="False">
 						&lt;
 					</controls:AudioButton>
 
-					<TextBlock Grid.Column="1"
+					<TextBlock Grid.Row="0" Grid.Column="1"
 					           HorizontalAlignment="Center"
 					           VerticalAlignment="Center"
 					           TextWrapping="Wrap"
@@ -91,7 +91,7 @@
 								        BorderThickness="1 1 0 1"
 								        Background="White">
 									<Classes.current>
-										<MultiBinding Converter="{StaticResource intEqualMultiConverter}">
+										<MultiBinding Converter="{StaticResource IntEqualMultiConverter}">
 											<Binding />
 											<Binding
 												RelativeSource="{RelativeSource AncestorType=controls:HorizontalSelect}"
@@ -99,12 +99,12 @@
 										</MultiBinding>
 									</Classes.current>
 									<Classes.last>
-										<MultiBinding Converter="{StaticResource intEqualMultiConverter}">
+										<MultiBinding Converter="{StaticResource IntEqualMultiConverter}">
 											<Binding />
 											<Binding
 												RelativeSource="{RelativeSource AncestorType=controls:HorizontalSelect}"
 												Path="ValueNames.Count"
-												Converter="{StaticResource intAdderConverter}"
+												Converter="{StaticResource IntAdderConverter}"
 												ConverterParameter="-1" />
 										</MultiBinding>
 									</Classes.last>
@@ -115,7 +115,7 @@
 
 					<controls:AudioButton Name="PART_ValueIncrementer"
 					                      Grid.Column="2"
-					                      Grid.RowSpan="2"
+					                      Grid.Row="0" Grid.RowSpan="2"
 					                      VerticalAlignment="Center"
 					                      Focusable="False">
 						>

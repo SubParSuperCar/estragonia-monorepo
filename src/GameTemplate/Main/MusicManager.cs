@@ -10,6 +10,7 @@ public partial class MusicManager : Node
 {
 	public enum Music
 	{
+		// ReSharper disable once InconsistentNaming
 		MainMenu
 	}
 
@@ -20,14 +21,14 @@ public partial class MusicManager : Node
 
 	private AudioStreamPlayer _musicPlayer = new()
 	{
-		Bus = Bus.Music.ToString()
+		Bus = nameof(Bus.Music)
 	};
 
 	private Tween? _musicTween;
 	private Music? _nextMusic;
 	public static MusicManager? Instance { get; private set; }
 
-	public bool DebugWriteMusicPlayback { get; set; } = false;
+	public bool DebugWriteMusicPlayback { get; set; }
 
 	public override void _Ready()
 	{
@@ -58,12 +59,10 @@ public partial class MusicManager : Node
 
 			UpdateBusDbLevelFromLinear(Bus.Music, originalMusicLevel);
 
-			if (_nextMusic != null)
-			{
-				_musicPlayer.Stream = _musicToStream[_nextMusic.Value];
-				_musicPlayer.Play();
-				_nextMusic = null;
-			}
+			if (_nextMusic == null) return;
+			_musicPlayer.Stream = _musicToStream[_nextMusic.Value];
+			_musicPlayer.Play();
+			_nextMusic = null;
 		};
 	}
 

@@ -7,41 +7,29 @@ using static Estragonia.VkInterop;
 namespace Estragonia;
 
 /// <summary>Encapsulates a Skia surface along with the Godot texture it comes from (Vulkan backend).</summary>
-internal sealed class GodotSkiaSurface : IGodotSkiaSurface
+internal sealed class GodotSkiaSurface(
+	SKSurface skSurface,
+	Texture2Drd gdTexture,
+	VkImage vkImage,
+	VkImageLayout lastLayout,
+	RenderingDevice renderingDevice,
+	double renderScaling,
+	VkBarrierHelper barrierHelper)
+	: IGodotSkiaSurface
 {
-	public GodotSkiaSurface(
-		SKSurface skSurface,
-		Texture2Drd gdTexture,
-		VkImage vkImage,
-		VkImageLayout lastLayout,
-		RenderingDevice renderingDevice,
-		double renderScaling,
-		VkBarrierHelper barrierHelper
-	)
-	{
-		SkSurface = skSurface;
-		GdTexture = gdTexture;
-		VkImage = vkImage;
-		LastLayout = lastLayout;
-		RenderingDevice = renderingDevice;
-		RenderScaling = renderScaling;
-		BarrierHelper = barrierHelper;
-		IsDisposed = false;
-	}
+	private VkImage VkImage { get; } = vkImage;
 
-	public VkImage VkImage { get; }
+	private VkImageLayout LastLayout { get; set; } = lastLayout;
 
-	public VkImageLayout LastLayout { get; set; }
+	private VkBarrierHelper BarrierHelper { get; } = barrierHelper;
 
-	public VkBarrierHelper BarrierHelper { get; }
+	public SKSurface SkSurface { get; } = skSurface;
 
-	public SKSurface SkSurface { get; }
+	public Texture2Drd GdTexture { get; } = gdTexture;
 
-	public Texture2Drd GdTexture { get; }
+	public RenderingDevice RenderingDevice { get; } = renderingDevice;
 
-	public RenderingDevice RenderingDevice { get; }
-
-	public double RenderScaling { get; set; }
+	public double RenderScaling { get; set; } = renderScaling;
 
 	public ulong DrawCount { get; set; }
 

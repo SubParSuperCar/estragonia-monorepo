@@ -34,9 +34,10 @@ public class ViewLocator : IDataTemplate
 
 	public bool Match(object? data) => data is ViewModel;
 
-	private Control CreateView(object? param)
+	private static Control CreateView(object? param)
 	{
-		var name = param.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
+		var name = param?.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
+		if (name == null) return new TextBlock { Text = "Not Found: " + name };
 		var type = Type.GetType(name);
 
 		if (type != null) return (Control)Activator.CreateInstance(type)!;

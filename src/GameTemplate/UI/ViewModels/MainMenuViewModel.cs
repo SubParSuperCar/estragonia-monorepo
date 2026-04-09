@@ -6,9 +6,9 @@ namespace GameTemplate.UI.ViewModels;
 
 public partial class MainMenuViewModel : ViewModel
 {
-	private readonly NavigatorViewModel _navigatorViewModel;
-	private readonly SceneTree _sceneTree;
-	private readonly ViewModelFactory _viewModelFactory;
+	private readonly NavigatorViewModel _navigatorViewModel = null!;
+	private readonly SceneTree _sceneTree = null!;
+	private readonly ViewModelFactory _viewModelFactory = null!;
 
 	/// <summary>
 	///     Intended for designer usage only.
@@ -26,20 +26,20 @@ public partial class MainMenuViewModel : ViewModel
 	}
 
 	[RelayCommand]
-	public void ToGame()
+	private void ToGame()
 	{
 		_navigatorViewModel.NavigateTo(new GameViewModel());
 	}
 
 	[RelayCommand]
-	public void ToOptions()
+	private void ToOptions()
 	{
 		_navigatorViewModel.NavigateTo(_viewModelFactory.CreateOptions(),
 			CreatePageTransition(TransitionType.Fade, 0.5f));
 	}
 
 	[RelayCommand]
-	public void Quit()
+	private void Quit()
 	{
 		_sceneTree.Quit();
 	}

@@ -10,14 +10,8 @@ public class Options
 		WriteIndented = true
 	};
 
-	public Options()
-	{
-		GraphicsOptions = new GraphicsOptions();
-		AudioOptions = new AudioOptions();
-	}
-
-	public GraphicsOptions GraphicsOptions { get; set; }
-	public AudioOptions AudioOptions { get; set; }
+	public GraphicsOptions GraphicsOptions { get; init; } = new();
+	public AudioOptions AudioOptions { get; set; } = new();
 
 	public static Options LoadOrCreate()
 	{

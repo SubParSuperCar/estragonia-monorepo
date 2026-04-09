@@ -13,8 +13,7 @@ public sealed class AutoReversePageSlide : PageSlide
 	{
 		var fromElement = from as InputElement;
 
-		if (fromElement is not null)
-			fromElement.IsHitTestVisible = false;
+		fromElement?.IsHitTestVisible = false;
 
 		if (to?.DataContext is MainMenuViewModel)
 			forward = !forward;
@@ -25,8 +24,7 @@ public sealed class AutoReversePageSlide : PageSlide
 		}
 		finally
 		{
-			if (fromElement is not null)
-				fromElement.IsHitTestVisible = true;
+			fromElement?.IsHitTestVisible = true;
 		}
 	}
 }

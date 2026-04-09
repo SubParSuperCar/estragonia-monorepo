@@ -9,8 +9,8 @@ public static class GodotDevices
 	/// <summary>The device identifier used by emulated devices.</summary>
 	public const int EmulatedDeviceId = -1;
 
-	private static readonly ConcurrentDictionary<int, IMouseDevice> s_mouseById = new();
-	private static readonly ConcurrentDictionary<int, IJoypadDevice> s_joypadById = new();
+	private static readonly ConcurrentDictionary<int, IMouseDevice> SMouseById = new();
+	private static readonly ConcurrentDictionary<int, IJoypadDevice> SJoypadById = new();
 
 	/// <summary>Gets the keyboard device.</summary>
 	/// <remarks>
@@ -24,7 +24,7 @@ public static class GodotDevices
 	/// <returns>A mouse device.</returns>
 	public static IMouseDevice GetMouse(int deviceId)
 	{
-		return s_mouseById.GetOrAdd(deviceId,
+		return SMouseById.GetOrAdd(deviceId,
 			static id => new MouseDevice(new Pointer(id, PointerType.Mouse, id == 0)));
 	}
 
@@ -32,6 +32,6 @@ public static class GodotDevices
 	/// <returns>A joypad device.</returns>
 	public static IJoypadDevice GetJoypad(int deviceId)
 	{
-		return s_joypadById.GetOrAdd(deviceId, static id => new JoypadDevice(id));
+		return SJoypadById.GetOrAdd(deviceId, static _ => new JoypadDevice());
 	}
 }

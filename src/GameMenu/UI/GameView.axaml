@@ -24,6 +24,7 @@
 
 	<Grid RowDefinitions="*,2*">
 
+		<!-- ReSharper disable once Xaml.StyleClassNotFound -->
 		<Border
 			Classes="centered-view-content"
 			VerticalAlignment="Center"

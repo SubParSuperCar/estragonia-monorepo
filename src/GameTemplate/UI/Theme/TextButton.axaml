@@ -6,9 +6,11 @@
 	<Design.PreviewWith>
 		<Border Background="White">
 			<StackPanel Spacing="20" Margin="20">
+				<!-- ReSharper disable Xaml.StaticResourceNotResolved -->
 				<controls:AudioButton Theme="{StaticResource TextButton}" Content="Button 1" />
 				<controls:AudioButton Theme="{StaticResource TextButton}" Content="Button 1"
 				                      IsEnabled="False" />
+				<!-- ReSharper restore Xaml.StaticResourceNotResolved -->
 			</StackPanel>
 		</Border>
 	</Design.PreviewWith>

@@ -7,10 +7,9 @@ namespace GameTemplate.UI.Converters;
 
 public class PathToImageConverter : IValueConverter
 {
-	public const string ImageFolderPath = "UI/Images";
-	public static readonly GodotWindowModeConverter Instance = new();
+	private const string ImageFolderPath = "UI/Images";
 
-	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value is not string path)
 			return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);

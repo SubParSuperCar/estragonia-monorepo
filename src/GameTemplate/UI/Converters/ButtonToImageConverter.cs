@@ -9,8 +9,7 @@ namespace GameTemplate.UI.Converters;
 
 public class ButtonToImageConverter : IValueConverter
 {
-	public const string ImageFolderPath = "UI/Images";
-	public static readonly GodotWindowModeConverter Instance = new();
+	private const string ImageFolderPath = "UI/Images";
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
@@ -19,19 +18,24 @@ public class ButtonToImageConverter : IValueConverter
 
 		string? buttonName = null;
 		var subFolder = "";
-		if (type == "keyboard")
+		switch (type)
 		{
-			subFolder = "Keyboard";
-			var key = (Key)valueInt;
-			if (!Design.IsDesignMode) key = DisplayServer.KeyboardGetKeycodeFromPhysical(key);
+			case "keyboard":
+				{
+					subFolder = "Keyboard";
+					var key = (Key)valueInt;
+					if (!Design.IsDesignMode) key = DisplayServer.KeyboardGetKeycodeFromPhysical(key);
 
-			ButtonToIconName.TryGetKeyboard(key, out buttonName);
-		}
-		else if (type == "xbox")
-		{
-			subFolder = "Controller";
-			var joyButton = (JoyButton)valueInt;
-			ButtonToIconName.TryGetXbox(joyButton, out buttonName);
+					ButtonToIconName.TryGetKeyboard(key, out buttonName);
+					break;
+				}
+			case "xbox":
+				{
+					subFolder = "Controller";
+					var joyButton = (JoyButton)valueInt;
+					ButtonToIconName.TryGetXbox(joyButton, out buttonName);
+					break;
+				}
 		}
 
 		if (buttonName != null)

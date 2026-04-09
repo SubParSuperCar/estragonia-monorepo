@@ -34,7 +34,7 @@
 		        VerticalAlignment="Center"
 		        HorizontalAlignment="Center">
 			<DockPanel>
-				<controls:AudioButton Name="initialFocus0"
+				<controls:AudioButton Name="InitialFocus0"
 				                      DockPanel.Dock="Right"
 				                      VerticalAlignment="Top"
 				                      Margin="20 0 0 0"

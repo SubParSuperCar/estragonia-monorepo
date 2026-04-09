@@ -8,27 +8,23 @@ public sealed partial class GameViewModel : ViewModel
 {
 	private Node? _anchorNode;
 
-	[ObservableProperty] private Node? _gameNode;
+	[ObservableProperty] public partial Node? GameNode { get; set; }
 
 	protected override Task LoadAsync()
 	{
-		if (GameNode is not null)
-		{
-			_anchorNode = SceneTree?.Root.GetNode("Root/Game");
-			_anchorNode?.AddChild(GameNode);
-		}
+		if (GameNode is null) return Task.CompletedTask;
+		_anchorNode = SceneTree?.Root.GetNode("Root/Game");
+		_anchorNode?.AddChild(GameNode);
 
 		return Task.CompletedTask;
 	}
 
 	protected override Task<bool> TryCloseCoreAsync()
 	{
-		if (GameNode is not null)
-		{
-			_anchorNode?.RemoveChild(GameNode);
-			GameNode.Free();
-			GameNode = null;
-		}
+		if (GameNode is null) return base.TryCloseCoreAsync();
+		_anchorNode?.RemoveChild(GameNode);
+		GameNode.Free();
+		GameNode = null;
 
 		return base.TryCloseCoreAsync();
 	}

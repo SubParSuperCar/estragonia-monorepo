@@ -19,7 +19,7 @@
 		<TextBlock>
 			This View only exists to test the <Bold>escape menu</Bold> (go ahead, press escape).
 		</TextBlock>
-		<controls:AudioButton Name="initialFocus0" Command="{Binding CloseCommand}">
+		<controls:AudioButton Name="InitialFocus0" Command="{Binding CloseCommand}">
 			Main Menu
 		</controls:AudioButton>
 	</StackPanel>
