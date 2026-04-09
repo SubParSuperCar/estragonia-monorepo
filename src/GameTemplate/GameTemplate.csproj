@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Godot.NET.Sdk/4.6.2">
   <PropertyGroup>
-    <AssemblyTitle>Template</AssemblyTitle>
+    <AssemblyTitle>GameTemplate</AssemblyTitle>
     <TargetFramework>net8.0</TargetFramework>
     <LangVersion>14</LangVersion>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
-    <GdLauncherScriptExt>cmd</GdLauncherScriptExt>
+    <GdLaunchScriptExt>cmd</GdLaunchScriptExt>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
-    <GdLauncherScriptExt>sh</GdLauncherScriptExt>
+    <GdLaunchScriptExt>sh</GdLaunchScriptExt>
   </PropertyGroup>
 
   <ItemGroup>
