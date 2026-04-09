@@ -63,20 +63,18 @@ internal sealed class MtlSynchronizer : ISurfaceSynchronizer
 	{
 		// Get Skia's Metal texture from its surface
 		var skiaTexture = MtlInterop.GetSurfaceMetalTexture(surface.SkSurface);
-		if (skiaTexture == IntPtr.Zero)
-		{
-			GD.PrintErr("[Estragonia Metal] Could not get Skia Metal texture");
-			return false;
-		}
+		if (skiaTexture != IntPtr.Zero)
+			return MtlInterop.BlitTexture(
+				surface.CommandQueue,
+				skiaTexture,
+				surface.GdMetalTexture,
+				surface.Width,
+				surface.Height
+			);
+		GD.PrintErr("[Estragonia Metal] Could not get Skia Metal texture");
+		return false;
 
 		// Perform GPU blit from Skia texture to Godot texture
-		return MtlInterop.BlitTexture(
-			surface.CommandQueue,
-			skiaTexture,
-			surface.GdMetalTexture,
-			surface.Width,
-			surface.Height
-		);
 	}
 
 	private static void CpuCopy(IGodotSkiaSurface surface)
@@ -94,15 +92,13 @@ internal sealed class MtlSynchronizer : ISurfaceSynchronizer
 		var imageInfo = new SKImageInfo(width, height, SKColorType.Rgba8888, SKAlphaType.Premul);
 		using var bitmap = new SKBitmap(imageInfo);
 
-		if (skSurface.ReadPixels(imageInfo, bitmap.GetPixels(), imageInfo.RowBytes, 0, 0))
-		{
-			// Get pixel data and upload to Godot texture
-			var pixelData = bitmap.GetPixelSpan().ToArray();
-			surface.RenderingDevice.TextureUpdate(
-				surface.GdTexture.TextureRdRid,
-				0, // layer
-				pixelData
-			);
-		}
+		if (!skSurface.ReadPixels(imageInfo, bitmap.GetPixels(), imageInfo.RowBytes, 0, 0)) return;
+		// Get pixel data and upload to Godot texture
+		var pixelData = bitmap.GetPixelSpan().ToArray();
+		surface.RenderingDevice.TextureUpdate(
+			surface.GdTexture.TextureRdRid,
+			0, // layer
+			pixelData
+		);
 	}
 }

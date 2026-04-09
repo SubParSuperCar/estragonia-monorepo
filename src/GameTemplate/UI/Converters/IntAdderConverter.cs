@@ -10,7 +10,7 @@ public class IntAdderConverter : IValueConverter
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value != null && parameter != null && int.TryParse(value.ToString(), out var num1) &&
-		    int.TryParse(parameter.ToString(), out var num2))
+			int.TryParse(parameter.ToString(), out var num2))
 			return num1 + num2;
 
 		return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);

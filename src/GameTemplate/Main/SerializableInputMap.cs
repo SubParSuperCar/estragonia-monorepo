@@ -36,16 +36,16 @@ public class SerializableInputMap
 		var inputMap = new SerializableInputMap();
 
 		foreach (var action in InputMap.GetActions())
-		foreach (var inputEvent in InputMap.ActionGetEvents(action))
-			switch (inputEvent)
-			{
-				case InputEventKey key when key.PhysicalKeycode != Key.None:
-					inputMap.KeyEvents.Add(new InputMapKeyEvent(action, key.PhysicalKeycode));
-					break;
-				case InputEventJoypadButton joypadButton:
-					inputMap.JoypadEvents.Add(new InputMapJoypadEvent(action, joypadButton.ButtonIndex));
-					break;
-			}
+			foreach (var inputEvent in InputMap.ActionGetEvents(action))
+				switch (inputEvent)
+				{
+					case InputEventKey key when key.PhysicalKeycode != Key.None:
+						inputMap.KeyEvents.Add(new InputMapKeyEvent(action, key.PhysicalKeycode));
+						break;
+					case InputEventJoypadButton joypadButton:
+						inputMap.JoypadEvents.Add(new InputMapJoypadEvent(action, joypadButton.ButtonIndex));
+						break;
+				}
 
 		using var file = FileAccess.Open("user://input_map.json", FileAccess.ModeFlags.Write);
 		file.StoreString(JsonSerializer.Serialize(inputMap, _jsonOptions));

@@ -32,7 +32,6 @@ internal sealed unsafe class VkDeviceApi
 
 	private readonly delegate* unmanaged[Stdcall]<VkDevice, VkFence, VkResult> _vkGetFenceStatus;
 	private readonly delegate* unmanaged[Stdcall]<VkQueue, uint, VkSubmitInfo*, VkFence, VkResult> _vkQueueSubmit;
-	private readonly delegate* unmanaged[Stdcall]<VkQueue, VkResult> _vkQueueWaitIdle;
 	private readonly delegate* unmanaged[Stdcall]<VkDevice, uint, VkFence*, VkResult> _vkResetFences;
 	private readonly delegate* unmanaged[Stdcall]<VkDevice, uint, VkFence*, uint, ulong, VkResult> _vkWaitForFences;
 
@@ -91,9 +90,7 @@ internal sealed unsafe class VkDeviceApi
 			(delegate* unmanaged[Stdcall]<VkDevice, VkFence, IntPtr, void>)
 			GetVkProcAddress("vkDestroyFence");
 
-		_vkQueueWaitIdle =
-			(delegate* unmanaged[Stdcall]<VkQueue, VkResult>)
-			GetVkProcAddress("vkQueueWaitIdle");
+		return;
 
 		IntPtr GetVkProcAddress(string name)
 		{
@@ -111,10 +108,9 @@ internal sealed unsafe class VkDeviceApi
 				result = vkGetDeviceProcAddr(vkDevice, utf8NamePtr);
 			}
 
-			if (result == IntPtr.Zero)
-				throw new EntryPointNotFoundException($"Vulkan entry point not found for {name}");
-
-			return result;
+			return result == IntPtr.Zero
+				? throw new EntryPointNotFoundException($"Vulkan entry point not found for {name}")
+				: result;
 		}
 	}
 
@@ -218,10 +214,5 @@ internal sealed unsafe class VkDeviceApi
 	public void DestroyFence(VkDevice device, VkFence fence, IntPtr pAllocator)
 	{
 		_vkDestroyFence(device, fence, pAllocator);
-	}
-
-	public void QueueWaitIdle(VkQueue queue)
-	{
-		_vkQueueWaitIdle(queue).VerifySuccess(nameof(QueueWaitIdle));
 	}
 }

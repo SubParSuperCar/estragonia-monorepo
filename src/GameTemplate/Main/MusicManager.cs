@@ -75,7 +75,7 @@ public partial class MusicManager : Node
 	{
 		if (DebugWriteMusicPlayback)
 			Debug.WriteLine($"AudioManager playing music \"{music}\"\n" +
-			                $"Sender: {sender} - {Time.GetTicksMsec()}ms\n");
+							$"Sender: {sender} - {Time.GetTicksMsec()}ms\n");
 
 		if (!_musicPlayer.Playing)
 		{

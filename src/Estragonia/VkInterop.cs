@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Estragonia;
 
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
@@ -480,102 +482,57 @@ internal static class VkInterop
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkInstance
+	internal struct VkInstance(IntPtr handle)
 	{
-		public IntPtr Handle;
-
-		public VkInstance(IntPtr handle)
-		{
-			Handle = handle;
-		}
+		public IntPtr Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkPhysicalDevice
+	internal struct VkPhysicalDevice(IntPtr handle)
 	{
-		public IntPtr Handle;
-
-		public VkPhysicalDevice(IntPtr handle)
-		{
-			Handle = handle;
-		}
+		public IntPtr Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkDevice
+	internal struct VkDevice(IntPtr handle)
 	{
-		public IntPtr Handle;
-
-		public VkDevice(IntPtr handle)
-		{
-			Handle = handle;
-		}
+		public IntPtr Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkQueue
+	internal struct VkQueue(IntPtr handle)
 	{
-		public IntPtr Handle;
-
-		public VkQueue(IntPtr handle)
-		{
-			Handle = handle;
-		}
+		public IntPtr Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkCommandBuffer
+	internal struct VkCommandBuffer(IntPtr handle)
 	{
-		public IntPtr Handle;
-
-		public VkCommandBuffer(IntPtr handle)
-		{
-			Handle = handle;
-		}
+		public IntPtr Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkSemaphore
+	internal struct VkSemaphore(ulong handle)
 	{
-		public ulong Handle;
-
-		public VkSemaphore(ulong handle)
-		{
-			Handle = handle;
-		}
+		public ulong Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkFence
+	internal struct VkFence(ulong handle)
 	{
-		public ulong Handle;
-
-		public VkFence(ulong handle)
-		{
-			Handle = handle;
-		}
+		public ulong Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkCommandPool
+	internal struct VkCommandPool(ulong handle)
 	{
-		public ulong Handle;
-
-		public VkCommandPool(ulong handle)
-		{
-			Handle = handle;
-		}
+		public ulong Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0
-	internal struct VkImage
+	internal struct VkImage(ulong handle)
 	{
-		public ulong Handle;
-
-		public VkImage(ulong handle)
-		{
-			Handle = handle;
-		}
+		public readonly ulong Handle = handle;
 	}
 
 	// Provided by VK_VERSION_1_0

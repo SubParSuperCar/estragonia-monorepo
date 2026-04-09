@@ -15,7 +15,7 @@ namespace GameTemplate.UI.Controls;
 [TemplatePart("PART_ValueDecrementer", typeof(Button))]
 [TemplatePart("PART_ValueIncrementer", typeof(Button))]
 [TemplatePart("PART_Container", typeof(Control))]
-internal class HorizontalSelect : TemplatedControl
+internal sealed class HorizontalSelect : TemplatedControl
 {
 	public static readonly DirectProperty<HorizontalSelect, IEnumerable<int>> ValuesProperty =
 		AvaloniaProperty.RegisterDirect<HorizontalSelect, IEnumerable<int>>(

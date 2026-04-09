@@ -30,7 +30,6 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 	private PixelSize _renderSize;
 
 	private IGodotSkiaSurface? _surface;
-	private WindowTransparencyLevel _transparencyLevel = WindowTransparencyLevel.Transparent;
 
 	public GodotTopLevelImpl(IGodotPlatformGraphics platformGraphics, IClipboard clipboard, AvCompositor compositor)
 	{
@@ -41,7 +40,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		platformGraphics.AddRef();
 	}
 
-	public Action<GdCursorShape>? CursorChanged { get; set; }
+	public Action<GdCursorShape>? CursorChanged { get; init; }
 
 	public double RenderScaling { get; private set; } = 1.0;
 
@@ -57,16 +56,16 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 
 	public WindowTransparencyLevel TransparencyLevel
 	{
-		get => _transparencyLevel;
+		get;
 		private set
 		{
-			if (_transparencyLevel.Equals(value))
+			if (field.Equals(value))
 				return;
 
-			_transparencyLevel = value;
+			field = value;
 			TransparencyLevelChanged?.Invoke(value);
 		}
-	}
+	} = WindowTransparencyLevel.Transparent;
 
 	public Action<Rect>? Paint { get; set; }
 
@@ -113,7 +112,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 	{
 		foreach (var transparencyLevel in transparencyLevels)
 			if (transparencyLevel == WindowTransparencyLevel.Transparent ||
-			    transparencyLevel == WindowTransparencyLevel.None)
+				transparencyLevel == WindowTransparencyLevel.None)
 			{
 				TransparencyLevel = transparencyLevel;
 				return;
@@ -124,13 +123,8 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 	{
 	}
 
-	object? IOptionalFeatureProvider.TryGetFeature(Type featureType)
-	{
-		if (featureType == typeof(IClipboard))
-			return _clipboard;
-
-		return null;
-	}
+	object? IOptionalFeatureProvider.TryGetFeature(Type featureType) =>
+		featureType == typeof(IClipboard) ? _clipboard : null;
 
 	public void Dispose()
 	{
@@ -150,13 +144,9 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		_platformGraphics.Release();
 	}
 
-	private IGodotSkiaSurface CreateSurface()
-	{
-		if (_isDisposed)
-			throw new ObjectDisposedException(nameof(GodotTopLevelImpl));
-
-		return _platformGraphics.GetSharedContext().CreateSurface(_renderSize, RenderScaling);
-	}
+	private IGodotSkiaSurface CreateSurface() => _isDisposed
+		? throw new ObjectDisposedException(nameof(GodotTopLevelImpl))
+		: _platformGraphics.GetSharedContext().CreateSurface(_renderSize, RenderScaling);
 
 	public IGodotSkiaSurface? TryGetSurface() => _surface;
 
@@ -165,10 +155,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		return _surface ??= CreateSurface();
 	}
 
-	private IEnumerable<object> GetOrCreateSurfaces()
-	{
-		return new object[] { GetOrCreateSurface() };
-	}
+	private IEnumerable<object> GetOrCreateSurfaces() => [GetOrCreateSurface()];
 
 	[SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator", Justification = "Doesn't affect correctness")]
 	public void SetRenderSize(PixelSize renderSize, double renderScaling)
@@ -201,8 +188,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 
 		if (hasScalingChanged)
 		{
-			if (_surface != null)
-				_surface.RenderScaling = RenderScaling;
+			_surface?.RenderScaling = RenderScaling;
 			ScalingChanged?.Invoke(RenderScaling);
 		}
 
@@ -244,30 +230,6 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		if (_inputRoot is null || Input is not { } input)
 			return false;
 
-		RawPointerEventArgs CreateButtonArgs(RawPointerEventType type)
-		{
-			return new RawPointerEventArgs(
-				GodotDevices.GetMouse(inputEvent.Device),
-				timestamp,
-				_inputRoot,
-				type,
-				inputEvent.Position.ToAvaloniaPoint() / RenderScaling,
-				inputEvent.GetRawInputModifiers()
-			);
-		}
-
-		RawMouseWheelEventArgs CreateWheelArgs(Vector delta)
-		{
-			return new RawMouseWheelEventArgs(
-				GodotDevices.GetMouse(inputEvent.Device),
-				timestamp,
-				_inputRoot,
-				inputEvent.Position.ToAvaloniaPoint() / RenderScaling,
-				delta,
-				inputEvent.GetRawInputModifiers()
-			);
-		}
-
 		var args = (inputEvent.ButtonIndex, inputEvent.Pressed) switch
 		{
 			(GdMouseButton.Left, true) => CreateButtonArgs(RawPointerEventType.LeftButtonDown),
@@ -293,6 +255,30 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		input(args);
 
 		return args.Handled;
+
+		RawPointerEventArgs CreateButtonArgs(RawPointerEventType type)
+		{
+			return new RawPointerEventArgs(
+				GodotDevices.GetMouse(inputEvent.Device),
+				timestamp,
+				_inputRoot,
+				type,
+				inputEvent.Position.ToAvaloniaPoint() / RenderScaling,
+				inputEvent.GetRawInputModifiers()
+			);
+		}
+
+		RawMouseWheelEventArgs CreateWheelArgs(Vector delta)
+		{
+			return new RawMouseWheelEventArgs(
+				GodotDevices.GetMouse(inputEvent.Device),
+				timestamp,
+				_inputRoot,
+				inputEvent.Position.ToAvaloniaPoint() / RenderScaling,
+				delta,
+				inputEvent.GetRawInputModifiers()
+			);
+		}
 	}
 
 	public bool OnScreenTouch(InputEventScreenTouch inputEvent, ulong timestamp)
@@ -373,7 +359,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 				return true;
 		}
 
-		if (pressed && OS.IsKeycodeUnicode((long)keyCode))
+		if (!pressed || !OS.IsKeycodeUnicode((long)keyCode)) return false;
 		{
 			var text = char.ConvertFromUtf32((int)inputEvent.Unicode);
 			var args = new RawTextInputEventArgs(GodotDevices.Keyboard, timestamp, _inputRoot, text);
@@ -396,8 +382,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 			GodotDevices.GetJoypad(inputEvent.Device),
 			timestamp,
 			_inputRoot,
-			inputEvent.IsPressed() ? RawJoypadButtonEventType.ButtonDown : RawJoypadButtonEventType.ButtonUp,
-			inputEvent.ButtonIndex
+			inputEvent.IsPressed() ? RawJoypadButtonEventType.ButtonDown : RawJoypadButtonEventType.ButtonUp
 		);
 
 		input(args);
@@ -413,9 +398,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		var args = new RawJoypadAxisEventArgs(
 			GodotDevices.GetJoypad(inputEvent.Device),
 			timestamp,
-			_inputRoot,
-			inputEvent.Axis,
-			inputEvent.AxisValue
+			_inputRoot
 		);
 
 		input(args);
@@ -428,10 +411,9 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		LostFocus?.Invoke();
 	}
 
-	public bool OnMouseExited(ulong timestamp)
+	public void OnMouseExited(ulong timestamp)
 	{
-		if (_inputRoot is null || Input is not { } input)
-			return false;
+		if (_inputRoot is null || Input is not { } input) return;
 
 		var args = new RawPointerEventArgs(
 			GodotDevices.GetMouse(_lastMouseDeviceId),
@@ -443,7 +425,5 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 		);
 
 		input(args);
-
-		return args.Handled;
 	}
 }

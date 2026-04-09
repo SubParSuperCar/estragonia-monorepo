@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia;
 using Avalonia.Controls;
@@ -18,23 +17,20 @@ namespace Estragonia;
 /// <summary>Renders an Avalonia control and forwards input to it.</summary>
 public class AvaloniaControl : GdControl
 {
-	private AvControl? _control;
-	private double _renderScaling = 1.0;
 	private GodotTopLevel? _topLevel;
 
 	/// <summary>Gets or sets the underlying Avalonia control that will be rendered.</summary>
 	public AvControl? Control
 	{
-		get => _control;
+		get;
 		set
 		{
-			if (ReferenceEquals(_control, value))
+			if (ReferenceEquals(field, value))
 				return;
 
-			_control = value;
+			field = value;
 
-			if (_topLevel is not null)
-				_topLevel.Content = _control;
+			_topLevel?.Content = field;
 		}
 	}
 
@@ -42,17 +38,17 @@ public class AvaloniaControl : GdControl
 	[SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator", Justification = "Doesn't affect correctness")]
 	public double RenderScaling
 	{
-		get => _renderScaling;
+		get;
 		set
 		{
-			if (_renderScaling == value)
+			if (field == value)
 				return;
 
-			_renderScaling = value;
+			field = value;
 			OnResized();
 			QueueRedraw();
 		}
-	}
+	} = 1.0;
 
 	/// <summary>
 	///     Gets or sets whether some Godot UI actions will be automatically mapped to an
@@ -60,19 +56,7 @@ public class AvaloniaControl : GdControl
 	///     The mapped actions are ui_left, ui_right, ui_up, ui_down, ui_accept and ui_cancel.
 	///     Defaults to true.
 	/// </summary>
-	public bool AutoConvertUIActionToKeyDown { get; set; } = true;
-
-	/// <summary>Gets the underlying Avalonia top-level element.</summary>
-	/// <returns>The Avalonia top-level element.</returns>
-	/// <exception cref="InvalidOperationException">Thrown if the control isn't ready or has been disposed.</exception>
-	public GodotTopLevel GetTopLevel() => _topLevel ??
-	                                      throw new InvalidOperationException(
-		                                      $"The {nameof(AvaloniaControl)} isn't initialized");
-
-	/// <summary>Gets the underlying Godot texture where <see cref="Control" /> is rendered.</summary>
-	/// <returns>A texture.</returns>
-	/// <exception cref="InvalidOperationException">Thrown if the control isn't ready or has been disposed.</exception>
-	public Texture2D GetTexture() => GetTopLevel().Impl.GetOrCreateSurface().GdTexture;
+	private static bool AutoConvertUiActionToKeyDown => true;
 
 	protected override bool InvokeGodotClassMethod(in godot_string_name method, NativeVariantPtrArgs args,
 		out godot_variant ret)
@@ -105,13 +89,10 @@ public class AvaloniaControl : GdControl
 			return true;
 		}
 
-		if (method == MethodName._HasPoint && args.Count == 1)
-		{
-			ret = VariantUtils.CreateFrom(_HasPoint(VariantUtils.ConvertTo<Vector2>(args[0])));
-			return true;
-		}
-
-		return base.InvokeGodotClassMethod(method, args, out ret);
+		if (method != MethodName._HasPoint || args.Count != 1)
+			return base.InvokeGodotClassMethod(method, args, out ret);
+		ret = VariantUtils.CreateFrom(_HasPoint(VariantUtils.ConvertTo<Vector2>(args[0])));
+		return true;
 	}
 
 	protected override bool HasGodotClassMethod(in godot_string_name method) =>
@@ -155,7 +136,7 @@ public class AvaloniaControl : GdControl
 		{
 			Background = null,
 			Content = Control,
-			TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent, WindowTransparencyLevel.None }
+			TransparencyLevelHint = [WindowTransparencyLevel.Transparent, WindowTransparencyLevel.None]
 		};
 
 		_topLevel.Prepare();
@@ -213,8 +194,8 @@ public class AvaloniaControl : GdControl
 
 		NavigationMethod navigationMethod;
 
-		if (GdInput.IsActionPressed(GodotBuiltInActions.UIFocusNext) ||
-		    GdInput.IsActionPressed(GodotBuiltInActions.UIFocusPrev))
+		if (GdInput.IsActionPressed(GodotBuiltInActions.UiFocusNext) ||
+			GdInput.IsActionPressed(GodotBuiltInActions.UiFocusPrev))
 			navigationMethod = NavigationMethod.Tab;
 		else if (GdInput.GetMouseButtonMask() != 0)
 			navigationMethod = NavigationMethod.Pointer;
@@ -254,34 +235,30 @@ public class AvaloniaControl : GdControl
 		if (!inputEvent.IsActionType())
 			return false;
 
-		if (inputEvent.IsActionPressed(GodotBuiltInActions.UIFocusNext, true, true))
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiFocusNext, true, true))
 			return TryMoveFocus(NavigationDirection.Next, inputEvent);
 
-		if (inputEvent.IsActionPressed(GodotBuiltInActions.UIFocusPrev, true, true))
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiFocusPrev, true, true))
 			return TryMoveFocus(NavigationDirection.Previous, inputEvent);
 
-		if (AutoConvertUIActionToKeyDown)
-		{
-			if (inputEvent.IsActionPressed(GodotBuiltInActions.UILeft, true, true))
-				return SimulateKeyDownFromAction(inputEvent, GdKey.Left);
+		if (!AutoConvertUiActionToKeyDown) return false;
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiLeft, true, true))
+			return SimulateKeyDownFromAction(inputEvent, GdKey.Left);
 
-			if (inputEvent.IsActionPressed(GodotBuiltInActions.UIRight, true, true))
-				return SimulateKeyDownFromAction(inputEvent, GdKey.Right);
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiRight, true, true))
+			return SimulateKeyDownFromAction(inputEvent, GdKey.Right);
 
-			if (inputEvent.IsActionPressed(GodotBuiltInActions.UIUp, true, true))
-				return SimulateKeyDownFromAction(inputEvent, GdKey.Up);
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiUp, true, true))
+			return SimulateKeyDownFromAction(inputEvent, GdKey.Up);
 
-			if (inputEvent.IsActionPressed(GodotBuiltInActions.UIDown, true, true))
-				return SimulateKeyDownFromAction(inputEvent, GdKey.Down);
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiDown, true, true))
+			return SimulateKeyDownFromAction(inputEvent, GdKey.Down);
 
-			if (inputEvent.IsActionPressed(GodotBuiltInActions.UIAccept, true, true))
-				return SimulateKeyDownFromAction(inputEvent, GdKey.Enter);
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiAccept, true, true))
+			return SimulateKeyDownFromAction(inputEvent, GdKey.Enter);
 
-			if (inputEvent.IsActionPressed(GodotBuiltInActions.UICancel, true, true))
-				return SimulateKeyDownFromAction(inputEvent, GdKey.Escape);
-		}
-
-		return false;
+		return inputEvent.IsActionPressed(GodotBuiltInActions.UiCancel, true, true) &&
+			   SimulateKeyDownFromAction(inputEvent, GdKey.Escape);
 	}
 
 	private bool SimulateKeyDownFromAction(InputEvent inputEvent, GdKey key)

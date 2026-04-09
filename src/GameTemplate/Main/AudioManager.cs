@@ -90,7 +90,7 @@ public partial class AudioManager : Node
 	{
 		foreach (var audioPlayer in _activeAudioPlayers)
 			if (Enum.TryParse(audioPlayer.Bus.ToString(), out Bus bus)
-			    && busses.Contains(bus))
+				&& busses.Contains(bus))
 				audioPlayer.StreamPaused = pause;
 	}
 
@@ -98,7 +98,7 @@ public partial class AudioManager : Node
 	{
 		if (DebugWriteAudioPlayback)
 			Debug.WriteLine($"AudioManager playing sound \"{sound}\", {bus} bus\n" +
-			                $"Sender: {sender} - {Time.GetTicksMsec()}ms\n");
+							$"Sender: {sender} - {Time.GetTicksMsec()}ms\n");
 
 		if (_availableAudioPlayers == 0) AddAudioPlayers(1);
 
