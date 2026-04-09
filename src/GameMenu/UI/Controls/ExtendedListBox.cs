@@ -22,6 +22,7 @@ public class ExtendedListBox : ListBox
 			return;
 
 		// Override the default ListBox behavior that changes the selection with Up/Down: we want to change the focus instead.
+		// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
 		switch (e.Key)
 		{
 			case Key.Up:
@@ -46,7 +47,7 @@ public class ExtendedListBox : ListBox
 	private bool TryMoveFocus(NavigationDirection direction, KeyModifiers keyModifiers)
 	{
 		if (TopLevel.GetTopLevel(this)?.FocusManager is not { } focusManager
-			|| Presenter?.Panel is not INavigableContainer navigableContainer
+		    || Presenter?.Panel is not INavigableContainer navigableContainer
 		   )
 			return false;
 

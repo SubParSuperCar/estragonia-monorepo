@@ -9,9 +9,9 @@ namespace GameTemplate.UI.ViewModels;
 public partial class InputListenerDialogViewModel : ViewModel
 {
 	private readonly EventHandler<InputEvent>? _inputEventHandler;
-	private readonly HashSet<Key> _reservedKeys;
+	private readonly HashSet<Key> _reservedKeys = null!;
 
-	private readonly UserInterface _userInterface;
+	private readonly UserInterface _userInterface = null!;
 
 	/// <summary>
 	///     Intended for designer usage only.
@@ -29,9 +29,9 @@ public partial class InputListenerDialogViewModel : ViewModel
 
 		_userInterface = userInterface;
 		_inputEventHandler = null;
-		_inputEventHandler = (sender, inputEvent) =>
+		_inputEventHandler = (_, inputEvent) =>
 		{
-			if (OnInputEvent(sender, inputEvent)) userInterface.InputEventReceived -= _inputEventHandler;
+			if (OnInputEvent(inputEvent)) userInterface.InputEventReceived -= _inputEventHandler;
 		};
 
 		userInterface.InputEventReceived += _inputEventHandler;
@@ -44,39 +44,34 @@ public partial class InputListenerDialogViewModel : ViewModel
 	/// <summary>
 	///     Returns true if the input was valid.
 	/// </summary>
-	private bool OnInputEvent(object? sender, InputEvent inputEvent)
+	private bool OnInputEvent(InputEvent inputEvent)
 	{
-		var userInterface = (UserInterface)sender!;
-
 		(Key?, JoyButton?)? inputTuple = null;
-		if (ListenToKeyboard && inputEvent is InputEventKey keyEvent && keyEvent.Pressed
-			&& ButtonToIconName.TryGetKeyboard(keyEvent.Keycode, out var name)
-			&& !_reservedKeys.Contains(keyEvent.PhysicalKeycode))
+		switch (ListenToKeyboard)
 		{
-			// UserInterface will process the inputEvent after this method:
-			// set pressed to false to prevent instant press after this dialog is closed.
-			keyEvent.Pressed = false;
-			inputTuple = (keyEvent.PhysicalKeycode, null);
-		}
-		else if (!ListenToKeyboard && inputEvent is InputEventJoypadButton joypadEvent && joypadEvent.Pressed
-				 && ButtonToIconName.TryGetXbox(joypadEvent.ButtonIndex, out _))
-		{
-			joypadEvent.Pressed = false;
-			inputTuple = (null, joypadEvent.ButtonIndex);
-		}
-
-		if (inputTuple != null)
-		{
-			InputPressed?.Invoke(inputTuple.Value);
-			Close();
-			return true;
+			case true when inputEvent is InputEventKey { Pressed: true } keyEvent
+			               && ButtonToIconName.TryGetKeyboard(keyEvent.Keycode, out _)
+			               && !_reservedKeys.Contains(keyEvent.PhysicalKeycode):
+				// UserInterface will process the inputEvent after this method:
+				// set pressed to false to prevent instant press after this dialog is closed.
+				keyEvent.Pressed = false;
+				inputTuple = (keyEvent.PhysicalKeycode, null);
+				break;
+			case false when inputEvent is InputEventJoypadButton { Pressed: true } joypadEvent
+			                && ButtonToIconName.TryGetXbox(joypadEvent.ButtonIndex, out _):
+				joypadEvent.Pressed = false;
+				inputTuple = (null, joypadEvent.ButtonIndex);
+				break;
 		}
 
-		return false;
+		if (inputTuple == null) return false;
+		InputPressed?.Invoke(inputTuple.Value);
+		Close();
+		return true;
 	}
 
 	[RelayCommand]
-	public void Cancel()
+	private void Cancel()
 	{
 		_userInterface.InputEventReceived -= _inputEventHandler;
 		InputPressed?.Invoke((null, null));

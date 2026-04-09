@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Avalonia.Animation;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,34 +7,25 @@ using Godot;
 
 namespace GameTemplate.UI.ViewModels;
 
-public abstract partial class NavigatorViewModel : ViewModel
+public abstract partial class NavigatorViewModel(UserInterface? userInterface) : ViewModel
 {
-	protected readonly UserInterface _userInterface;
-
-	protected readonly Stack<ViewModel> _viewModels = new();
-
-	[ObservableProperty] private ViewModel? _currentViewModel;
+	private readonly Stack<ViewModel> _viewModels = new();
 
 	private Utilities.PageTransitionWithDuration? _pageTransition;
 
-	[ObservableProperty] private IPageTransition? _transition;
+	[ObservableProperty] public partial ViewModel? CurrentViewModel { get; set; }
 
-	public NavigatorViewModel(UserInterface userInterface)
-	{
-		_userInterface = userInterface;
-	}
+	[ObservableProperty] public partial IPageTransition? Transition { get; set; }
 
-	protected virtual void OnViewModelsAddedOrRemoved()
+	private void OnViewModelsAddedOrRemoved()
 	{
-		if (_userInterface == null)
+		if (userInterface == null)
 			return;
 
-		_userInterface.FocusMode = Control.FocusModeEnum.All;
-		if (_viewModels.Count == 0)
-		{
-			_userInterface.FocusMode = Control.FocusModeEnum.None;
-			_userInterface.ReleaseFocus();
-		}
+		userInterface.FocusMode = Control.FocusModeEnum.All;
+		if (_viewModels.Count != 0) return;
+		userInterface.FocusMode = Control.FocusModeEnum.None;
+		userInterface.ReleaseFocus();
 	}
 
 	public void NavigateTo(ViewModel viewModel, Utilities.PageTransitionWithDuration? transition = null,
@@ -55,6 +47,7 @@ public abstract partial class NavigatorViewModel : ViewModel
 		CurrentViewModel.FirstNavigationByNavigator();
 
 		if (_pageTransition != null) DisableInputForTransitionDuration(_pageTransition);
+		return;
 
 
 		void OnViewModelClosed(bool forced)
@@ -62,10 +55,7 @@ public abstract partial class NavigatorViewModel : ViewModel
 			viewModel.Closed -= OnViewModelClosed;
 			_viewModels.Pop();
 
-			if (_viewModels.Count > 0)
-				CurrentViewModel = _viewModels.Peek();
-			else
-				CurrentViewModel = null;
+			CurrentViewModel = _viewModels.Count > 0 ? _viewModels.Peek() : null;
 
 			if (forced)
 				return;
@@ -77,15 +67,22 @@ public abstract partial class NavigatorViewModel : ViewModel
 		}
 	}
 
-	public async void DisableInputForTransitionDuration(Utilities.PageTransitionWithDuration transition)
+	private async void DisableInputForTransitionDuration(Utilities.PageTransitionWithDuration transition)
 	{
-		_userInterface.InputEnabled = false;
+		try
+		{
+			userInterface?.InputEnabled = false;
 
-		await transition.StartToEnd();
-		_userInterface.InputEnabled = true;
+			await transition.StartToEnd();
+			userInterface?.InputEnabled = true;
+		}
+		catch (Exception)
+		{
+			// ignored
+		}
 	}
 
-	public override void Close()
+	protected override void Close()
 	{
 		while (CurrentViewModel != null) CurrentViewModel.ForcedClose();
 		base.Close();

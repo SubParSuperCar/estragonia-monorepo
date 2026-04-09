@@ -8,10 +8,10 @@ namespace GameTemplate.Main;
 
 public partial class MainNode : Node2D
 {
-	private FocusStack _focusStack;
-	private SceneTree _sceneTree;
+	private FocusStack _focusStack = null!;
+	private SceneTree _sceneTree = null!;
 
-	private ViewModelFactory _viewModelFactory;
+	private ViewModelFactory _viewModelFactory = null!;
 
 	[Export] private UserInterface? UserInterfaceMain { get; set; }
 
@@ -20,7 +20,9 @@ public partial class MainNode : Node2D
 	public override void _Ready()
 	{
 		if (UserInterfaceMain == null || UserInterfaceDialog == null)
+#pragma warning disable CA2201
 			throw new NullReferenceException();
+#pragma warning restore CA2201
 
 		MusicManager.Instance?.PlayMusic(this, MusicManager.Music.MainMenu);
 
@@ -35,9 +37,7 @@ public partial class MainNode : Node2D
 
 		var mainViewModelDialog = new MainViewModel(UserInterfaceDialog);
 		var mainViewModel = new MainViewModel(UserInterfaceMain);
-		var viewModelFactory = new ViewModelFactory(
-			this,
-			options,
+		var viewModelFactory = new ViewModelFactory(options,
 			mainViewModel,
 			mainViewModelDialog,
 			UserInterfaceMain,
@@ -60,37 +60,32 @@ public partial class MainNode : Node2D
 	{
 		using (@event)
 		{
-			if ((@event is InputEventKey key && key.PhysicalKeycode == Key.Escape && key.Pressed && !key.Echo)
-				|| (@event is InputEventJoypadButton button && button.ButtonIndex == JoyButton.Start))
+			if ((@event is not InputEventKey { PhysicalKeycode: Key.Escape, Pressed: true } key || key.Echo)
+			    && @event is not InputEventJoypadButton { ButtonIndex: JoyButton.Start }) return;
+			var leafViewModel = UserInterfaceMain?.MainViewModel?.CurrentViewModel;
+			while (leafViewModel is NavigatorViewModel navigator) leafViewModel = navigator.CurrentViewModel;
+
+			if (leafViewModel is MainMenuViewModel
+			    or EscapeMenuViewModel
+			    or OptionsViewModel
+			    or IOptionsTabViewModel) return;
+			_sceneTree.Paused = true;
+			Instance?.PauseOrResumeAudioPlayersBus(true, [Bus.SFX]);
+
+			var escapeMenu = _viewModelFactory.CreateEscapeMenu();
+			UserInterfaceMain?.MainViewModel?.NavigateTo(escapeMenu);
+			if (UserInterfaceMain != null) _focusStack.Push(UserInterfaceMain);
+			GetViewport().SetInputAsHandled();
+
+			escapeMenu.Closed += OnClose;
+
+			void OnClose(bool _)
 			{
-				var leafViewModel = UserInterfaceMain?.MainViewModel?.CurrentViewModel;
-				while (leafViewModel is NavigatorViewModel navigator) leafViewModel = navigator.CurrentViewModel;
+				escapeMenu.Closed -= OnClose;
 
-				if (leafViewModel is not (
-					MainMenuViewModel
-					or EscapeMenuViewModel
-					or OptionsViewModel
-					or IOptionsTabViewModel))
-				{
-					_sceneTree.Paused = true;
-					Instance?.PauseOrResumeAudioPlayersBus(true, [Bus.SFX]);
-
-					var escapeMenu = _viewModelFactory.CreateEscapeMenu();
-					UserInterfaceMain.MainViewModel?.NavigateTo(escapeMenu);
-					_focusStack.Push(UserInterfaceMain);
-					GetViewport().SetInputAsHandled();
-
-					escapeMenu.Closed += OnClose;
-
-					void OnClose(bool _)
-					{
-						escapeMenu.Closed -= OnClose;
-
-						_focusStack.Pop();
-						Instance?.ResumeAllAudio();
-						_sceneTree.Paused = false;
-					}
-				}
+				_focusStack.Pop();
+				Instance?.ResumeAllAudio();
+				_sceneTree.Paused = false;
 			}
 		}
 	}

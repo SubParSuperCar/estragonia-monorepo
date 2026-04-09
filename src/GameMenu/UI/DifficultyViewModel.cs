@@ -6,25 +6,18 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace GameMenu.UI;
 
-public sealed partial class DifficultyViewModel : ViewModel
+public sealed partial class DifficultyViewModel(INavigator navigator) : ViewModel
 {
-	private readonly INavigator _navigator;
-
-	[ObservableProperty] private GameDifficulty _selectedDifficulty = GameDifficulty.Normal;
-
-	public DifficultyViewModel(INavigator navigator)
-	{
-		_navigator = navigator;
-	}
+	[ObservableProperty] public partial GameDifficulty SelectedDifficulty { get; set; } = GameDifficulty.Normal;
 
 	public ObservableCollection<GameDifficulty> Difficulties { get; } = new(Enum.GetValues<GameDifficulty>());
 
 	protected override Task LoadAsync() => Task.CompletedTask;
 
 	[RelayCommand]
-	public async Task StartGameAsync()
+	private async Task StartGameAsync()
 	{
-		_navigator.NavigateTo(new GameLoadingViewModel(_navigator));
+		navigator.NavigateTo(new GameLoadingViewModel(navigator));
 		await TryCloseAsync();
 	}
 }

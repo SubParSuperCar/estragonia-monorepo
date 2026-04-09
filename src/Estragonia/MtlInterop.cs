@@ -79,8 +79,8 @@ internal static class MtlInterop
 			{
 				var ps = c.GetParameters();
 				return ps.Length == 2 &&
-					   ps[0].ParameterType == typeof(IntPtr) &&
-					   ps[1].ParameterType == typeof(bool);
+				       ps[0].ParameterType == typeof(IntPtr) &&
+				       ps[1].ParameterType == typeof(bool);
 			});
 
 			if (ctor is not null)
@@ -159,8 +159,8 @@ internal static class MtlInterop
 			{
 				var ps = c.GetParameters();
 				return ps.Length == 2 &&
-					   ps[0].ParameterType == typeof(IntPtr) &&
-					   ps[1].ParameterType == typeof(bool);
+				       ps[0].ParameterType == typeof(IntPtr) &&
+				       ps[1].ParameterType == typeof(bool);
 			});
 
 			if (ctor is not null)

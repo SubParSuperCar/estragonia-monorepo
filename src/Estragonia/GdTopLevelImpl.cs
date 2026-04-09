@@ -113,7 +113,7 @@ internal sealed class GodotTopLevelImpl : ITopLevelImpl
 	{
 		foreach (var transparencyLevel in transparencyLevels)
 			if (transparencyLevel == WindowTransparencyLevel.Transparent ||
-				transparencyLevel == WindowTransparencyLevel.None)
+			    transparencyLevel == WindowTransparencyLevel.None)
 			{
 				TransparencyLevel = transparencyLevel;
 				return;

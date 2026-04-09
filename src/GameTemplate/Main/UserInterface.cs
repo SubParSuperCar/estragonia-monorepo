@@ -28,7 +28,7 @@ public partial class UserInterface : AvaloniaControl, IFocussable
 		}
 	}
 
-	public ViewModel? CurrentViewModel => MainViewModel?.CurrentViewModel;
+	private ViewModel? CurrentViewModel => MainViewModel?.CurrentViewModel;
 
 	public MainViewModel? MainViewModel { get; private set; }
 
@@ -49,13 +49,7 @@ public partial class UserInterface : AvaloniaControl, IFocussable
 
 	public event EventHandler<InputEvent>? InputEventReceived;
 
-	public override bool _HasPoint(Vector2 point)
-	{
-		if (!AllowTransparentClickThrough)
-			return true;
-
-		return base._HasPoint(point);
-	}
+	public override bool _HasPoint(Vector2 point) => !AllowTransparentClickThrough || base._HasPoint(point);
 
 	private void OnUIScaleChanged(object? sender, double scale)
 	{
@@ -64,14 +58,14 @@ public partial class UserInterface : AvaloniaControl, IFocussable
 
 	public override void _Ready()
 	{
-		RenderScaling = AvaloniaLoader.Instance.UIScaling;
-		AvaloniaLoader.Instance.UIScaleChanged += OnUIScaleChanged;
+		RenderScaling = AvaloniaLoader.Instance.UiScaling;
+		AvaloniaLoader.Instance.UiScaleChanged += OnUIScaleChanged;
 		base._Ready();
 	}
 
 	public override void _Notification(int what)
 	{
-		if (what == NotificationPredelete) AvaloniaLoader.Instance.UIScaleChanged -= OnUIScaleChanged;
+		if (what == NotificationPredelete) AvaloniaLoader.Instance.UiScaleChanged -= OnUIScaleChanged;
 	}
 
 	public void Initialize(MainViewModel mainViewModel, KeyRepeater keyRepeater, ViewModel? initialViewModel = null)
@@ -96,7 +90,7 @@ public partial class UserInterface : AvaloniaControl, IFocussable
 
 			InputEventReceived?.Invoke(this, @event);
 
-			if (@event is InputEventKey key && key.PhysicalKeycode == Key.Space)
+			if (@event is InputEventKey { PhysicalKeycode: Key.Space } key)
 			{
 				key.Keycode = Key.Enter;
 				key.PhysicalKeycode = Key.Enter;

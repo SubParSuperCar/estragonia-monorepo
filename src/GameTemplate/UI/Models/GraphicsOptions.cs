@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Godot;
 
@@ -6,14 +7,6 @@ namespace GameTemplate.UI.Models;
 
 public partial class GraphicsOptions : ObservableObject
 {
-	private int _fpsLimit = 60;
-
-	[ObservableProperty] private float _UIScale = 1;
-
-	[ObservableProperty] private bool _vSync;
-
-	[ObservableProperty] private DisplayServer.WindowMode _windowMode = DisplayServer.WindowMode.Fullscreen;
-
 	public GraphicsOptions()
 	{
 	}
@@ -23,31 +16,31 @@ public partial class GraphicsOptions : ObservableObject
 		SetFromOptions(options);
 	}
 
-	public int MaxFPSLimit => 300;
-	public int MinFPSLimit => 60;
+	[ObservableProperty] public partial float UiScale { get; set; } = 1;
 
-	public int FPSLimit
+	[ObservableProperty] public partial bool VSync { get; set; }
+
+	[ObservableProperty]
+	public partial DisplayServer.WindowMode WindowMode { get; set; } = DisplayServer.WindowMode.Fullscreen;
+
+	public static int MaxFpsLimit => 300;
+	public static int MinFpsLimit => 60;
+
+	public int FpsLimit
 	{
-		get => _fpsLimit;
-		set => SetProperty(ref _fpsLimit, Mathf.Clamp(value, MinFPSLimit, MaxFPSLimit));
-	}
+		get;
+		set => SetProperty(ref field, Mathf.Clamp(value, MinFpsLimit, MaxFpsLimit));
+	} = 60;
 
+	// ReSharper disable once EventNeverSubscribedTo.Global
 	public event EventHandler? Applied;
-
-	public GraphicsOptions SetFPSLimitToRefreshRate()
-	{
-		var refreshRate = DisplayServer.ScreenGetRefreshRate();
-		if (refreshRate > 0) FPSLimit = (int)refreshRate;
-
-		return this;
-	}
 
 	public void SetFromOptions(GraphicsOptions options)
 	{
 		WindowMode = options.WindowMode;
 		VSync = options.VSync;
-		FPSLimit = options.FPSLimit;
-		UIScale = options.UIScale;
+		FpsLimit = options.FpsLimit;
+		UiScale = options.UiScale;
 	}
 
 	public void Apply()
@@ -61,18 +54,20 @@ public partial class GraphicsOptions : ObservableObject
 		if (WindowMode != DisplayServer.WindowMode.Windowed || currentMode != DisplayServer.WindowMode.Maximized)
 			DisplayServer.WindowSetMode(WindowMode);
 
-		AvaloniaLoader.Instance.UIScalingOption = UIScale;
+		AvaloniaLoader.Instance.UiScalingOption = UiScale;
 
 		Engine.MaxFps = 0;
-		if (!VSync) Engine.MaxFps = FPSLimit;
+		if (!VSync) Engine.MaxFps = FpsLimit;
 	}
 
 	public override bool Equals(object? obj) =>
 		obj is GraphicsOptions options &&
 		WindowMode == options.WindowMode &&
 		VSync == options.VSync &&
-		FPSLimit == options.FPSLimit &&
-		UIScale == options.UIScale;
+		FpsLimit == options.FpsLimit &&
+		// ReSharper disable once CompareOfFloatsByEqualityOperator
+		UiScale == options.UiScale;
 
-	public override int GetHashCode() => HashCode.Combine(WindowMode, VSync, FPSLimit, UIScale);
+	[SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
+	public override int GetHashCode() => HashCode.Combine(WindowMode, VSync, FpsLimit, UiScale);
 }

@@ -14,14 +14,16 @@ public partial class OptionsViewModel : NavigatorViewModel
 {
 	public enum OptionsTab
 	{
+		// ReSharper disable InconsistentNaming
 		Graphics = 0,
 		Controls = 1,
+
+		// ReSharper disable once UnusedMember.Global
 		Audio = 2
+		// ReSharper restore InconsistentNaming
 	}
 
-	private readonly ViewModelFactory _viewModelFactory;
-
-	[ObservableProperty] private int _currentTabIndex;
+	private readonly ViewModelFactory _viewModelFactory = null!;
 
 	/// <summary>
 	///     Intended for designer usage only.
@@ -38,6 +40,8 @@ public partial class OptionsViewModel : NavigatorViewModel
 		ToOptionsTabCommand.NotifyCanExecuteChanged();
 	}
 
+	[ObservableProperty] public partial int CurrentTabIndex { get; set; }
+
 	[RelayCommand]
 	public void ToOptionsTab(int tabIndex)
 	{
@@ -49,7 +53,6 @@ public partial class OptionsViewModel : NavigatorViewModel
 		{
 			OptionsTab.Graphics => _viewModelFactory.CreateOptionsGraphics(),
 			OptionsTab.Controls => _viewModelFactory.CreateOptionsControls(),
-			OptionsTab.Audio => _viewModelFactory.CreateOptionsAudio(),
 			_ => _viewModelFactory.CreateOptionsAudio()
 		};
 
@@ -62,7 +65,7 @@ public partial class OptionsViewModel : NavigatorViewModel
 			});
 	}
 
-	public override void Close()
+	protected override void Close()
 	{
 		if (CurrentViewModel is IOptionsTabViewModel viewModel) viewModel.TryClose(() => base.Close());
 	}

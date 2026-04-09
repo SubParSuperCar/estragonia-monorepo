@@ -11,7 +11,7 @@ namespace Estragonia;
 public sealed class GodotTopLevel : EmbeddableControlRoot
 {
 	static GodotTopLevel()
-	// TopLevel has Cycle navigation mode but we want the focus to be able to leave Avalonia to return back to godot: use Continue
+		// TopLevel has Cycle navigation mode but we want the focus to be able to leave Avalonia to return back to godot: use Continue
 	{
 		KeyboardNavigation.TabNavigationProperty.OverrideDefaultValue<GodotTopLevel>(KeyboardNavigationMode.Continue);
 	}

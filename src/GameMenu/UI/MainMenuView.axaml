@@ -19,7 +19,7 @@
 		<ui:MainMenuViewModel>
 			<x:Arguments>
 				<ui:NullNavigator />
-				<ui:UIOptions />
+				<ui:UiOptions />
 			</x:Arguments>
 		</ui:MainMenuViewModel>
 	</Design.DataContext>

@@ -7,9 +7,7 @@ namespace GameTemplate.UI.Converters;
 
 public class BoolToIntConverter : IValueConverter
 {
-	public static readonly BoolToIntConverter Instance = new();
-
-	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value is bool booleanValue) return booleanValue ? 1 : 0;
 

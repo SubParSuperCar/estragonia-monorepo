@@ -1,11 +1,11 @@
 <UserControl
-	x:Name="root"
+	x:Name="Root"
 	Focusable="True"
 	xmlns="https://github.com/avaloniaui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	x:Class="GameTemplate.UI.Controls.SliderFocusser">
 
-	<ContentControl Name="sliderContentControl"
-	                XYFocus.NavigationModes="{Binding #root.XYFocusMode}"
-	                Content="{Binding #root.Slider}" />
+	<ContentControl Name="SliderContentControl"
+	                XYFocus.NavigationModes="{Binding #Root.XyFocusMode}"
+	                Content="{Binding #Root.Slider}" />
 </UserControl>

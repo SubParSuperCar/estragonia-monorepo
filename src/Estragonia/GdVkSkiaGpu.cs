@@ -124,9 +124,9 @@ internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu
 			Mipmaps = 1,
 			Samples = RenderingDevice.TextureSamples.Samples1,
 			UsageBits = RenderingDevice.TextureUsageBits.SamplingBit
-						| RenderingDevice.TextureUsageBits.CanCopyFromBit
-						| RenderingDevice.TextureUsageBits.CanCopyToBit
-						| RenderingDevice.TextureUsageBits.ColorAttachmentBit
+			            | RenderingDevice.TextureUsageBits.CanCopyFromBit
+			            | RenderingDevice.TextureUsageBits.CanCopyToBit
+			            | RenderingDevice.TextureUsageBits.ColorAttachmentBit
 		};
 
 		var gdRdTexture = _renderingDevice.TextureCreate(gdRdTextureFormat, new RDTextureView());
@@ -218,27 +218,27 @@ internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu
 				return true;
 
 			return TryLoadByName("libvulkan.dylib", out handle)
-				   || TryLoadByName("libvulkan.1.dylib", out handle)
-				   || TryLoadByName("libMoltenVK.dylib", out handle)
-				   || TryLoadByPath("vulkan.framework/vulkan", out handle)
-				   || TryLoadByPath("MoltenVK.framework/MoltenVK", out handle)
-				   || (Environment.GetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH") is null
-					   && (TryLoadByPath("/opt/homebrew/lib/libvulkan.dylib", out handle) // Apple Silicon
-						   || TryLoadByPath("/opt/homebrew/lib/libMoltenVK.dylib", out handle) // Apple Silicon
-						   || TryLoadByPath("/usr/local/lib/libvulkan.dylib", out handle) // Intel
-						   || TryLoadByPath("/usr/local/lib/libMoltenVK.dylib", out handle)) // Intel
-				   );
+			       || TryLoadByName("libvulkan.1.dylib", out handle)
+			       || TryLoadByName("libMoltenVK.dylib", out handle)
+			       || TryLoadByPath("vulkan.framework/vulkan", out handle)
+			       || TryLoadByPath("MoltenVK.framework/MoltenVK", out handle)
+			       || (Environment.GetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH") is null
+			           && (TryLoadByPath("/opt/homebrew/lib/libvulkan.dylib", out handle) // Apple Silicon
+			               || TryLoadByPath("/opt/homebrew/lib/libMoltenVK.dylib", out handle) // Apple Silicon
+			               || TryLoadByPath("/usr/local/lib/libvulkan.dylib", out handle) // Intel
+			               || TryLoadByPath("/usr/local/lib/libMoltenVK.dylib", out handle)) // Intel
+			       );
 		}
 
 		return TryLoadByName("libvulkan.so.1", out handle)
-			   || TryLoadByName("libvulkan.so", out handle);
+		       || TryLoadByName("libvulkan.so", out handle);
 
 		static bool TryLoadFromMainProgram(out IntPtr handle)
 		{
 			handle = NativeLibrary.GetMainProgramHandle();
 			// Verify the main program exports Vulkan symbols
 			return handle != IntPtr.Zero
-				   && NativeLibrary.TryGetExport(handle, "vkGetInstanceProcAddr", out _);
+			       && NativeLibrary.TryGetExport(handle, "vkGetInstanceProcAddr", out _);
 		}
 
 		static bool TryLoadByName(string libraryName, out IntPtr handle)

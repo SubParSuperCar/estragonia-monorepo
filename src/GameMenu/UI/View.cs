@@ -81,6 +81,7 @@ public abstract class View : UserControl
 		if (e.Handled || e.KeyModifiers != KeyModifiers.None)
 			return;
 
+		// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
 		switch (e.Key)
 		{
 			case Key.Up:
@@ -111,8 +112,11 @@ public abstract class View : UserControl
 
 	private enum ListBoxFocusMode
 	{
+		// ReSharper disable InconsistentNaming
 		FirstItem,
 		LastItem,
+
 		SelectedItem
+		// ReSharper restore InconsistentNaming
 	}
 }

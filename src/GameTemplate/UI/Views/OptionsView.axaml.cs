@@ -3,20 +3,21 @@ using Avalonia.Controls;
 
 namespace GameTemplate.UI.Views;
 
+// ReSharper disable once UnusedType.Global
 public partial class OptionsView : View
 {
-	private const int focusInflation = 100;
+	private const int FocusInflation = 100;
 
 	public OptionsView()
 	{
 		InitializeComponent();
 
-		scrollViewer.BringIntoViewOnFocusChange = false;
-		scrollViewer.GotFocus += (s, e) =>
+		ScrollViewer.BringIntoViewOnFocusChange = false;
+		ScrollViewer.GotFocus += (_, e) =>
 		{
 			var control = e.Source as Control;
-			var inflatedSize = control?.DesiredSize.Inflate(new Thickness(focusInflation)) ?? default;
-			control?.BringIntoView(new Rect(-new Point(focusInflation, focusInflation), inflatedSize));
+			var inflatedSize = control?.DesiredSize.Inflate(new Thickness(FocusInflation)) ?? default;
+			control?.BringIntoView(new Rect(-new Point(FocusInflation, FocusInflation), inflatedSize));
 		};
 	}
 }

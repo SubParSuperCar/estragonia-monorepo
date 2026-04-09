@@ -55,7 +55,7 @@
 						</controls:AudioButton.CommandParameter>
 					</controls:AudioButton>
 					<controls:AudioButton DockPanel.Dock="Right"
-					                      Name="initialFocus0"
+					                      Name="InitialFocus0"
 					                      IsVisible="{Binding CancelText,
 								Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
 					                      Content="{Binding CancelText}"

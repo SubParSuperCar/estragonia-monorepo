@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -10,14 +12,9 @@ using static GameTemplate.UI.Utilities;
 
 namespace GameTemplate.UI.Views;
 
-public class FocussedControl
+public class FocussedControl(Control control)
 {
-	public FocussedControl(Control control)
-	{
-		Control = control;
-	}
-
-	public Control Control { get; }
+	public Control Control { get; } = control;
 
 	public virtual bool TryFocus() => Control.Focus(NavigationMethodBasedOnMouseOrKey);
 }
@@ -28,8 +25,9 @@ public class FocussedItemsControl : FocussedControl
 
 	public FocussedItemsControl(Control item, ItemsControl itemsControl) : base(itemsControl)
 	{
+		if (item.DataContext == null) return;
 		var container = itemsControl.ContainerFromItem(item.DataContext);
-		_containerIndex = itemsControl.IndexFromContainer(container);
+		if (container != null) _containerIndex = itemsControl.IndexFromContainer(container);
 	}
 
 	public override bool TryFocus()
@@ -55,14 +53,14 @@ public abstract class View : UserControl
 	/// <summary>
 	///     Index 0 indicates the most recently focussed control.
 	/// </summary>
-	private readonly List<FocussedControl> _lastFocussedControls = new();
+	private readonly List<FocussedControl> _lastFocussedControls = [];
 
 	private bool _firstLoad = true;
 	private bool _focusLastOnLoaded;
 	private NavigationMethod _previousNavigationMethod = NavigationMethod.Unspecified;
 
-	protected bool TrackFocussedControls = true;
-	protected virtual int TrackedLastFocussedControlsCount { get; } = 5;
+	private protected bool trackFocussedControls = true;
+	private static int TrackedLastFocussedControlsCount => 5;
 
 	protected override void OnGotFocus(GotFocusEventArgs e)
 	{
@@ -70,20 +68,21 @@ public abstract class View : UserControl
 
 		base.OnGotFocus(e);
 
-		if (IsLoaded && TrackFocussedControls && e.Source is Control control && control.IsFocused)
-		{
-			var itemsControl = control.FindAncestorOfType<ItemsControl>();
-			if (itemsControl != null)
-				_lastFocussedControls.Insert(0, new FocussedItemsControl(control, itemsControl));
-			else
-				_lastFocussedControls.Insert(0, new FocussedControl(control));
+		if (!IsLoaded || !trackFocussedControls || e.Source is not Control { IsFocused: true } control) return;
+		var itemsControl = control.FindAncestorOfType<ItemsControl>();
+		if (itemsControl != null)
+			_lastFocussedControls.Insert(0, new FocussedItemsControl(control, itemsControl));
+		else
+			_lastFocussedControls.Insert(0, new FocussedControl(control));
 
-			if (_lastFocussedControls.Count > TrackedLastFocussedControlsCount)
-				_lastFocussedControls.RemoveAt(TrackedLastFocussedControlsCount);
-		}
+		if (_lastFocussedControls.Count > TrackedLastFocussedControlsCount)
+			_lastFocussedControls.RemoveAt(TrackedLastFocussedControlsCount);
 	}
 
+	[Obsolete("Obsolete")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
 	protected override void OnLoaded(RoutedEventArgs e)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 	{
 		base.OnLoaded(e);
 
@@ -93,14 +92,15 @@ public abstract class View : UserControl
 			_firstLoad = false;
 		}
 
-		if (_focusLastOnLoaded)
-		{
-			FocusLast();
-			_focusLastOnLoaded = false;
-		}
+		if (!_focusLastOnLoaded) return;
+		FocusLast();
+		_focusLastOnLoaded = false;
 	}
 
+	[Obsolete("Obsolete")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
 	protected override void OnInitialized()
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 	{
 		base.OnInitialized();
 
@@ -108,16 +108,17 @@ public abstract class View : UserControl
 			return;
 
 		var viewModel = (ViewModel)DataContext;
-		viewModel.NavigatorFocusReturned += (s, e) => FocusLast();
+		viewModel.NavigatorFocusReturned += (_, _) => FocusLast();
 
-		viewModel.UserInterfaceFocusReturned += (s, e) =>
+		viewModel.UserInterfaceFocusReturned += (_, _) =>
 		{
 			FocusLast();
-			TrackFocussedControls = true;
+			trackFocussedControls = true;
 		};
-		viewModel.UserInterfaceFocusLost += (s, e) => { TrackFocussedControls = false; };
+		viewModel.UserInterfaceFocusLost += (_, _) => { trackFocussedControls = false; };
 	}
 
+	[Obsolete("Obsolete")]
 	protected virtual void FocusLast()
 	{
 		if (!IsLoaded)
@@ -132,21 +133,21 @@ public abstract class View : UserControl
 		var topLevel = TopLevel.GetTopLevel(_lastFocussedControls[0].Control);
 		topLevel?.FocusManager?.ClearFocus();
 
-		foreach (var focussableControl in _lastFocussedControls)
-			if (focussableControl.TryFocus())
-				return;
+		if (_lastFocussedControls.Any(focussableControl => focussableControl.TryFocus()))
+		{
+		}
 	}
 
-	public void FocusNamedControls()
+	private void FocusNamedControls()
 	{
-		Control? focusableControl = null;
+		Control? focusableControl;
 		var count = 0;
 
 		do
 		{
 			focusableControl = this.FindControl<Control>($"initialFocus{count}");
 
-			if (focusableControl != null && focusableControl.Focusable && focusableControl.IsEffectivelyEnabled)
+			if (focusableControl is { Focusable: true, IsEffectivelyEnabled: true })
 				break;
 
 			count++;
@@ -155,31 +156,26 @@ public abstract class View : UserControl
 		focusableControl?.Focus(NavigationMethodBasedOnMouseOrKey);
 	}
 
+	[Obsolete("Obsolete")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
 	protected override void OnKeyDown(KeyEventArgs e)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 	{
 		base.OnKeyDown(e);
 
 		if (e.Handled || e.KeyModifiers != KeyModifiers.None || e.Source is not InputElement inputElement)
 			return;
 
-		IInputElement? nextFocus = null;
-		switch (e.Key)
+		var nextFocus = e.Key switch
 		{
-			case Key.Up:
-				nextFocus = KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Up);
-				break;
-			case Key.Down:
-				nextFocus = KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Down);
-				break;
-			case Key.Left:
-				nextFocus = KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Left);
-				break;
-			case Key.Right:
-				nextFocus = KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Right);
-				break;
-		}
+			Key.Up => KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Up),
+			Key.Down => KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Down),
+			Key.Left => KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Left),
+			Key.Right => KeyboardNavigationHandler.GetNext(inputElement, NavigationDirection.Right),
+			_ => null
+		};
 
-		if (nextFocus != null && nextFocus.Focusable)
+		if (nextFocus is { Focusable: true })
 		{
 			nextFocus.Focus(NavigationMethodBasedOnMouseOrKey);
 			AudioManager.Instance?.Play(this, AudioManager.Sound.UISelect, AudioManager.Bus.UI);
@@ -191,7 +187,7 @@ public abstract class View : UserControl
 
 			if (_previousNavigationMethod == NavigationMethod.Unspecified)
 			{
-				topLevel.FocusManager.ClearFocus();
+				topLevel?.FocusManager?.ClearFocus();
 				inputElement.Focus(NavigationMethodBasedOnMouseOrKey);
 			}
 		}

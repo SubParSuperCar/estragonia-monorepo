@@ -22,7 +22,7 @@ public abstract partial class ViewModel : ObservableObject
 	public event Action<bool>? Closed;
 
 	[RelayCommand]
-	public virtual void Close()
+	protected virtual void Close()
 	{
 		Closed?.Invoke(_forcedClose);
 	}
@@ -33,6 +33,7 @@ public abstract partial class ViewModel : ObservableObject
 		Close();
 	}
 
+	// ReSharper disable once VirtualMemberNeverOverridden.Global
 	public virtual void FirstNavigationByNavigator()
 	{
 	}

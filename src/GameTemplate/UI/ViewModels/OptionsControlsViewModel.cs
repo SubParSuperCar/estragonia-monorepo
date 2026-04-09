@@ -11,37 +11,33 @@ namespace GameTemplate.UI.ViewModels;
 
 public partial class OptionsControlsViewModel : ViewModel, IOptionsTabViewModel
 {
-	private readonly UserInterface _dialogUserInterface;
+	private readonly UserInterface _dialogUserInterface = null!;
 
-	private readonly FocusStack _focusStack;
-	private readonly KeyRepeater _keyRepeater;
+	private readonly FocusStack _focusStack = null!;
+	private readonly KeyRepeater _keyRepeater = null!;
 
-	private readonly MainViewModel _mainViewModelDialog;
-
-	[ObservableProperty] private ObservableCollection<InputMapItem> _gameplayInputMapItems;
-
-	[ObservableProperty] private ObservableCollection<InputMapItem> _navigationInputMapItems;
+	private readonly MainViewModel _mainViewModelDialog = null!;
 
 	/// <summary>
 	///     Intended for designer usage only.
 	/// </summary>
 	public OptionsControlsViewModel()
 	{
-		NavigationInputMapItems = new ObservableCollection<InputMapItem>
-		{
-			new("Confirm", Key.Enter, JoyButton.A, ["Keyboard/keyboard_a", "Keyboard/keyboard_b"]),
-			new("Cancel", Key.Escape, JoyButton.X),
-			new("A", Key.A),
-			new("B", Key.B)
-		};
+		NavigationInputMapItems =
+		[
+			new InputMapItem("Confirm", Key.Enter, JoyButton.A, ["Keyboard/keyboard_a", "Keyboard/keyboard_b"]),
+			new InputMapItem("Cancel", Key.Escape, JoyButton.X),
+			new InputMapItem("A", Key.A),
+			new InputMapItem("B", Key.B)
+		];
 
-		GameplayInputMapItems = new ObservableCollection<InputMapItem>
-		{
-			new("A", Key.A),
-			new("B", Key.B),
-			new("C", Key.C),
-			new("D", Key.D)
-		};
+		GameplayInputMapItems =
+		[
+			new InputMapItem("A", Key.A),
+			new InputMapItem("B", Key.B),
+			new InputMapItem("C", Key.C),
+			new InputMapItem("D", Key.D)
+		];
 	}
 
 	public OptionsControlsViewModel(FocusStack focusStack, UserInterface dialogUserInterface,
@@ -55,6 +51,11 @@ public partial class OptionsControlsViewModel : ViewModel, IOptionsTabViewModel
 		SetInputMapItems();
 	}
 
+	[ObservableProperty] public partial ObservableCollection<InputMapItem> GameplayInputMapItems { get; set; } = null!;
+
+	[ObservableProperty]
+	public partial ObservableCollection<InputMapItem> NavigationInputMapItems { get; set; } = null!;
+
 	public void TryClose(Action callOnClose)
 	{
 		SerializableInputMap.SaveCurrentInputMap();
@@ -63,33 +64,34 @@ public partial class OptionsControlsViewModel : ViewModel, IOptionsTabViewModel
 
 	private void SetInputMapItems()
 	{
-		HashSet<Key> navigationReservedKeys = new()
-		{
+		HashSet<Key> navigationReservedKeys =
+		[
 			Key.Escape,
 			Key.Enter,
 			Key.Space
-		};
+		];
 		var navigationGroup = new InputMapGroup(navigationReservedKeys);
-		NavigationInputMapItems = new ObservableCollection<InputMapItem>
-		{
-			new("ui_accept", "Confirm", navigationGroup, ["Keyboard/keyboard_enter", "Keyboard/keyboard_space"]),
-			new("ui_cancel", "Cancel", navigationGroup, ["Keyboard/keyboard_escape"]),
-			new("ui_left", "Left", navigationGroup, ["Keyboard/keyboard_arrow_left"]),
-			new("ui_right", "Right", navigationGroup, ["Keyboard/keyboard_arrow_right"]),
-			new("ui_up", "Up", navigationGroup, ["Keyboard/keyboard_arrow_up"]),
-			new("ui_down", "Down", navigationGroup, ["Keyboard/keyboard_arrow_down"])
-		};
+		NavigationInputMapItems =
+		[
+			new InputMapItem("ui_accept", "Confirm", navigationGroup,
+				["Keyboard/keyboard_enter", "Keyboard/keyboard_space"]),
+			new InputMapItem("ui_cancel", "Cancel", navigationGroup, ["Keyboard/keyboard_escape"]),
+			new InputMapItem("ui_left", "Left", navigationGroup, ["Keyboard/keyboard_arrow_left"]),
+			new InputMapItem("ui_right", "Right", navigationGroup, ["Keyboard/keyboard_arrow_right"]),
+			new InputMapItem("ui_up", "Up", navigationGroup, ["Keyboard/keyboard_arrow_up"]),
+			new InputMapItem("ui_down", "Down", navigationGroup, ["Keyboard/keyboard_arrow_down"])
+		];
 
 		var gameplayGroup = new InputMapGroup();
-		GameplayInputMapItems = new ObservableCollection<InputMapItem>
-		{
-			new("game_accept", "Confirm", gameplayGroup),
-			new("game_cancel", "Cancel", gameplayGroup)
-		};
+		GameplayInputMapItems =
+		[
+			new InputMapItem("game_accept", "Confirm", gameplayGroup),
+			new InputMapItem("game_cancel", "Cancel", gameplayGroup)
+		];
 	}
 
 	[RelayCommand]
-	public void ResetToDefault()
+	private void ResetToDefault()
 	{
 		var dialog = new DialogViewModel(
 			"Are you sure you want to reset all control bindings to their defaults?\n" +
@@ -110,22 +112,27 @@ public partial class OptionsControlsViewModel : ViewModel, IOptionsTabViewModel
 	}
 
 	[RelayCommand]
-	public void InputPromptKeyboard(InputMapItem inputMapItem)
+	private void InputPromptKeyboard(InputMapItem inputMapItem)
 	{
 		InputPrompt(inputMapItem, true);
 	}
 
 	[RelayCommand]
-	public void InputPromptJoypad(InputMapItem inputMapItem)
+	private void InputPromptJoypad(InputMapItem inputMapItem)
 	{
 		InputPrompt(inputMapItem, false);
 	}
 
-	public void InputPrompt(InputMapItem inputMapItem, bool listenToKeyboard)
+	private void InputPrompt(InputMapItem inputMapItem, bool listenToKeyboard)
 	{
 		var dialog = new InputListenerDialogViewModel(_dialogUserInterface, inputMapItem.GroupReservedKeys,
 			listenToKeyboard, inputMapItem.InputName);
 		dialog.InputPressed += OnInput;
+
+		_mainViewModelDialog.NavigateTo(dialog);
+		_focusStack.Push(_dialogUserInterface);
+		dialog.Closed += _ => _focusStack.Pop();
+		return;
 
 		void OnInput((Key?, JoyButton?) inputTuple)
 		{
@@ -137,9 +144,5 @@ public partial class OptionsControlsViewModel : ViewModel, IOptionsTabViewModel
 
 			_keyRepeater.UpdateDirectionalKeys();
 		}
-
-		_mainViewModelDialog.NavigateTo(dialog);
-		_focusStack.Push(_dialogUserInterface);
-		dialog.Closed += _ => _focusStack.Pop();
 	}
 }

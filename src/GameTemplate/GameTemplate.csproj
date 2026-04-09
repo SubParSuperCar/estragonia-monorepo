@@ -5,6 +5,7 @@
     <LangVersion>14</LangVersion>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <Nullable>enable</Nullable>
+    <AnalysisMode>Recommended</AnalysisMode>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
@@ -69,10 +70,6 @@
     </Compile>
     <Compile Update="UI\Views\OptionsAudioView.axaml.cs">
       <DependentUpon>OptionsAudioView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\Views\OptionsView.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>OptionsView.axaml</DependentUpon>
     </Compile>
     <Compile Update="UI\Views\OptionsGraphicsView.axaml.cs">
       <DependentUpon>OptionsGraphicsView.axaml</DependentUpon>

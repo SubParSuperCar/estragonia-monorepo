@@ -6,23 +6,18 @@ using Godot;
 
 namespace GameMenu.UI;
 
-public sealed partial class GameLoadingViewModel : ViewModel
+public sealed partial class GameLoadingViewModel(INavigator navigator) : ViewModel
 {
 	// We're loading an almost empty scene: it's nearly instantaneous.
 	// For demo purposes (we want to show the loading screen), set the real loading to be 10% of the total loading,
 	// and simulate the rest by waiting.
 	private const double RealProgressRatio = 0.1;
 
-	private readonly INavigator _navigator;
+	[ObservableProperty]
+	// ReSharper disable once UnusedMember.Global
+	public partial bool IsLoading { get; set; } = true;
 
-	[ObservableProperty] private bool _isLoading = true;
-
-	[ObservableProperty] private double _loadingProgress;
-
-	public GameLoadingViewModel(INavigator navigator)
-	{
-		_navigator = navigator;
-	}
+	[ObservableProperty] public partial double LoadingProgress { get; set; }
 
 	protected override async Task LoadAsync()
 	{
@@ -41,7 +36,7 @@ public sealed partial class GameLoadingViewModel : ViewModel
 		LoadingProgress = 1.0;
 		await Task.Delay(TimeSpan.FromSeconds(0.1));
 
-		_navigator.NavigateTo(new GameViewModel { GameNode = gameNode });
+		navigator.NavigateTo(new GameViewModel { GameNode = gameNode });
 		await TryCloseAsync();
 		IsLoading = false;
 	}
@@ -61,18 +56,11 @@ public sealed partial class GameLoadingViewModel : ViewModel
 		}
 	}
 
-	private sealed class SceneLoadProgress : IProgress<double>
+	private sealed class SceneLoadProgress(GameLoadingViewModel owner) : IProgress<double>
 	{
-		private readonly GameLoadingViewModel _owner;
-
-		public SceneLoadProgress(GameLoadingViewModel owner)
-		{
-			_owner = owner;
-		}
-
 		public void Report(double value)
 		{
-			_owner.LoadingProgress = value * RealProgressRatio;
+			owner.LoadingProgress = value * RealProgressRatio;
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Input;
 
 namespace GameTemplate.UI.Views;
@@ -10,10 +11,11 @@ public abstract class NestedView : View
 {
 	protected override void OnGotFocus(GotFocusEventArgs e)
 	{
-		TrackFocussedControls = false;
+		trackFocussedControls = false;
 		base.OnGotFocus(e);
 	}
 
+	[Obsolete("Obsolete")]
 	protected override void FocusLast()
 	{
 	}

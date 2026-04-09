@@ -8,7 +8,9 @@ public interface IFocussable
 	public void ReleaseFocus();
 }
 
+#pragma warning disable CA1711
 public class FocusStack
+#pragma warning restore CA1711
 {
 	private readonly Stack<IFocussable> _stack = new();
 
@@ -30,10 +32,5 @@ public class FocusStack
 
 		_stack.Push(focusItem);
 		focusItem.GrabFocus();
-	}
-
-	public void Peek()
-	{
-		_stack.Peek();
 	}
 }

@@ -9,7 +9,7 @@ public sealed partial class UserInterface : AvaloniaControl
 {
 	private MainViewModel _mainViewModel = null!;
 
-	private UIOptions _uiOptions = null!;
+	private UiOptions _uiOptions = null!;
 
 	public override void _Ready()
 	{
@@ -17,7 +17,7 @@ public sealed partial class UserInterface : AvaloniaControl
 
 		GrabFocus();
 
-		_uiOptions = new UIOptions
+		_uiOptions = new UiOptions
 		{
 			UIScale = RenderScaling,
 			VSync = DisplayServer.WindowGetVsyncMode() != DisplayServer.VSyncMode.Disabled,
@@ -43,19 +43,19 @@ public sealed partial class UserInterface : AvaloniaControl
 	{
 		switch (e.PropertyName)
 		{
-			case nameof(UIOptions.VSync):
+			case nameof(UiOptions.VSync):
 				var vSyncMode = _uiOptions.VSync ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled;
 				DisplayServer.WindowSetVsyncMode(vSyncMode);
 				break;
 
-			case nameof(UIOptions.Fullscreen):
+			case nameof(UiOptions.Fullscreen):
 				var windowMode = _uiOptions.Fullscreen
 					? DisplayServer.WindowMode.Fullscreen
 					: DisplayServer.WindowMode.Windowed;
 				DisplayServer.WindowSetMode(windowMode);
 				break;
 
-			case nameof(UIOptions.UIScale):
+			case nameof(UiOptions.UIScale):
 				RenderScaling = _uiOptions.UIScale;
 				break;
 		}

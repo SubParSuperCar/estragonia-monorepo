@@ -8,9 +8,12 @@ public partial class DialogViewModel : ViewModel
 {
 	public enum Response
 	{
+		// ReSharper disable InconsistentNaming
 		Cancel = 0,
 		Deny = 1,
+
 		Confirm = 2
+		// ReSharper restore InconsistentNaming
 	}
 
 	public DialogViewModel()
@@ -38,15 +41,16 @@ public partial class DialogViewModel : ViewModel
 	{
 		dialog.Responded += OnResponse;
 
+		dialogUserInterface.MainViewModel?.NavigateTo(dialog);
+		focusStack.Push(dialogUserInterface);
+		dialog.Closed += _ => focusStack.Pop();
+		return;
+
 		void OnResponse(Response response)
 		{
 			dialog.Responded -= OnResponse;
 			onResponse(response);
 		}
-
-		dialogUserInterface.MainViewModel.NavigateTo(dialog);
-		focusStack.Push(dialogUserInterface);
-		dialog.Closed += _ => focusStack.Pop();
 	}
 
 	[RelayCommand]

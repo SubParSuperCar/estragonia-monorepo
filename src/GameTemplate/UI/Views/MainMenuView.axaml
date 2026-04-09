@@ -23,7 +23,7 @@
 			Title Of Titles
 		</TextBlock>
 
-		<controls:AudioButton Name="initialFocus0"
+		<controls:AudioButton Name="InitialFocus0"
 		                      Theme="{StaticResource TextButton}"
 		                      HorizontalAlignment="Center"
 		                      Command="{Binding ToGameCommand}">

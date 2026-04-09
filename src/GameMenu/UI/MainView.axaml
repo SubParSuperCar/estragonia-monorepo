@@ -19,7 +19,7 @@
 	<Design.DataContext>
 		<ui:MainViewModel>
 			<x:Arguments>
-				<ui:UIOptions />
+				<ui:UiOptions />
 			</x:Arguments>
 		</ui:MainViewModel>
 	</Design.DataContext>
@@ -59,7 +59,7 @@
 
 		<TextBlock
 			Text="{Binding FramesPerSecond, StringFormat='FPS: {0}'}"
-			IsVisible="{Binding UIOptions.ShowFps}"
+			IsVisible="{Binding UiOptions.ShowFps}"
 			FontSize="{StaticResource SmallFontSize}"
 			HorizontalAlignment="Right"
 			VerticalAlignment="Top"

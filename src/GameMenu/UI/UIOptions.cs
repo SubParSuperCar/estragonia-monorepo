@@ -3,16 +3,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace GameMenu.UI;
 
-public sealed partial class UIOptions : ObservableObject
+public sealed partial class UiOptions : ObservableObject
 {
-	[ObservableProperty] private bool _fullscreen;
+	[ObservableProperty] public partial bool Fullscreen { get; set; }
 
-	[ObservableProperty] private bool _showFps = true;
+	[ObservableProperty] public partial bool ShowFps { get; set; } = true;
 
 	[ObservableProperty]
-	[SuppressMessage("ReSharper", "InconsistentNaming",
+	[field: SuppressMessage("ReSharper", "InconsistentNaming",
 		Justification = "Name required for correct property generation")]
-	private double _UIScale = 1.0;
+	public partial double UIScale { get; set; } = 1.0;
 
-	[ObservableProperty] private bool _vSync = true;
+	[ObservableProperty] public partial bool VSync { get; set; } = true;
 }

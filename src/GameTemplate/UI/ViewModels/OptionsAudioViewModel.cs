@@ -11,19 +11,11 @@ namespace GameTemplate.UI.ViewModels;
 
 public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
 {
-	private readonly UserInterface _dialogUserInterface;
+	private readonly UserInterface _dialogUserInterface = null!;
 
-	private readonly FocusStack _focusStack;
+	private readonly FocusStack _focusStack = null!;
 
-	private readonly Options _options;
-
-	[ObservableProperty] private int _interfaceLevel;
-
-	[ObservableProperty] private int _masterLevel;
-
-	[ObservableProperty] private int _musicLevel;
-
-	[ObservableProperty] private int _soundEffectsLevel;
+	private readonly Options _options = null!;
 
 	/// <summary>
 	///     Intended for designer usage only.
@@ -43,6 +35,14 @@ public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
 		SoundEffectsLevel = GetBusLinearEnergyPercentage(Bus.SFX);
 		InterfaceLevel = GetBusLinearEnergyPercentage(Bus.UI);
 	}
+
+	[ObservableProperty] public partial int InterfaceLevel { get; set; }
+
+	[ObservableProperty] public partial int MasterLevel { get; set; }
+
+	[ObservableProperty] public partial int MusicLevel { get; set; }
+
+	[ObservableProperty] public partial int SoundEffectsLevel { get; set; }
 
 	public void TryClose(Action callOnClose)
 	{
@@ -83,7 +83,7 @@ public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
 	}
 
 	[RelayCommand]
-	public void ResetToDefault()
+	private void ResetToDefault()
 	{
 		var dialog = new DialogViewModel(
 			"Are you sure you want to reset the audio levels to their defaults?\n" +
@@ -93,13 +93,11 @@ public partial class OptionsAudioViewModel : ViewModel, IOptionsTabViewModel
 
 		DialogViewModel.OpenDialog(_dialogUserInterface, _focusStack, dialog, response =>
 		{
-			if (response == DialogViewModel.Response.Confirm)
-			{
-				MasterLevel = 100;
-				MusicLevel = 100;
-				SoundEffectsLevel = 100;
-				InterfaceLevel = 100;
-			}
+			if (response != DialogViewModel.Response.Confirm) return;
+			MasterLevel = 100;
+			MusicLevel = 100;
+			SoundEffectsLevel = 100;
+			InterfaceLevel = 100;
 		});
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
@@ -46,18 +47,10 @@ internal class HorizontalSelect : TemplatedControl
 
 	private Control? _container;
 
-	private string _displayedText = "";
-
 	private bool _focusEngaged;
-
-	private int _value;
 
 	private Button? _valueDecrementer;
 	private Button? _valueIncrementer;
-
-	private List<string> _valueNames = [""];
-
-	private IEnumerable<int> _values = Enumerable.Range(0, 1);
 
 	static HorizontalSelect()
 	{
@@ -66,27 +59,27 @@ internal class HorizontalSelect : TemplatedControl
 
 	public IEnumerable<int> Values
 	{
-		get => _values;
-		set => SetAndRaise(ValuesProperty, ref _values, value);
-	}
+		get;
+		set => SetAndRaise(ValuesProperty, ref field, value);
+	} = Enumerable.Range(0, 1);
 
 	public int Value
 	{
-		get => _value;
-		set => SetAndRaise(ValueProperty, ref _value, value);
+		get;
+		set => SetAndRaise(ValueProperty, ref field, value);
 	}
 
 	public string DisplayedText
 	{
-		get => _displayedText;
-		set => SetAndRaise(DisplayedTextProperty, ref _displayedText, value);
-	}
+		get;
+		set => SetAndRaise(DisplayedTextProperty, ref field, value);
+	} = "";
 
 	public List<string> ValueNames
 	{
-		get => _valueNames;
-		set => SetAndRaise(ValueNamesProperty, ref _valueNames, value);
-	}
+		get;
+		set => SetAndRaise(ValueNamesProperty, ref field, value);
+	} = [""];
 
 	private bool FocusEngaged
 	{
@@ -105,7 +98,10 @@ internal class HorizontalSelect : TemplatedControl
 		}
 	}
 
+	[Obsolete("Obsolete")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
 	protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 	{
 		base.OnApplyTemplate(e);
 
@@ -119,48 +115,51 @@ internal class HorizontalSelect : TemplatedControl
 		_valueIncrementer = e.NameScope.Find("PART_ValueIncrementer") as Button;
 		_container = e.NameScope.Find("PART_Container") as Control;
 
-		if (_valueDecrementer != null && _valueIncrementer != null)
-		{
-			_valueDecrementer.Click += DecrementValue;
-			_valueIncrementer.Click += IncrementValue;
-			_valueDecrementer.IsEnabled = Value != 0;
-			_valueIncrementer.IsEnabled = Value != ValueNames.Count - 1;
-		}
+		if (_valueDecrementer == null || _valueIncrementer == null) return;
+		_valueDecrementer.Click += DecrementValue;
+		_valueIncrementer.Click += IncrementValue;
+		_valueDecrementer.IsEnabled = Value != 0;
+		_valueIncrementer.IsEnabled = Value != ValueNames.Count - 1;
 	}
 
+	[Obsolete("Obsolete")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 	{
 		base.OnPropertyChanged(change);
 
 		if (change.Property == ValueNamesProperty) Values = Enumerable.Range(0, ValueNames.Count);
 
-		if (change.Property == ValueProperty || change.Property == ValueNamesProperty)
+		if (change.Property != ValueProperty && change.Property != ValueNamesProperty) return;
+		if (_valueDecrementer != null && _valueIncrementer != null)
 		{
-			if (_valueDecrementer != null && _valueIncrementer != null)
-			{
-				_valueDecrementer.IsEnabled = Value == 0 ? false : true;
-				_valueIncrementer.IsEnabled = Value == ValueNames.Count - 1 ? false : true;
-			}
-
-			DisplayedText = ValueNames[MathUtilities.Clamp(Value, 0, ValueNames.Count - 1)];
+			_valueDecrementer.IsEnabled = Value != 0;
+			_valueIncrementer.IsEnabled = Value != ValueNames.Count - 1;
 		}
+
+		DisplayedText = ValueNames[MathUtilities.Clamp(Value, 0, ValueNames.Count - 1)];
 	}
 
+	[Obsolete("Obsolete")]
 	private void DecrementValue()
 	{
 		Value = MathUtilities.Clamp(Value - 1, 0, ValueNames.Count - 1);
 	}
 
+	[Obsolete("Obsolete")]
 	private void DecrementValue(object? sender, RoutedEventArgs e)
 	{
 		DecrementValue();
 	}
 
+	[Obsolete("Obsolete")]
 	private void IncrementValue()
 	{
 		Value = MathUtilities.Clamp(Value + 1, 0, ValueNames.Count - 1);
 	}
 
+	[Obsolete("Obsolete")]
 	private void IncrementValue(object? sender, RoutedEventArgs e)
 	{
 		IncrementValue();
@@ -172,7 +171,10 @@ internal class HorizontalSelect : TemplatedControl
 		base.OnLostFocus(e);
 	}
 
+	[Obsolete("Obsolete")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
 	protected override void OnKeyDown(KeyEventArgs e)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
 	{
 		if (e.Handled || e is { KeyModifiers: KeyModifiers.None, Key: Key.Up or Key.Down })
 			return;
@@ -182,15 +184,17 @@ internal class HorizontalSelect : TemplatedControl
 		if (!_focusEngaged)
 			return;
 
-		if (e.Key == Key.Left)
+		// ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+		switch (e.Key)
 		{
-			DecrementValue();
-			e.Handled = true;
-		}
-		else if (e.Key == Key.Right)
-		{
-			IncrementValue();
-			e.Handled = true;
+			case Key.Left:
+				DecrementValue();
+				e.Handled = true;
+				break;
+			case Key.Right:
+				IncrementValue();
+				e.Handled = true;
+				break;
 		}
 	}
 }

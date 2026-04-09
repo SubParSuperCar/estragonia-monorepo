@@ -66,8 +66,8 @@ public class AvaloniaControl : GdControl
 	/// <returns>The Avalonia top-level element.</returns>
 	/// <exception cref="InvalidOperationException">Thrown if the control isn't ready or has been disposed.</exception>
 	public GodotTopLevel GetTopLevel() => _topLevel ??
-										  throw new InvalidOperationException(
-											  $"The {nameof(AvaloniaControl)} isn't initialized");
+	                                      throw new InvalidOperationException(
+		                                      $"The {nameof(AvaloniaControl)} isn't initialized");
 
 	/// <summary>Gets the underlying Godot texture where <see cref="Control" /> is rendered.</summary>
 	/// <returns>A texture.</returns>
@@ -214,7 +214,7 @@ public class AvaloniaControl : GdControl
 		NavigationMethod navigationMethod;
 
 		if (GdInput.IsActionPressed(GodotBuiltInActions.UIFocusNext) ||
-			GdInput.IsActionPressed(GodotBuiltInActions.UIFocusPrev))
+		    GdInput.IsActionPressed(GodotBuiltInActions.UIFocusPrev))
 			navigationMethod = NavigationMethod.Tab;
 		else if (GdInput.GetMouseButtonMask() != 0)
 			navigationMethod = NavigationMethod.Pointer;

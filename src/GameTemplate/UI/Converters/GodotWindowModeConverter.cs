@@ -8,37 +8,28 @@ namespace GameTemplate.UI.Converters;
 
 public class GodotWindowModeConverter : IValueConverter
 {
-	public static readonly GodotWindowModeConverter Instance = new();
-
-	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		if (value is DisplayServer.WindowMode windowMode)
-			switch (windowMode)
-			{
-				case DisplayServer.WindowMode.ExclusiveFullscreen:
-					return 0;
-				case DisplayServer.WindowMode.Fullscreen:
-					return 1;
-				case DisplayServer.WindowMode.Windowed:
-					return 2;
-			}
-
-		return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
+		if (value is not DisplayServer.WindowMode windowMode)
+			return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
+		return windowMode switch
+		{
+			DisplayServer.WindowMode.ExclusiveFullscreen => 0,
+			DisplayServer.WindowMode.Fullscreen => 1,
+			DisplayServer.WindowMode.Windowed => 2,
+			_ => new BindingNotification(new InvalidCastException(), BindingErrorType.Error)
+		};
 	}
 
 	public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		if (value is int index)
-			switch (index)
-			{
-				case 0:
-					return DisplayServer.WindowMode.ExclusiveFullscreen;
-				case 1:
-					return DisplayServer.WindowMode.Fullscreen;
-				case 2:
-					return DisplayServer.WindowMode.Windowed;
-			}
-
-		return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
+		if (value is not int index) return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
+		return index switch
+		{
+			0 => DisplayServer.WindowMode.ExclusiveFullscreen,
+			1 => DisplayServer.WindowMode.Fullscreen,
+			2 => DisplayServer.WindowMode.Windowed,
+			_ => new BindingNotification(new InvalidCastException(), BindingErrorType.Error)
+		};
 	}
 }

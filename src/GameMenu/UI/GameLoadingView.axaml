@@ -22,6 +22,7 @@
 		</ui:GameLoadingViewModel>
 	</Design.DataContext>
 
+	<!-- ReSharper disable once Xaml.StyleClassNotFound -->
 	<Border Classes="centered-view-content" VerticalAlignment="Center">
 		<StackPanel>
 

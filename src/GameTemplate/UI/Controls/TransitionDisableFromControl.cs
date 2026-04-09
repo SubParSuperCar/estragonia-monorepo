@@ -7,27 +7,13 @@ using Avalonia.Input;
 
 namespace GameTemplate.UI.Controls;
 
-public class TransitionDisableFromControl : IPageTransition
+public class TransitionDisableFromControl(TimeSpan duration) : IPageTransition
 {
-	public TransitionDisableFromControl() : this(TimeSpan.Zero)
-	{
-	}
-
-	public TransitionDisableFromControl(TimeSpan duration)
-	{
-		Duration = duration;
-	}
-
-	public TimeSpan Duration { get; set; }
+	private TimeSpan Duration { get; } = duration;
 
 	public async Task Start(Visual? from, Visual? to, bool forward, CancellationToken cancellationToken)
 	{
-		if (from is not InputElement fromElement || to is not InputElement toElement) return;
-
-		void OnTransitionEnd()
-		{
-			fromElement.IsHitTestVisible = true;
-		}
+		if (from is not InputElement fromElement || to is not InputElement) return;
 
 		fromElement.IsHitTestVisible = false;
 
@@ -40,5 +26,11 @@ public class TransitionDisableFromControl : IPageTransition
 		await Task.Delay(Duration, CancellationToken.None);
 
 		OnTransitionEnd();
+		return;
+
+		void OnTransitionEnd()
+		{
+			fromElement.IsHitTestVisible = true;
+		}
 	}
 }

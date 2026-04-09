@@ -10,7 +10,7 @@ public abstract partial class ViewModel : ObservableObject
 {
 	private Task? _loadTask;
 
-	[ObservableProperty] private SceneTree? _sceneTree;
+	[ObservableProperty] public partial SceneTree? SceneTree { get; set; }
 
 	public event EventHandler? Closed;
 

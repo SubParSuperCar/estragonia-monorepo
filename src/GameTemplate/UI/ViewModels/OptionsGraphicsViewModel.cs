@@ -9,20 +9,14 @@ namespace GameTemplate.UI.ViewModels;
 
 public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 {
-	private readonly UserInterface _dialogUserInterface;
+	private readonly UserInterface _dialogUserInterface = null!;
 
-	private readonly FocusStack _focusStack;
+	private readonly FocusStack _focusStack = null!;
 
 	private readonly Options _options;
 	private readonly GraphicsOptions _savedGraphicsOptions;
 
-	[ObservableProperty]
-	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
-	private bool _canApply;
-
 	private GraphicsOptions _currentlyAppliedGraphicsOptions;
-
-	[ObservableProperty] private GraphicsOptions _graphicsOptions;
 
 	public OptionsGraphicsViewModel(Options options, FocusStack focusStack, UserInterface dialogUserInterface) :
 		this(options)
@@ -53,6 +47,15 @@ public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 	{
 	}
 
+	[ObservableProperty]
+	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
+	public partial bool CanApply { get; set; }
+
+	[ObservableProperty]
+	// ReSharper disable once PropertyCanBeMadeInitOnly.Global
+	// ReSharper disable once MemberCanBePrivate.Global
+	public partial GraphicsOptions GraphicsOptions { get; set; }
+
 	public void TryClose(Action callOnClose)
 	{
 		if (!_currentlyAppliedGraphicsOptions.Equals(_savedGraphicsOptions))
@@ -65,6 +68,7 @@ public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 
 			DialogViewModel.OpenDialog(_dialogUserInterface, _focusStack, dialog, response =>
 			{
+				// ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 				switch (response)
 				{
 					case DialogViewModel.Response.Cancel:
@@ -107,7 +111,7 @@ public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 	}
 
 	[RelayCommand(CanExecute = nameof(CanApply))]
-	public void Apply()
+	private void Apply()
 	{
 		GraphicsOptions.Apply();
 		CanApply = false;
@@ -115,7 +119,7 @@ public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 	}
 
 	[RelayCommand]
-	public void ResetToDefault()
+	private void ResetToDefault()
 	{
 		var dialog = new DialogViewModel(
 			"Are you sure you want to reset the graphics settings to their defaults?\n" +
@@ -125,12 +129,10 @@ public partial class OptionsGraphicsViewModel : ViewModel, IOptionsTabViewModel
 
 		DialogViewModel.OpenDialog(_dialogUserInterface, _focusStack, dialog, response =>
 		{
-			if (response == DialogViewModel.Response.Confirm)
-			{
-				var defaultOptions = new GraphicsOptions();
-				GraphicsOptions.SetFromOptions(defaultOptions);
-				Apply();
-			}
+			if (response != DialogViewModel.Response.Confirm) return;
+			var defaultOptions = new GraphicsOptions();
+			GraphicsOptions.SetFromOptions(defaultOptions);
+			Apply();
 		});
 	}
 }
