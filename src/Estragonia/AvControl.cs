@@ -52,27 +52,7 @@ public class AvaloniaControl : GdControl
 			OnResized();
 			QueueRedraw();
 		}
-	}
-
-	/// <summary>
-	///     Gets or sets whether some Godot UI actions will be automatically mapped to an
-	///     <see cref="InputElement.KeyDownEvent" /> event.
-	///     The mapped actions are ui_left, ui_right, ui_up, ui_down, ui_accept and ui_cancel.
-	///     Defaults to true.
-	/// </summary>
-	public bool AutoConvertUIActionToKeyDown { get; set; } = true;
-
-	/// <summary>Gets the underlying Avalonia top-level element.</summary>
-	/// <returns>The Avalonia top-level element.</returns>
-	/// <exception cref="InvalidOperationException">Thrown if the control isn't ready or has been disposed.</exception>
-	public GodotTopLevel GetTopLevel() => _topLevel ??
-	                                      throw new InvalidOperationException(
-		                                      $"The {nameof(AvaloniaControl)} isn't initialized");
-
-	/// <summary>Gets the underlying Godot texture where <see cref="Control" /> is rendered.</summary>
-	/// <returns>A texture.</returns>
-	/// <exception cref="InvalidOperationException">Thrown if the control isn't ready or has been disposed.</exception>
-	public Texture2D GetTexture() => GetTopLevel().Impl.GetOrCreateSurface().GdTexture;
+	} = 1.0;
 
 	protected override bool InvokeGodotClassMethod(in godot_string_name method, NativeVariantPtrArgs args,
 		out godot_variant ret)
@@ -234,7 +214,6 @@ public class AvaloniaControl : GdControl
 		if (_topLevel is null)
 			return;
 
-
 		var surface = _topLevel.Impl.GetOrCreateSurface();
 
 		DrawTexture(surface.GdTexture, Vector2.Zero);
@@ -260,10 +239,8 @@ public class AvaloniaControl : GdControl
 		if (inputEvent.IsActionPressed(GodotBuiltInActions.UIFocusPrev, true, true))
 			return TryMoveFocus(NavigationDirection.Previous, inputEvent);
 
-		if (AutoConvertUIActionToKeyDown)
-		{
-			if (inputEvent.IsActionPressed(GodotBuiltInActions.UILeft, true, true))
-				return SimulateKeyDownFromAction(inputEvent, GdKey.Left);
+		if (inputEvent.IsActionPressed(GodotBuiltInActions.UiLeft, true, true))
+			return SimulateKeyDownFromAction(inputEvent, GdKey.Left);
 
 			if (inputEvent.IsActionPressed(GodotBuiltInActions.UIRight, true, true))
 				return SimulateKeyDownFromAction(inputEvent, GdKey.Right);
