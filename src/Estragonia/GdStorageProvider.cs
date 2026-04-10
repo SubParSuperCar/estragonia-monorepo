@@ -36,8 +36,8 @@ internal sealed class GodotStorageProvider : IStorageProvider
 
 	public async Task<SaveFilePickerResult> SaveFilePickerWithResultAsync(FilePickerSaveOptions options)
 	{
-    	var file = await SaveFilePickerAsync(options);
-    	return new SaveFilePickerResult { File = file };
+		var file = await SaveFilePickerAsync(options);
+		return new SaveFilePickerResult { File = file };
 	}
 
 	public Task<IReadOnlyList<IStorageFolder>> OpenFolderPickerAsync(FolderPickerOpenOptions options)
