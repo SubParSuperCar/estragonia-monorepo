@@ -47,25 +47,25 @@ internal sealed class GodotStorageProvider : IStorageProvider
 
 		dialog.DirSelected += OnDirSelected;
 
+		dialog.Canceled += OnCancelled;
+
+		dialog.Show();
+
+		return taskCompletionSource.Task;
+
 		void OnDirSelected(string dir)
 		{
 			dialog.Canceled -= OnCancelled;
 			dialog.DirSelected -= OnDirSelected;
-			taskCompletionSource.SetResult(new IStorageFolder[] { new BclStorageFolder(new DirectoryInfo(dir)) });
+			taskCompletionSource.SetResult([new BclStorageFolder(new DirectoryInfo(dir))]);
 		}
-
-		dialog.Canceled += OnCancelled;
 
 		void OnCancelled()
 		{
 			dialog.Canceled -= OnCancelled;
 			dialog.DirSelected -= OnDirSelected;
-			taskCompletionSource.SetResult(Array.Empty<BclStorageFolder>());
+			taskCompletionSource.SetResult([]);
 		}
-
-		dialog.Show();
-
-		return taskCompletionSource.Task;
 	}
 
 	public Task<IStorageBookmarkFile?> OpenFileBookmarkAsync(string bookmark)
@@ -84,26 +84,20 @@ internal sealed class GodotStorageProvider : IStorageProvider
 
 	public Task<IStorageFile?> TryGetFileFromPathAsync(Uri filePath)
 	{
-		if (filePath.IsAbsoluteUri)
-		{
-			var fileInfo = new FileInfo(filePath.LocalPath);
-			if (fileInfo.Exists)
-				return Task.FromResult<IStorageFile?>(new BclStorageFile(fileInfo));
-		}
-
-		return Task.FromResult<IStorageFile?>(null);
+		if (!filePath.IsAbsoluteUri) return Task.FromResult<IStorageFile?>(null);
+		var fileInfo = new FileInfo(filePath.LocalPath);
+		return fileInfo.Exists
+			? Task.FromResult<IStorageFile?>(new BclStorageFile(fileInfo))
+			: Task.FromResult<IStorageFile?>(null);
 	}
 
 	public Task<IStorageFolder?> TryGetFolderFromPathAsync(Uri folderPath)
 	{
-		if (folderPath.IsAbsoluteUri)
-		{
-			var folderInfo = new DirectoryInfo(folderPath.LocalPath);
-			if (folderInfo.Exists)
-				return Task.FromResult<IStorageFolder?>(new BclStorageFolder(folderInfo));
-		}
-
-		return Task.FromResult<IStorageFolder?>(null);
+		if (!folderPath.IsAbsoluteUri) return Task.FromResult<IStorageFolder?>(null);
+		var folderInfo = new DirectoryInfo(folderPath.LocalPath);
+		return folderInfo.Exists
+			? Task.FromResult<IStorageFolder?>(new BclStorageFolder(folderInfo))
+			: Task.FromResult<IStorageFolder?>(null);
 	}
 
 	public Task<IStorageFolder?> TryGetWellKnownFolderAsync(WellKnownFolder wellKnownFolder)
@@ -132,7 +126,7 @@ internal sealed class GodotStorageProvider : IStorageProvider
 
 		if (fileTypes is not null)
 			foreach (var fileType in fileTypes)
-				dialog.AddFilter(string.Join(',', fileType.Patterns ?? Array.Empty<string>()), fileType.Name);
+				dialog.AddFilter(string.Join(',', fileType.Patterns ?? []), fileType.Name);
 
 		var taskCompletionSource = new TaskCompletionSource<IReadOnlyList<IStorageFile>>();
 
@@ -142,6 +136,10 @@ internal sealed class GodotStorageProvider : IStorageProvider
 			dialog.FileSelected += OnFileSelected;
 
 		dialog.Canceled += OnCancelled;
+
+		dialog.Show();
+
+		return taskCompletionSource.Task;
 
 		void OnFilesSelected(string[] paths)
 		{
@@ -154,7 +152,7 @@ internal sealed class GodotStorageProvider : IStorageProvider
 		{
 			dialog.FileSelected -= OnFileSelected;
 			dialog.Canceled -= OnCancelled;
-			taskCompletionSource.SetResult(new[] { new BclStorageFile(new FileInfo(path)) });
+			taskCompletionSource.SetResult([new BclStorageFile(new FileInfo(path))]);
 		}
 
 		void OnCancelled()
@@ -162,12 +160,8 @@ internal sealed class GodotStorageProvider : IStorageProvider
 			dialog.Canceled -= OnCancelled;
 			dialog.FilesSelected -= OnFilesSelected;
 			dialog.FileSelected -= OnFileSelected;
-			taskCompletionSource.SetResult(Array.Empty<BclStorageFile>());
+			taskCompletionSource.SetResult([]);
 		}
-
-		dialog.Show();
-
-		return taskCompletionSource.Task;
 	}
 
 	private static FileDialog CreateDialog(PickerOptions options, FileDialog.FileModeEnum fileMode) =>

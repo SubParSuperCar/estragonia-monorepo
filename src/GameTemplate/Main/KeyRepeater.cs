@@ -46,9 +46,9 @@ public class KeyRepeater
 		foreach (var directionalEvent in _directionalInputEvents)
 		{
 			if ((directionalEvent is not InputEventKey keyEvent ||
-			     keyEvent.PhysicalKeycode != inputEventKey?.PhysicalKeycode) &&
-			    (directionalEvent is not InputEventJoypadButton joypadEvent ||
-			     joypadEvent.ButtonIndex != joypadButton?.ButtonIndex)) continue;
+				 keyEvent.PhysicalKeycode != inputEventKey?.PhysicalKeycode) &&
+				(directionalEvent is not InputEventJoypadButton joypadEvent ||
+				 joypadEvent.ButtonIndex != joypadButton?.ButtonIndex)) continue;
 			correspondingDirectionalEvent = directionalEvent;
 			break;
 		}
@@ -130,11 +130,16 @@ public class KeyRepeater
 		{
 			InputEventKey keyEvent => new InputEventKey
 			{
-				Echo = true, Pressed = true, PhysicalKeycode = keyEvent.PhysicalKeycode, Keycode = keyEvent.Keycode
+				Echo = true,
+				Pressed = true,
+				PhysicalKeycode = keyEvent.PhysicalKeycode,
+				Keycode = keyEvent.Keycode
 			},
 			InputEventJoypadButton joypadEvent => new InputEventJoypadButton
 			{
-				Pressed = true, ButtonIndex = joypadEvent.ButtonIndex, Device = joypadEvent.Device
+				Pressed = true,
+				ButtonIndex = joypadEvent.ButtonIndex,
+				Device = joypadEvent.Device
 			},
 			_ => throw new ArgumentException("Argument was neither InputEventKey nor InputEventJoypadButton",
 				nameof(inputEvent))

@@ -21,21 +21,21 @@ public class ButtonToImageConverter : IValueConverter
 		switch (type)
 		{
 			case "keyboard":
-			{
-				subFolder = "Keyboard";
-				var key = (Key)valueInt;
-				if (!Design.IsDesignMode) key = DisplayServer.KeyboardGetKeycodeFromPhysical(key);
+				{
+					subFolder = "Keyboard";
+					var key = (Key)valueInt;
+					if (!Design.IsDesignMode) key = DisplayServer.KeyboardGetKeycodeFromPhysical(key);
 
-				ButtonToIconName.TryGetKeyboard(key, out buttonName);
-				break;
-			}
+					ButtonToIconName.TryGetKeyboard(key, out buttonName);
+					break;
+				}
 			case "xbox":
-			{
-				subFolder = "Controller";
-				var joyButton = (JoyButton)valueInt;
-				ButtonToIconName.TryGetXbox(joyButton, out buttonName);
-				break;
-			}
+				{
+					subFolder = "Controller";
+					var joyButton = (JoyButton)valueInt;
+					ButtonToIconName.TryGetXbox(joyButton, out buttonName);
+					break;
+				}
 		}
 
 		if (buttonName != null)

@@ -30,16 +30,6 @@ internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu
 		if (_renderingDevice is null)
 			throw new NotSupportedException("Estragonia is only supported on Vulkan renderers (Forward+ or Mobile)");
 
-		IntPtr GetIntPtrDriverResource(RenderingDevice.DriverResource resource)
-		{
-			var result = (IntPtr)_renderingDevice.GetDriverResource(resource, default, 0UL);
-
-			if (result == IntPtr.Zero)
-				throw new InvalidOperationException($"Godot returned null for driver resource {resource}");
-
-			return result;
-		}
-
 		var vkInstance = new VkInstance(GetIntPtrDriverResource(RenderingDevice.DriverResource.TopmostObject));
 		var vkPhysicalDevice =
 			new VkPhysicalDevice(GetIntPtrDriverResource(RenderingDevice.DriverResource.PhysicalDevice));
@@ -57,24 +47,6 @@ internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu
 		var vkGetDeviceProcAddr =
 			(delegate* unmanaged[Stdcall]<VkDevice, byte*, IntPtr>)NativeLibrary.GetExport(vkLibrary,
 				"vkGetDeviceProcAddr");
-
-		IntPtr GetVkProcAddress(string name, IntPtr instance, IntPtr device)
-		{
-			Span<byte> utf8Name = stackalloc byte[128];
-
-			// The stackalloc buffer should always be sufficient for proc names
-			if (Utf8.FromUtf16(name, utf8Name[..^1], out _, out var bytesWritten) != OperationStatus.Done)
-				throw new InvalidOperationException($"Invalid proc name {name}");
-
-			utf8Name[bytesWritten] = 0;
-
-			fixed (byte* utf8NamePtr = utf8Name)
-			{
-				return device != IntPtr.Zero
-					? vkGetDeviceProcAddr(new VkDevice(device), utf8NamePtr)
-					: vkGetInstanceProcAddr(new VkInstance(instance), utf8NamePtr);
-			}
-		}
 
 		var deviceApi = new VkDeviceApi(vkDevice, vkGetDeviceProcAddr);
 
@@ -95,6 +67,34 @@ internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu
 		_grContext = grContext;
 		_queueFamilyIndex = vkQueueFamilyIndex;
 		_barrierHelper = new VkBarrierHelper(vkDevice, vkQueue, deviceApi, vkQueueFamilyIndex);
+		return;
+
+		IntPtr GetVkProcAddress(string name, IntPtr instance, IntPtr device)
+		{
+			Span<byte> utf8Name = stackalloc byte[128];
+
+			// The stackalloc buffer should always be sufficient for proc names
+			if (Utf8.FromUtf16(name, utf8Name[..^1], out _, out var bytesWritten) != OperationStatus.Done)
+				throw new InvalidOperationException($"Invalid proc name {name}");
+
+			utf8Name[bytesWritten] = 0;
+
+			fixed (byte* utf8NamePtr = utf8Name)
+			{
+				return device != IntPtr.Zero
+					? vkGetDeviceProcAddr(new VkDevice(device), utf8NamePtr)
+					: vkGetInstanceProcAddr(new VkInstance(instance), utf8NamePtr);
+			}
+		}
+
+		IntPtr GetIntPtrDriverResource(RenderingDevice.DriverResource resource)
+		{
+			var result = (IntPtr)_renderingDevice.GetDriverResource(resource, default, 0UL);
+
+			return result == IntPtr.Zero
+				? throw new InvalidOperationException($"Godot returned null for driver resource {resource}")
+				: result;
+		}
 	}
 
 	public bool IsLost
@@ -124,9 +124,9 @@ internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu
 			Mipmaps = 1,
 			Samples = RenderingDevice.TextureSamples.Samples1,
 			UsageBits = RenderingDevice.TextureUsageBits.SamplingBit
-			            | RenderingDevice.TextureUsageBits.CanCopyFromBit
-			            | RenderingDevice.TextureUsageBits.CanCopyToBit
-			            | RenderingDevice.TextureUsageBits.ColorAttachmentBit
+						| RenderingDevice.TextureUsageBits.CanCopyFromBit
+						| RenderingDevice.TextureUsageBits.CanCopyToBit
+						| RenderingDevice.TextureUsageBits.ColorAttachmentBit
 		};
 
 		var gdRdTexture = _renderingDevice.TextureCreate(gdRdTextureFormat, new RDTextureView());
@@ -210,35 +210,32 @@ internal sealed class GodotVkSkiaGpu : IGodotSkiaGpu
 		if (OperatingSystem.IsWindows())
 			return TryLoadByName("vulkan-1.dll", out handle);
 
-		if (OperatingSystem.IsMacOS() || OperatingSystem.IsIOS())
-		{
-			// On macOS, Godot bundles MoltenVK statically in the executable.
-			// Try loading from the main program first to avoid conflicts with external MoltenVK.
-			if (TryLoadFromMainProgram(out handle))
-				return true;
+		if (!OperatingSystem.IsMacOS() && !OperatingSystem.IsIOS())
+			return TryLoadByName("libvulkan.so.1", out handle)
+				   || TryLoadByName("libvulkan.so", out handle);
+		// On macOS, Godot bundles MoltenVK statically in the executable.
+		// Try loading from the main program first to avoid conflicts with external MoltenVK.
+		if (TryLoadFromMainProgram(out handle))
+			return true;
 
-			return TryLoadByName("libvulkan.dylib", out handle)
-			       || TryLoadByName("libvulkan.1.dylib", out handle)
-			       || TryLoadByName("libMoltenVK.dylib", out handle)
-			       || TryLoadByPath("vulkan.framework/vulkan", out handle)
-			       || TryLoadByPath("MoltenVK.framework/MoltenVK", out handle)
-			       || (Environment.GetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH") is null
-			           && (TryLoadByPath("/opt/homebrew/lib/libvulkan.dylib", out handle) // Apple Silicon
-			               || TryLoadByPath("/opt/homebrew/lib/libMoltenVK.dylib", out handle) // Apple Silicon
-			               || TryLoadByPath("/usr/local/lib/libvulkan.dylib", out handle) // Intel
-			               || TryLoadByPath("/usr/local/lib/libMoltenVK.dylib", out handle)) // Intel
-			       );
-		}
-
-		return TryLoadByName("libvulkan.so.1", out handle)
-		       || TryLoadByName("libvulkan.so", out handle);
+		return TryLoadByName("libvulkan.dylib", out handle)
+			   || TryLoadByName("libvulkan.1.dylib", out handle)
+			   || TryLoadByName("libMoltenVK.dylib", out handle)
+			   || TryLoadByPath("vulkan.framework/vulkan", out handle)
+			   || TryLoadByPath("MoltenVK.framework/MoltenVK", out handle)
+			   || (Environment.GetEnvironmentVariable("DYLD_FALLBACK_LIBRARY_PATH") is null
+				   && (TryLoadByPath("/opt/homebrew/lib/libvulkan.dylib", out handle) // Apple Silicon
+					   || TryLoadByPath("/opt/homebrew/lib/libMoltenVK.dylib", out handle) // Apple Silicon
+					   || TryLoadByPath("/usr/local/lib/libvulkan.dylib", out handle) // Intel
+					   || TryLoadByPath("/usr/local/lib/libMoltenVK.dylib", out handle)) // Intel
+			   );
 
 		static bool TryLoadFromMainProgram(out IntPtr handle)
 		{
 			handle = NativeLibrary.GetMainProgramHandle();
 			// Verify the main program exports Vulkan symbols
 			return handle != IntPtr.Zero
-			       && NativeLibrary.TryGetExport(handle, "vkGetInstanceProcAddr", out _);
+				   && NativeLibrary.TryGetExport(handle, "vkGetInstanceProcAddr", out _);
 		}
 
 		static bool TryLoadByName(string libraryName, out IntPtr handle)

@@ -5,28 +5,20 @@ using SkiaSharp;
 namespace Estragonia;
 
 /// <summary>A render target that uses an underlying Skia surface.</summary>
-internal sealed class GodotSkiaRenderTarget : ISkiaGpuRenderTarget
+internal sealed class GodotSkiaRenderTarget(
+	IGodotSkiaSurface surface,
+	GRContext grContext,
+	ISurfaceSynchronizer synchronizer)
+	: ISkiaGpuRenderTarget
 {
-	private readonly GRContext _grContext;
-	private readonly double _renderScaling;
-
-	private readonly IGodotSkiaSurface _surface;
-	private readonly ISurfaceSynchronizer _synchronizer;
-
-	public GodotSkiaRenderTarget(IGodotSkiaSurface surface, GRContext grContext, ISurfaceSynchronizer synchronizer)
-	{
-		_renderScaling = surface.RenderScaling;
-		_surface = surface;
-		_grContext = grContext;
-		_synchronizer = synchronizer;
-	}
+	private readonly double _renderScaling = surface.RenderScaling;
 
 	[SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator", Justification = "Doesn't affect correctness")]
 	public bool IsCorrupted
-		=> _surface.IsDisposed || _grContext.IsAbandoned || _renderScaling != _surface.RenderScaling;
+		=> surface.IsDisposed || grContext.IsAbandoned || _renderScaling != surface.RenderScaling;
 
 	public ISkiaGpuRenderSession BeginRenderingSession() =>
-		new GodotSkiaGpuRenderSession(_surface, _grContext, _synchronizer);
+		new GodotSkiaGpuRenderSession(surface, grContext, synchronizer);
 
 	public void Dispose()
 	{

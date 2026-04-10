@@ -97,7 +97,7 @@ internal static class InputModifiersProvider
 			? inputEventWithModifiers.GetKeyModifiers()
 			: GetKeyModifiers();
 
-	public static KeyModifiers GetKeyModifiers(this InputEventWithModifiers inputEvent)
+	private static KeyModifiers GetKeyModifiers(this InputEventWithModifiers inputEvent)
 	{
 		var modifiers = KeyModifiers.None;
 
@@ -113,7 +113,7 @@ internal static class InputModifiersProvider
 		return modifiers;
 	}
 
-	public static KeyModifiers GetKeyModifiers()
+	private static KeyModifiers GetKeyModifiers()
 	{
 		var modifiers = KeyModifiers.None;
 

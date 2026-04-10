@@ -30,14 +30,10 @@ internal static class GodotPlatformGraphicsFactory
 
 		// Check if user explicitly requested Vulkan via project settings
 		var settings = ProjectSettings.Singleton;
-		if (settings.HasSetting("rendering/rendering_device/driver.macos"))
-		{
-			var macosDriver = settings.GetSetting("rendering/rendering_device/driver.macos").AsString();
-			if (macosDriver == "vulkan")
-				return false; // User explicitly wants Vulkan (via MoltenVK)
-		}
-
+		if (!settings.HasSetting("rendering/rendering_device/driver.macos")) return true;
+		var macosDriver = settings.GetSetting("rendering/rendering_device/driver.macos").AsString();
+		return macosDriver != "vulkan";
+		// User explicitly wants Vulkan (via MoltenVK)
 		// Default to Metal on Apple platforms
-		return true;
 	}
 }

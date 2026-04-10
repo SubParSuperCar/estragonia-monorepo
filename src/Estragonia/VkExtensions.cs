@@ -11,6 +11,7 @@ internal static class VkExtensions
 	{
 		if (result != VkResult.VK_SUCCESS)
 			ThrowError(result, functionName);
+		return;
 
 		[DoesNotReturn]
 		[MethodImpl(MethodImplOptions.NoInlining)]

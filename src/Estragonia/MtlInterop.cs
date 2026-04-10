@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Godot;
 using SkiaSharp;
@@ -10,10 +11,10 @@ namespace Estragonia;
 /// <summary>
 ///     Native interop for SkiaSharp Metal functions and GPU texture blitting.
 /// </summary>
-internal static class MtlInterop
+internal static partial class MtlInterop
 {
-	private const string SKIA_LIBRARY = "libSkiaSharp";
-	private const string OBJC_LIBRARY = "/usr/lib/libobjc.A.dylib";
+	private const string SkiaLibrary = "libSkiaSharp";
+	private const string ObjcLibrary = "/usr/lib/libobjc.A.dylib";
 
 	/// <summary>
 	///     Creates a GRContext for Metal.
@@ -21,52 +22,40 @@ internal static class MtlInterop
 	/// <param name="device">The MTLDevice handle.</param>
 	/// <param name="queue">The MTLCommandQueue handle.</param>
 	/// <returns>A handle to the GRContext, or IntPtr.Zero on failure.</returns>
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	public static extern IntPtr gr_direct_context_make_metal(IntPtr device, IntPtr queue);
-
-	/// <summary>
-	///     Creates a GRBackendRenderTarget for Metal.
-	/// </summary>
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	public static extern IntPtr gr_backendrendertarget_new_metal(int width, int height,
-		ref GRMtlTextureInfoNative mtlInfo);
-
-	/// <summary>
-	///     Deletes a GRBackendRenderTarget.
-	/// </summary>
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	public static extern void gr_backendrendertarget_delete(IntPtr handle);
+	[LibraryImport(SkiaLibrary)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	private static partial IntPtr gr_direct_context_make_metal(IntPtr device, IntPtr queue);
 
 	/// <summary>
 	///     Creates a GRBackendTexture for Metal.
 	/// </summary>
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	public static extern IntPtr gr_backendtexture_new_metal(int width, int height, bool mipmapped,
-		ref GRMtlTextureInfoNative mtlInfo);
+	[LibraryImport(SkiaLibrary)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	private static partial IntPtr gr_backendtexture_new_metal(int width, int height,
+		[MarshalAs(UnmanagedType.Bool)] bool mipmapped,
+		ref GrMtlTextureInfoNative mtlInfo);
 
 	/// <summary>
 	///     Deletes a GRBackendTexture.
 	/// </summary>
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	public static extern void gr_backendtexture_delete(IntPtr handle);
+	[LibraryImport(SkiaLibrary)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	private static partial void gr_backendtexture_delete(IntPtr handle);
 
 	/// <summary>
 	///     Creates a GRBackendTexture for a Metal texture.
 	/// </summary>
 	public static GRBackendTexture? CreateMetalBackendTexture(int width, int height, bool mipmapped, IntPtr mtlTexture)
 	{
-		var textureInfo = new GRMtlTextureInfoNative { Texture = mtlTexture };
+		var textureInfo = new GrMtlTextureInfoNative { Texture = mtlTexture };
 		var handle = gr_backendtexture_new_metal(width, height, mipmapped, ref textureInfo);
-		if (handle == IntPtr.Zero)
-			return null;
-
-		return CreateGRBackendTextureFromHandle(handle);
+		return handle == IntPtr.Zero ? null : CreateGrBackendTextureFromHandle(handle);
 	}
 
 	/// <summary>
 	///     Creates a GRBackendTexture from a native handle using reflection.
 	/// </summary>
-	private static GRBackendTexture? CreateGRBackendTextureFromHandle(IntPtr handle)
+	private static GRBackendTexture? CreateGrBackendTextureFromHandle(IntPtr handle)
 	{
 		try
 		{
@@ -79,12 +68,12 @@ internal static class MtlInterop
 			{
 				var ps = c.GetParameters();
 				return ps.Length == 2 &&
-				       ps[0].ParameterType == typeof(IntPtr) &&
-				       ps[1].ParameterType == typeof(bool);
+					   ps[0].ParameterType == typeof(IntPtr) &&
+					   ps[1].ParameterType == typeof(bool);
 			});
 
 			if (ctor is not null)
-				return ctor.Invoke(new object[] { handle, true }) as GRBackendTexture;
+				return ctor.Invoke([handle, true]) as GRBackendTexture;
 
 			// Try single IntPtr constructor
 			ctor = ctors.FirstOrDefault(c =>
@@ -94,7 +83,7 @@ internal static class MtlInterop
 			});
 
 			if (ctor is not null)
-				return ctor.Invoke(new object[] { handle }) as GRBackendTexture;
+				return ctor.Invoke([handle]) as GRBackendTexture;
 
 			gr_backendtexture_delete(handle);
 			return null;
@@ -121,31 +110,18 @@ internal static class MtlInterop
 			return null;
 		}
 
-		if (handle == IntPtr.Zero)
-			return null;
-
-		// Use reflection to create GRContext from handle
-		// GRContext has an internal constructor that takes IntPtr
-		return CreateGRContextFromHandle(handle);
-	}
-
-	/// <summary>
-	///     Creates a GRBackendRenderTarget for a Metal texture.
-	/// </summary>
-	public static GRBackendRenderTarget? CreateMetalRenderTarget(int width, int height, IntPtr mtlTexture)
-	{
-		var textureInfo = new GRMtlTextureInfoNative { Texture = mtlTexture };
-		var handle = gr_backendrendertarget_new_metal(width, height, ref textureInfo);
-		if (handle == IntPtr.Zero)
-			return null;
-
-		return CreateGRBackendRenderTargetFromHandle(handle);
+		return handle == IntPtr.Zero
+			? null
+			:
+			// Use reflection to create GRContext from handle
+			// GRContext has an internal constructor that takes IntPtr
+			CreateGrContextFromHandle(handle);
 	}
 
 	/// <summary>
 	///     Creates a GRContext from a native handle using reflection.
 	/// </summary>
-	private static GRContext? CreateGRContextFromHandle(IntPtr handle)
+	private static GRContext? CreateGrContextFromHandle(IntPtr handle)
 	{
 		try
 		{
@@ -159,12 +135,12 @@ internal static class MtlInterop
 			{
 				var ps = c.GetParameters();
 				return ps.Length == 2 &&
-				       ps[0].ParameterType == typeof(IntPtr) &&
-				       ps[1].ParameterType == typeof(bool);
+					   ps[0].ParameterType == typeof(IntPtr) &&
+					   ps[1].ParameterType == typeof(bool);
 			});
 
 			if (ctor is not null)
-				return ctor.Invoke(new object[] { handle, true }) as GRContext;
+				return ctor.Invoke([handle, true]) as GRContext;
 
 			// Try (IntPtr) constructor
 			ctor = ctors.FirstOrDefault(c =>
@@ -174,18 +150,15 @@ internal static class MtlInterop
 			});
 
 			if (ctor is not null)
-				return ctor.Invoke(new object[] { handle }) as GRContext;
+				return ctor.Invoke([handle]) as GRContext;
 
 			// Last resort: check base class SKObject for useful patterns
 			var owned = typeof(SKObject).GetMethod("Owned",
 				BindingFlags.NonPublic | BindingFlags.Static);
-			if (owned is not null && owned.IsGenericMethod)
-			{
-				var typedOwned = owned.MakeGenericMethod(typeof(GRContext));
-				var result = typedOwned.Invoke(null, new object[] { handle }) as GRContext;
-				if (result is not null)
-					return result;
-			}
+			if (owned is null || !owned.IsGenericMethod) return null;
+			var typedOwned = owned.MakeGenericMethod(typeof(GRContext));
+			if (typedOwned.Invoke(null, [handle]) is GRContext result)
+				return result;
 
 			return null;
 		}
@@ -196,79 +169,46 @@ internal static class MtlInterop
 	}
 
 	/// <summary>
-	///     Creates a GRBackendRenderTarget from a native handle using reflection.
-	/// </summary>
-	private static GRBackendRenderTarget? CreateGRBackendRenderTargetFromHandle(IntPtr handle)
-	{
-		// Try to find a constructor or factory method
-		var ctor = typeof(GRBackendRenderTarget).GetConstructor(
-			BindingFlags.NonPublic | BindingFlags.Instance,
-			null,
-			new[] { typeof(IntPtr), typeof(bool) },
-			null
-		);
-
-		if (ctor is not null) return ctor.Invoke(new object[] { handle, true }) as GRBackendRenderTarget;
-
-		// Fallback: try single IntPtr constructor
-		ctor = typeof(GRBackendRenderTarget).GetConstructor(
-			BindingFlags.NonPublic | BindingFlags.Instance,
-			null,
-			new[] { typeof(IntPtr) },
-			null
-		);
-
-		if (ctor is not null) return ctor.Invoke(new object[] { handle }) as GRBackendRenderTarget;
-
-		// Last resort: delete handle and return null
-		gr_backendrendertarget_delete(handle);
-		return null;
-	}
-
-	/// <summary>
 	///     Native structure for Metal texture info.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
-	public struct GRMtlTextureInfoNative
+	public struct GrMtlTextureInfoNative
 	{
 		public IntPtr Texture;
 	}
 
 	#region Objective-C Runtime
 
-	[DllImport(OBJC_LIBRARY, EntryPoint = "sel_registerName")]
-	private static extern IntPtr sel_registerName(string name);
+	[LibraryImport(ObjcLibrary, EntryPoint = "sel_registerName", StringMarshalling = StringMarshalling.Utf8)]
+	private static partial IntPtr sel_registerName(string name);
 
-	[DllImport(OBJC_LIBRARY, EntryPoint = "objc_msgSend")]
-	private static extern IntPtr objc_msgSend(IntPtr receiver, IntPtr selector);
+	[LibraryImport(ObjcLibrary, EntryPoint = "objc_msgSend")]
+	private static partial IntPtr objc_msgSend(IntPtr receiver, IntPtr selector);
 
-	[DllImport(OBJC_LIBRARY, EntryPoint = "objc_msgSend")]
-	private static extern void objc_msgSend_void(IntPtr receiver, IntPtr selector);
+	[LibraryImport(ObjcLibrary, EntryPoint = "objc_msgSend")]
+	private static partial void objc_msgSend_void(IntPtr receiver, IntPtr selector);
 
-	[DllImport(OBJC_LIBRARY, EntryPoint = "objc_msgSend")]
-	private static extern IntPtr objc_msgSend_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1);
-
-	[DllImport(OBJC_LIBRARY, EntryPoint = "objc_msgSend")]
-	private static extern void objc_msgSend_blit(
+	[LibraryImport(ObjcLibrary, EntryPoint = "objc_msgSend")]
+	private static partial void objc_msgSend_blit(
 		IntPtr receiver, IntPtr selector,
 		IntPtr sourceTexture, ulong sourceSlice, ulong sourceLevel,
-		MTLOrigin sourceOrigin, MTLSize sourceSize,
+		MtlOrigin sourceOrigin, MtlSize sourceSize,
 		IntPtr destTexture, ulong destSlice, ulong destLevel,
-		MTLOrigin destOrigin);
+		MtlOrigin destOrigin);
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct MTLOrigin
+	public struct MtlOrigin
 	{
 		public ulong x, y, z;
-		public static MTLOrigin Zero => new() { x = 0, y = 0, z = 0 };
+		public static MtlOrigin Zero => new() { x = 0, y = 0, z = 0 };
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct MTLSize
+	public struct MtlSize
 	{
 		public ulong width, height, depth;
 
-		public static MTLSize Create(int w, int h) => new() { width = (ulong)w, height = (ulong)h, depth = 1 };
+		public static MtlSize Create(int w, int h) => new() { width = (ulong)w, height = (ulong)h, depth = 1 };
 	}
 
 	// Cached selectors for Metal operations
@@ -322,8 +262,8 @@ internal static class MtlInterop
 			}
 
 			// Copy texture
-			var origin = MTLOrigin.Zero;
-			var size = MTLSize.Create(width, height);
+			var origin = MtlOrigin.Zero;
+			var size = MtlSize.Create(width, height);
 
 			objc_msgSend_blit(
 				blitEncoder, _selCopyFromTexture,
@@ -351,11 +291,9 @@ internal static class MtlInterop
 
 	#region SkiaSharp Backend Texture
 
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	private static extern IntPtr sk_surface_get_backend_texture(IntPtr surface, int mode);
-
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	private static extern bool gr_backendtexture_get_gl_textureinfo(IntPtr texture, out IntPtr info);
+	[LibraryImport(SkiaLibrary)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	private static partial IntPtr sk_surface_get_backend_texture(IntPtr surface, int mode);
 
 	/// <summary>
 	///     Gets the Metal texture handle from a Skia surface's backend texture.
@@ -365,19 +303,19 @@ internal static class MtlInterop
 		try
 		{
 			// Get the native handle of the surface
-			var surfaceHandle = GetSKObjectHandle(surface);
+			var surfaceHandle = GetSkObjectHandle(surface);
 			if (surfaceHandle == IntPtr.Zero)
 				return IntPtr.Zero;
 
 			// FlushAndSubmit mode = 1 (kFlushRead_
 			var backendTexture = sk_surface_get_backend_texture(surfaceHandle, 1);
-			if (backendTexture == IntPtr.Zero)
-				return IntPtr.Zero;
-
-			// The backend texture contains the Metal texture info
-			// For Metal, we need to extract the texture handle
-			// This is stored at a specific offset in the GrBackendTexture structure
-			return GetMetalTextureFromBackend(backendTexture);
+			return backendTexture == IntPtr.Zero
+				? IntPtr.Zero
+				:
+				// The backend texture contains the Metal texture info
+				// For Metal, we need to extract the texture handle
+				// This is stored at a specific offset in the GrBackendTexture structure
+				GetMetalTextureFromBackend(backendTexture);
 		}
 		catch (Exception ex)
 		{
@@ -386,7 +324,7 @@ internal static class MtlInterop
 		}
 	}
 
-	private static IntPtr GetSKObjectHandle(SKObject obj)
+	private static IntPtr GetSkObjectHandle(SKObject obj)
 	{
 		// SKObject.Handle property
 		var handleProp = typeof(SKObject).GetProperty("Handle",
@@ -394,14 +332,13 @@ internal static class MtlInterop
 		return handleProp?.GetValue(obj) as IntPtr? ?? IntPtr.Zero;
 	}
 
-	[DllImport(SKIA_LIBRARY, CallingConvention = CallingConvention.Cdecl)]
-	private static extern bool gr_backendtexture_get_mtl_textureinfo(IntPtr texture, out GRMtlTextureInfoNative info);
+	[LibraryImport(SkiaLibrary)]
+	[UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+	[return: MarshalAs(UnmanagedType.Bool)]
+	private static partial bool gr_backendtexture_get_mtl_textureinfo(IntPtr texture, out GrMtlTextureInfoNative info);
 
-	private static IntPtr GetMetalTextureFromBackend(IntPtr backendTexture)
-	{
-		if (gr_backendtexture_get_mtl_textureinfo(backendTexture, out var info)) return info.Texture;
-		return IntPtr.Zero;
-	}
+	private static IntPtr GetMetalTextureFromBackend(IntPtr backendTexture) =>
+		gr_backendtexture_get_mtl_textureinfo(backendTexture, out var info) ? info.Texture : IntPtr.Zero;
 
 	#endregion
 }

@@ -11,10 +11,12 @@ using GdKey = Godot.Key;
 namespace Estragonia;
 
 /// <summary>Contains extensions methods to convert between Godot and Avalonia types.</summary>
+#pragma warning disable CA1708
 public static class ConversionExtensions
+#pragma warning restore CA1708
 {
 	// Reference: https://github.com/godotengine/godot/blob/master/platform/windows/key_mapping_windows.cpp
-	private static readonly Dictionary<GdKey, AvKey> s_keyMap = new()
+	private static readonly Dictionary<GdKey, AvKey> SKeyMap = new()
 	{
 		[GdKey.Backspace] = AvKey.Back,
 		[GdKey.Tab] = AvKey.Tab, // Godot maps Tab and CrSel to the same key
@@ -151,7 +153,7 @@ public static class ConversionExtensions
 		[GdKey.Bar] = AvKey.Oem102
 	};
 
-	private static readonly Dictionary<GdKey, PhysicalKey> s_physicalKeyMap = new()
+	private static readonly Dictionary<GdKey, PhysicalKey> SPhysicalKeyMap = new()
 	{
 		[GdKey.Backspace] = PhysicalKey.Backspace,
 		[GdKey.Tab] = PhysicalKey.Tab, // Godot maps Tab and CrSel to the same key
@@ -288,7 +290,7 @@ public static class ConversionExtensions
 		[GdKey.Bar] = PhysicalKey.IntlBackslash
 	};
 
-	private static readonly Dictionary<StandardCursorType, GdCursorShape> s_cursorMap = new()
+	private static readonly Dictionary<StandardCursorType, GdCursorShape> SCursorMap = new()
 	{
 		[StandardCursorType.Arrow] = GdCursorShape.Arrow,
 		[StandardCursorType.Ibeam] = GdCursorShape.Ibeam,
@@ -315,18 +317,23 @@ public static class ConversionExtensions
 		[StandardCursorType.DragLink] = GdCursorShape.Drag
 	};
 
-	public static AvKey ToAvaloniaKey(this GdKey source) => s_keyMap.GetValueOrDefault(source, AvKey.None);
-
-	public static PhysicalKey ToAvaloniaPhysicalKey(this GdKey source) =>
-		s_physicalKeyMap.GetValueOrDefault(source, PhysicalKey.None);
-
-	public static Size ToAvaloniaSize(this Vector2 source) => new(source.X, source.Y);
-
-	public static Point ToAvaloniaPoint(this Vector2 source) => new(source.X, source.Y);
-
 	public static AvColor ToAvaloniaColor(this GdColor source) =>
 		new((byte)source.A8, (byte)source.R8, (byte)source.G8, (byte)source.B8);
 
 	public static GdCursorShape ToGodotCursorShape(this StandardCursorType source) =>
-		s_cursorMap.GetValueOrDefault(source, GdCursorShape.Arrow);
+		SCursorMap.GetValueOrDefault(source, GdCursorShape.Arrow);
+
+	extension(GdKey source)
+	{
+		public AvKey ToAvaloniaKey() => SKeyMap.GetValueOrDefault(source, AvKey.None);
+
+		public PhysicalKey ToAvaloniaPhysicalKey() =>
+			SPhysicalKeyMap.GetValueOrDefault(source, PhysicalKey.None);
+	}
+
+	extension(Vector2 source)
+	{
+		public Size ToAvaloniaSize() => new(source.X, source.Y);
+		public Point ToAvaloniaPoint() => new(source.X, source.Y);
+	}
 }

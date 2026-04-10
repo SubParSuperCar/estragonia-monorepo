@@ -47,7 +47,7 @@ public class ExtendedListBox : ListBox
 	private bool TryMoveFocus(NavigationDirection direction, KeyModifiers keyModifiers)
 	{
 		if (TopLevel.GetTopLevel(this)?.FocusManager is not { } focusManager
-		    || Presenter?.Panel is not INavigableContainer navigableContainer
+			|| Presenter?.Panel is not INavigableContainer navigableContainer
 		   )
 			return false;
 

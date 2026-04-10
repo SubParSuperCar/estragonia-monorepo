@@ -121,14 +121,14 @@ public partial class AvaloniaLoader : Node
 					break;
 				case InputEventKey { Pressed: true }:
 				case InputEventJoypadButton { Pressed: true }:
-				{
-					if (LastPressedInputWasMouseClick || MouseMovedSinceLastButtonPress)
-						_elapsedMouseUntouchedSinceButtonPress = 0;
+					{
+						if (LastPressedInputWasMouseClick || MouseMovedSinceLastButtonPress)
+							_elapsedMouseUntouchedSinceButtonPress = 0;
 
-					LastPressedInputWasMouseClick = false;
-					MouseMovedSinceLastButtonPress = false;
-					break;
-				}
+						LastPressedInputWasMouseClick = false;
+						MouseMovedSinceLastButtonPress = false;
+						break;
+					}
 			}
 		}
 	}

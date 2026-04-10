@@ -8,16 +8,9 @@ using Avalonia.Platform.Storage;
 
 namespace Estragonia;
 
-internal sealed class BclStorageFolder : IStorageBookmarkFolder
+internal sealed class BclStorageFolder(DirectoryInfo directoryInfo) : IStorageBookmarkFolder
 {
-	private Uri? _path;
-
-	public BclStorageFolder(DirectoryInfo directoryInfo)
-	{
-		DirectoryInfo = directoryInfo;
-	}
-
-	public DirectoryInfo DirectoryInfo { get; }
+	public DirectoryInfo DirectoryInfo { get; } = directoryInfo;
 
 	public string Name
 		=> DirectoryInfo.Name;
@@ -26,7 +19,7 @@ internal sealed class BclStorageFolder : IStorageBookmarkFolder
 		=> true;
 
 	public Uri Path
-		=> _path ??= BuildPath();
+		=> field ??= BuildPath();
 
 	public Task<StorageItemProperties> GetBasicPropertiesAsync() =>
 		Task.FromResult(new StorageItemProperties(
@@ -44,7 +37,7 @@ internal sealed class BclStorageFolder : IStorageBookmarkFolder
 	public IAsyncEnumerable<IStorageItem> GetItemsAsync()
 	{
 		return DirectoryInfo.EnumerateDirectories()
-			.Select(d => (IStorageItem)new BclStorageFolder(d))
+			.Select(IStorageItem (d) => new BclStorageFolder(d))
 			.Concat(DirectoryInfo.EnumerateFiles().Select(f => new BclStorageFile(f)))
 			.AsAsyncEnumerable();
 	}
@@ -52,19 +45,17 @@ internal sealed class BclStorageFolder : IStorageBookmarkFolder
 	public Task<IStorageFolder?> GetFolderAsync(string name)
 	{
 		var directory = DirectoryInfo.EnumerateDirectories().FirstOrDefault(d => d.Name == name);
-		if (directory is null)
-			return Task.FromResult<IStorageFolder?>(null);
-
-		return Task.FromResult<IStorageFolder?>(new BclStorageFolder(directory));
+		return directory is null
+			? Task.FromResult<IStorageFolder?>(null)
+			: Task.FromResult<IStorageFolder?>(new BclStorageFolder(directory));
 	}
 
 	public Task<IStorageFile?> GetFileAsync(string name)
 	{
 		var file = DirectoryInfo.EnumerateFiles().FirstOrDefault(f => f.Name == name);
-		if (file is null)
-			return Task.FromResult<IStorageFile?>(null);
-
-		return Task.FromResult<IStorageFile?>(new BclStorageFile(file));
+		return file is null
+			? Task.FromResult<IStorageFile?>(null)
+			: Task.FromResult<IStorageFile?>(new BclStorageFile(file));
 	}
 
 	public Task<string?> SaveBookmarkAsync() => Task.FromResult<string?>(DirectoryInfo.FullName);
@@ -83,15 +74,11 @@ internal sealed class BclStorageFolder : IStorageBookmarkFolder
 
 	public Task<IStorageItem?> MoveAsync(IStorageFolder destination)
 	{
-		if (destination is BclStorageFolder storageFolder)
-		{
-			var newPath = System.IO.Path.Combine(storageFolder.DirectoryInfo.FullName, DirectoryInfo.Name);
-			DirectoryInfo.MoveTo(newPath);
+		if (destination is not BclStorageFolder storageFolder) return Task.FromResult<IStorageItem?>(null);
+		var newPath = System.IO.Path.Combine(storageFolder.DirectoryInfo.FullName, DirectoryInfo.Name);
+		DirectoryInfo.MoveTo(newPath);
 
-			return Task.FromResult<IStorageItem?>(new BclStorageFolder(new DirectoryInfo(newPath)));
-		}
-
-		return Task.FromResult<IStorageItem?>(null);
+		return Task.FromResult<IStorageItem?>(new BclStorageFolder(new DirectoryInfo(newPath)));
 	}
 
 	public Task<IStorageFile?> CreateFileAsync(string name)
